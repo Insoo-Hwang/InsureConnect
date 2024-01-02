@@ -1,0 +1,39 @@
+server:
+  servlet:
+    encoding:
+      force-response: true
+
+spring:
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+
+    properties:
+      hibernate:
+        format_sql: true
+
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/testdb;
+    username: sa
+    password: test
+    driver-class-name: org.h2.Driver
+
+  sql:
+    init:
+      encoding: utf-8
+
+kakao:
+  client:
+    id: 39acd4a4fff84f2535aa93ddb042f0c4
+    secret: oYWofo7GgvQfMgfAvDHXehTakpc5kf2u
+  redirect:
+    url: http://localhost:8080/kakao/callback
+
+logging:
+  level:
+    sql: debug
