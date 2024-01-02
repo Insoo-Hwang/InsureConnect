@@ -110,8 +110,10 @@ public class KakaoService {
         long id = (long) jsonObj.get("id");
         String nickname = String.valueOf(profile.get("nickname"));
         UserDto newDto = new UserDto(id, nickname);
-        userRepository.save(User.toUser(newDto));
         session.setAttribute("member", newDto);
+        if(userRepository.findById(id).isEmpty()){
+            userRepository.save(User.toUser(newDto));
+        }
 
         attributes.addFlashAttribute("msg", "로그인 성공!");
         return "redirect:/main";
