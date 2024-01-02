@@ -4,6 +4,7 @@ import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Service
+@RequiredArgsConstructor
 public class KakaoService {
+
+    private final UserRepository userRepository;
 
     @Value("${kakao.client.id}")
     private String KAKAO_CLIENT_ID;
@@ -30,8 +34,6 @@ public class KakaoService {
     @Value("${kakao.redirect.url}")
     private String KAKAO_REDIRECT_URL;
 
-    @Autowired
-    private UserRepository userRepository;
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
     private final static String KAKAO_API_URI = "https://kapi.kakao.com";
