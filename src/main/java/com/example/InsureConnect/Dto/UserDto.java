@@ -1,13 +1,12 @@
 package com.example.InsureConnect.Dto;
 
 import com.example.InsureConnect.Entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Builder
 @AllArgsConstructor
-@Data
+@NoArgsConstructor
+@Getter
+@ToString
 public class UserDto {
     private long id;
     private String nickname;
