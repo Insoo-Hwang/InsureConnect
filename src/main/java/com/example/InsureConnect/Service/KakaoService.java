@@ -104,16 +104,14 @@ public class KakaoService {
         JSONObject account = (JSONObject) jsonObj.get("kakao_account");
         JSONObject profile = (JSONObject) account.get("profile");
 
+        //회원 정보 users DB에 저장
         long id = (long) jsonObj.get("id");
         String nickname = String.valueOf(profile.get("nickname"));
-        if(userRepository.findById(id).isEmpty()){
-            UserDto newDto = new UserDto(id, nickname);
-            userRepository.save(User.toUser(newDto));
-            session.setAttribute("member", newDto);
-        }
+        UserDto newDto = new UserDto(id, nickname);
+        userRepository.save(User.toUser(newDto));
+        session.setAttribute("member", newDto);
 
         attributes.addFlashAttribute("msg", "로그인 성공!");
         return "redirect:/main";
     }
-
 }
