@@ -17,10 +17,16 @@ public class KakaoController {
 
     @GetMapping("/kakao/callback")
     public String callback(@RequestParam(value = "code",required = false) String code
-            , HttpSession session, RedirectAttributes attributes) throws Exception {
+            , HttpSession session) throws Exception {
         String accessToken = kakaoService.getKakaoInfo(code);
-        String view = kakaoService.getUserInfoWithToken(accessToken, session, attributes);
+        String view = kakaoService.getUserInfoWithToken(accessToken, session);
 
+        return view;
+    }
+
+    @GetMapping("/kakao/logout")
+    public String logout(HttpSession session){
+        String view = kakaoService.logout((String)session.getAttribute("accessToken"), session);
         return view;
     }
 }

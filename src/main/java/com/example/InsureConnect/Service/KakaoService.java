@@ -19,6 +19,11 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 @Service
 @RequiredArgsConstructor
 public class KakaoService {
@@ -37,6 +42,7 @@ public class KakaoService {
 
     private final static String KAKAO_AUTH_URI = "https://kauth.kakao.com";
     private final static String KAKAO_API_URI = "https://kapi.kakao.com";
+    private final static String KAKAO_LOGOUT = "https://kapi.kakao.com/v1/user/logout";
 
     public String getKakaoLogin() {
         return KAKAO_AUTH_URI + "/oauth/authorize"
@@ -84,7 +90,7 @@ public class KakaoService {
         return accessToken;
     }
 
-    public String getUserInfoWithToken(String accessToken, HttpSession session, RedirectAttributes attributes) throws Exception {
+    public String getUserInfoWithToken(String accessToken, HttpSession session) throws Exception {
         //HttpHeader 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -110,12 +116,40 @@ public class KakaoService {
         long id = (long) jsonObj.get("id");
         String nickname = String.valueOf(profile.get("nickname"));
         UserDto newDto = new UserDto(id, nickname);
-        session.setAttribute("member", newDto);
+        session.setAttribute("user", newDto);
+        session.setAttribute("accessToken", accessToken);
         if(userRepository.findById(id).isEmpty()){
             userRepository.save(User.toUser(newDto));
         }
 
-        attributes.addFlashAttribute("msg", "로그인 성공!");
         return "redirect:/main";
+    }
+
+    public String logout(String accessToken, HttpSession session){
+        try {
+            URL url = new URL(KAKAO_LOGOUT);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Authorization", "Bearer " + accessToken);
+            int responseCode = conn.getResponseCode();
+            System.out.println("responseCode = " + responseCode);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+
+            String result = "";
+            String line = "";
+
+            session.removeAttribute("user");
+            session.removeAttribute("accessToken");
+
+            while((line = br.readLine()) != null) {
+                result+=line;
+            }
+            System.out.println(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/";
     }
 }
