@@ -23,4 +23,5 @@ public class PageController {
     public String home() {
         return "home";
     }
+
 }
