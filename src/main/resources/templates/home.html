@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        .carousel-slide {
+            width: 80%;
+            height: 40%;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            user-select: none;
+        }
+
+        .carousel-indicators {
+            display: flex;
+        }
+
+        .carousel-item img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hot-planner {
+            margin-top: 20px;
+        }
+
+        .custom-dropdown {
+            position: relative;
+        }
+    </style>
+</head>
+<body class="bg-primary text-white">
+<div class="header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary p-4">
+        <div class="container-fluid">
+            <a class="navbar-brand font-bold" href="/main">
+                <h1>Insure Connect</h1>
+            </a>
+            <div class="navbar-nav flex-row">
+                <button type="button" class="btn btn-light m-2" id="login">
+                    <img src="/img/login.png" width="16" height="16" alt="로그인">
+                </button>
+
+                <button type="button" class="btn btn-light m-2" id="alarm">
+                    <img src="/img/alarm.png" width="16" height="16" alt="알람">
+                </button>
+
+                <div class="custom-dropdown">
+                    <button class="btn btn-light m-2" id="list" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/img/list_button.png" width="16" height="16" alt="리스트">
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="list">
+                        <li><a class="dropdown-item" href="#">마이페이지</a></li>
+                        <li><a class="dropdown-item" href="#">AI 상담</a></li>
+                        <li><a class="dropdown-item" href="#">설계사페이지</a></li>
+                        <li><a class="dropdown-item" href="#">리뷰페이지</a></li>
+                        <li><a class="dropdown-item" href="#">관리자페이지</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<div class="py-8 d-flex justify-content-center align-items-center">
+    <div id="carouselIndicators" class="carousel-slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="0" class="active"
+                    aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="1"
+                    aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselIndicators" data-bs-slide-to="2"
+                    aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <a href="https://www.idbins.com/" target="_blank">
+                    <img src="/img/db.jpg" class="d-block w-100" alt="ad">
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="https://www.kyobo.com" target="_blank">
+                    <img src="/img/kyobo.jpg" class="d-block w-100" alt="ad">
+                </a>
+            </div>
+            <div class="carousel-item">
+                <a href="https://www.samsungfire.com" target="_blank">
+                    <img src="/img/samsung.jpg" class="d-block w-100" alt="ad">
+                </a>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselIndicators"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselIndicators"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</div>
+<div class="planner mb-4">
+    <div class="hot-planner d-flex justify-content-between mb-2">
+        <div class="hot-planner-title">
+            <h2>인기 설계사</h2>
+        </div>
+        <div class="all-planner">
+            <a href="#">
+                <button type="button" class="btn btn-transparent text-white">
+                    전체보기
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="hot-planner-list">
+        <ul class="list-group">
+            <li class="list-group-item">An active item</li>
+            <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">A fourth item</li>
+            <li class="list-group-item">And a fifth one</li>
+        </ul>
+    </div>
+</div>
+<div class="review">
+    <div class="recent-review d-flex justify-content-between mb-2">
+        <div class="recent-review-title">
+            <h2>최근 리뷰</h2>
+        </div>
+        <div class="all-review">
+            <a href="#">
+                <button type="button" class="btn btn-transparent text-white">
+                    전체보기
+                </button>
+            </a>
+        </div>
+    </div>
+    <div class="recent-review-list">
+        <ul class="list-group">
+            <li class="list-group-item">An active item</li>
+            <li class="list-group-item">A second item</li>
+            <li class="list-group-item">A third item</li>
+            <li class="list-group-item">A fourth item</li>
+            <li class="list-group-item">And a fifth one</li>
+        </ul>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleList"
+            aria-expanded="false" aria-controls="collapsibleList">
+        Show/Hide List
+    </button>
+
+    <div class="collapse mt-2" id="collapsibleList">
+        <ul class="list-group">
+            <li class="list-group-item">Item 1</li>
+            <li class="list-group-item">Item 2</li>
+            <li class="list-group-item">Item 3</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
