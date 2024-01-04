@@ -17,6 +17,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatGptService {
@@ -66,5 +70,15 @@ public class ChatGptService {
         chatDto.setAnswer(answer);
         chatDto.setTime(new Timestamp(System.currentTimeMillis()));
         chatRepository.save(Chat.toChat(chatDto, user));
+    }
+
+    //사용자의 모든 채팅 불러오기
+    public List<ChatDto> chats(UUID userId){
+        List<ChatDto> chats = chatRepository.findByUserId(userId)
+                .stream()
+                .map(chat -> ChatDto.toDto(chat))
+                .collect(Collectors.toList());
+        Collections.reverse(chats);
+        return chats;
     }
 }

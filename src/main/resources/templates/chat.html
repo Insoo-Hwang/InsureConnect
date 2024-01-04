@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Page</title>
+</head>
+<body>
+<h1>Chat History</h1>
+
+<ul>
+    <li th:each="chat : ${chatDtos}">
+        <p th:text="${chat.question}"></p>
+        <p th:text="${chat.answer}"></p>
+        <p th:text="${chat.time}"></p>
+    </li>
+</ul>
+
+</body>
+</html>
