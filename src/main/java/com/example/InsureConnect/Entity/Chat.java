@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Entity;
 
+import com.example.InsureConnect.Dto.ChatDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,9 +27,13 @@ public class Chat {
     @Column
     private String question;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String answer;
 
     @Column
     private Timestamp time;
+
+    public static Chat toChat(ChatDto dto, User user){
+        return new Chat(dto.getId(), user, dto.getQuestion(), dto.getAnswer(), dto.getTime());
+    }
 }
