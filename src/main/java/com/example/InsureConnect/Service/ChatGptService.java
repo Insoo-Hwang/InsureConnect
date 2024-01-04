@@ -81,4 +81,13 @@ public class ChatGptService {
         Collections.reverse(chats);
         return chats;
     }
+
+    public List<ChatDto> chatTest(){
+        List<ChatDto> chats = chatRepository.findAll()
+                .stream()
+                .map(chat -> ChatDto.testDto(chat))
+                .collect(Collectors.toList());
+        Collections.reverse(chats);
+        return chats;
+    }
 }

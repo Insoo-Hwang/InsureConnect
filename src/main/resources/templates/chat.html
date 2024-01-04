@@ -8,6 +8,33 @@
 <body>
 <h1>Chat History</h1>
 
+<div>
+    <input type="text" id="question-text" style="width: 800px"/>
+    <button type="submit" id="chat-submit-button">전송</button>
+</div>
+<script>
+    {
+        const chatSubmitBtn = document.querySelector("#chat-submit-button")
+        chatSubmitBtn.addEventListener("click", function(){
+            const question = {
+                question: document.querySelector("#question-text").value
+            }
+            const url = "/chat-gpt/question";
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(question),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                const msg = (response.ok) ? "답변이 완료되었습니다!" : "답변 실패!";
+                alert(msg);
+                window.location.reload();
+            });
+        })
+    }
+</script>
+
 <ul>
     <li th:each="chat : ${chatDtos}">
         <p th:text="${chat.question}"></p>

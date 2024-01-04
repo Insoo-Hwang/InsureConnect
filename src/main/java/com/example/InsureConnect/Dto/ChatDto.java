@@ -25,4 +25,9 @@ public class ChatDto {
     public static ChatDto toDto(Chat chat){
         return new ChatDto(chat.getId(), chat.getUser().getId(), chat.getQuestion(), chat.getAnswer(), chat.getTime());
     }
+
+    public static ChatDto testDto(Chat chat){
+        UUID uuid = UUID.randomUUID();
+        return new ChatDto(chat.getId(), uuid, chat.getQuestion(), chat.getAnswer(), chat.getTime());
+    }
 }
