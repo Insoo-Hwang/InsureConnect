@@ -113,12 +113,12 @@ public class KakaoService {
         JSONObject profile = (JSONObject) account.get("profile");
 
         //회원 정보 users DB에 저장
-        long id = (long) jsonObj.get("id");
+        long kakaoId = (long) jsonObj.get("id");
         String nickname = String.valueOf(profile.get("nickname"));
-        UserDto newDto = new UserDto(id, nickname);
+        UserDto newDto = new UserDto(null, kakaoId, nickname, null, 0, null);
         session.setAttribute("user", newDto);
         session.setAttribute("accessToken", accessToken);
-        if(userRepository.findById(id).isEmpty()){
+        if(userRepository.findByKakaoId(kakaoId).isEmpty()){
             userRepository.save(User.toUser(newDto));
         }
 

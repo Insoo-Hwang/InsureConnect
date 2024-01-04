@@ -1,13 +1,12 @@
 package com.example.InsureConnect.Entity;
 
 import com.example.InsureConnect.Dto.UserDto;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Table(name = "users")
 @NoArgsConstructor
@@ -17,13 +16,32 @@ import lombok.NoArgsConstructor;
 public class User {
 
     @Id
-    @Column(name = "id", updatable = false)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
 
-    @Column(name = "nickname")
+    @Column
+    private Long kakaoId;
+
+    @Column
     private String nickname;
 
+    @Column
+    private String gender;
+
+    @Column
+    private int age;
+
+    @Column
+    private String type;
+
+    @PrePersist
+    private void generateUUID() {
+        if (id == null) {
+            id = UUID.randomUUID();
+        }
+    }
+
     public static User toUser(UserDto dto){
-        return new User(dto.getId(), dto.getNickname());
+        return new User(dto.getId(), dto.getKakaoId(), dto.getNickname(), dto.getGender(), dto.getAge(), dto.getType());
     }
 }
