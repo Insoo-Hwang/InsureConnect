@@ -115,12 +115,16 @@ public class KakaoService {
         //회원 정보 users DB에 저장
         long kakaoId = (long) jsonObj.get("id");
         String nickname = String.valueOf(profile.get("nickname"));
-        UserDto newDto = new UserDto(null, kakaoId, nickname, null, 0, null);
-        session.setAttribute("user", newDto);
-        session.setAttribute("accessToken", accessToken);
         if(userRepository.findByKakaoId(kakaoId).isEmpty()){
+            UserDto newDto = new UserDto(null, kakaoId, nickname, null, 0, null);
             userRepository.save(User.toUser(newDto));
+            session.setAttribute("user", newDto);
         }
+        else{
+            UserDto found = UserDto.toDto(userRepository.findByKakaoId(kakaoId).orElseThrow(() -> new IllegalArgumentException()));
+            session.setAttribute("user", found);
+        }
+        session.setAttribute("accessToken", accessToken);
 
         return "redirect:/main";
     }
