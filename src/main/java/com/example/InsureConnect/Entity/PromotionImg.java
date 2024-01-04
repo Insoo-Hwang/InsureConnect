@@ -25,5 +25,5 @@ public class PromotionImg {
     private String imgLink;
 
     @Column
-    private int order;
+    private int sequence;
 }
