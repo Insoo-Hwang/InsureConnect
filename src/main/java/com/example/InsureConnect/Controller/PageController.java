@@ -1,9 +1,11 @@
 package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.ChatDto;
+import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Service.ChatGptService;
 import com.example.InsureConnect.Service.KakaoService;
+import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ public class PageController {
 
     private final KakaoService kakaoService;
     private final ChatGptService chatGptService;
+    private final UserService userService;
 
     @GetMapping("/login")
     public String login(Model model) {
@@ -35,15 +38,16 @@ public class PageController {
         return "home";
     }
 
-    @GetMapping("/chat/{userId}")
-    public String chat(Model model, @PathVariable UUID userId){
-        List<ChatDto> chatDtos = chatGptService.chats(userId);
+    @GetMapping("/chat")
+    public String chat(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+        UserDto userDto = userService.findByKakaoId(user.getId());
+        List<ChatDto> chatDtos = chatGptService.chats(userDto.getId());
         model.addAttribute("chatDtos", chatDtos);
         return "chat";
     }
 
     //TEST
-    @GetMapping("/chat")
+    @GetMapping("/chat/all")
     public String chatTest(Model model){
         List<ChatDto> chatDtos = chatGptService.chatTest();
         model.addAttribute("chatDtos", chatDtos);
