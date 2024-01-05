@@ -78,7 +78,6 @@ public class ChatGptService {
                 .stream()
                 .map(chat -> ChatDto.toDto(chat))
                 .collect(Collectors.toList());
-        Collections.reverse(chats);
         return chats;
     }
 
@@ -87,7 +86,6 @@ public class ChatGptService {
                 .stream()
                 .map(chat -> ChatDto.testDto(chat))
                 .collect(Collectors.toList());
-        Collections.reverse(chats);
         return chats;
     }
 }

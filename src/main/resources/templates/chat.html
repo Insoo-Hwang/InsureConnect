@@ -3,13 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Page</title>
+    <title>Insure Connect</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #007BFF;
+            color: white;
+        }
+
+        #question-container {
+            text-align: center;
+            width: 100%;
+            background-color: #007BFF;
+            padding: 10px;
+            border-top: 2px solid white;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        #question-text {
+            width: 50vw;
+            height: 40px;
+            border-radius: 10px;
+            border: none;
+            padding: 5px;
+        }
+
+        #chat-submit-button {
+            margin-top: 10px;
+            border-radius: 10px;
+            border: none;
+            padding: 8px 16px;
+            background-color: #0056b3;
+            color: white;
+        }
+
+        #answer-container {
+            margin-top: 20px;
+            overflow: auto;
+        }
+
+        .card {
+            background-color: white;
+            width: 50vw;
+            color: black;
+            border-radius: 10px;
+            margin-top: 10px;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+        }
+
+        .card .time {
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-<h1>Chat History</h1>
 
-<div>
-    <input type="text" id="question-text" style="width: 800px"/>
+<div id="answer-container">
+    <li th:each="chat : ${chatDtos}" class="card">
+        <p th:text="'Q. ' + ${chat.question}"></p>
+        <p th:text="'A. ' + ${chat.answer}"></p>
+        <p class="time" th:text="${chat.time}"></p>
+    </li>
+</div>
+
+<div id="question-container">
+    <div>Chat GPT AI를 활용하여 자신의 상황에 맞는 보험 종류를 찾아보세요!!</div>
+    <div>ex) 이번에 새로운 자동차를 구매했는데 어떤 보험이 좋을까?</div>
+    <input type="text" id="question-text"/>
     <button type="submit" id="chat-submit-button">전송</button>
 </div>
 <script>
@@ -32,16 +101,13 @@
                 window.location.reload();
             });
         })
+
+        const answerContainer = document.querySelector("#answer-container");
+        window.addEventListener("load", function() {
+            answerContainer.scrollTop = answerContainer.scrollHeight;
+        });
     }
 </script>
-
-<ul>
-    <li th:each="chat : ${chatDtos}">
-        <p th:text="${chat.question}"></p>
-        <p th:text="${chat.answer}"></p>
-        <p th:text="${chat.time}"></p>
-    </li>
-</ul>
 
 </body>
 </html>
