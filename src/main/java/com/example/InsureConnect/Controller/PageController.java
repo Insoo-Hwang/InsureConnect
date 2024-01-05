@@ -1,9 +1,11 @@
 package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.ChatDto;
+import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Service.ChatGptService;
 import com.example.InsureConnect.Service.KakaoService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,7 @@ public class PageController {
         return "login";
     }
 
-    @GetMapping("/")
+    @GetMapping("/home")
     public String home() {
         return "home";
     }
@@ -46,5 +48,16 @@ public class PageController {
         List<ChatDto> chatDtos = chatGptService.chatTest();
         model.addAttribute("chatDtos", chatDtos);
         return "chat";
+    }
+
+    @GetMapping("/")
+    public String main(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+        model.addAttribute("we", user.getId());
+        return "logintest";
+    }
+
+    @GetMapping("/login/oauth2/code/kakao")
+    public String callback(){
+        return "redirect:/";
     }
 }

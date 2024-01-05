@@ -30,13 +30,13 @@ public class KakaoService {
 
     private final UserRepository userRepository;
 
-    @Value("${kakao.client.id}")
+    //@Value("${kakao.client.id}")
     private String KAKAO_CLIENT_ID;
 
-    @Value("${kakao.client.secret}")
+    //@Value("${kakao.client.secret}")
     private String KAKAO_CLIENT_SECRET;
 
-    @Value("${kakao.redirect.url}")
+    //@Value("${kakao.redirect.url}")
     private String KAKAO_REDIRECT_URL;
 
 
