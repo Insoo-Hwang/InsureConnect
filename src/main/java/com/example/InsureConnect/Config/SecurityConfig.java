@@ -31,8 +31,11 @@ public class SecurityConfig {
         http.authorizeHttpRequests(config -> config.anyRequest().permitAll());
         http.oauth2Login(oauth2Configurer -> oauth2Configurer
                 .loginPage("/login")
+                .defaultSuccessUrl("/")
                 .userInfoEndpoint()
-                .userService(oAuth2UserService));
+                .userService(oAuth2UserService))
+                .logout()
+                .logoutUrl("/logout");
         return http.build();
     }
 }

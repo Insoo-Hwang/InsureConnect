@@ -30,7 +30,7 @@ public class PageController {
         return "login";
     }
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home() {
         return "home";
     }
@@ -50,14 +50,9 @@ public class PageController {
         return "chat";
     }
 
-    @GetMapping("/")
+    @GetMapping("/logintest")
     public String main(@AuthenticationPrincipal CustomOAuth2User user, Model model){
         model.addAttribute("we", user.getId());
         return "logintest";
-    }
-
-    @GetMapping("/login/oauth2/code/kakao")
-    public String callback(){
-        return "redirect:/";
     }
 }
