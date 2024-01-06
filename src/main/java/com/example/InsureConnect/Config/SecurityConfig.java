@@ -20,12 +20,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public WebSecurityCustomizer configure() {
-        return (web) -> web.ignoring()
-                .requestMatchers(toH2Console())
-                .requestMatchers("/static/**");
-    }
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.authorizeHttpRequests(config -> config.anyRequest().permitAll());

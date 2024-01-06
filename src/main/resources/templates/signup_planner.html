@@ -12,28 +12,23 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">설계사 가입신청</h2>
 
-    <form>
+    <form action="/registerPlanner" method="post" enctype="multipart/form-data">
         <!-- 1. 프로필사진 등록 -->
         <div class="mb-3">
-            <label for="profilePicture" class="form-label">프로필사진 등록</label>
-            <input type="file" class="form-control" id="profilePicture" accept="image/*">
+            <label for="profileImage" class="form-label">프로필사진 등록</label>
+            <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
         </div>
 
-        <!-- 2. 재직증명서 등록 -->
+        <!-- 2. 회사이름 입력 -->
         <div class="mb-3">
-            <label for="employmentCertificate" class="form-label">재직증명서 등록</label>
-            <input type="file" class="form-control" id="employmentCertificate" accept=".pdf">
+            <label for="company" class="form-label">회사이름 입력</label>
+            <input type="text" class="form-control" id="company" name="company">
         </div>
 
-        <!-- 3. 개인정보 입력 -->
+        <!-- 3. 재직증명서 입력 -->
         <div class="mb-3">
-            <label for="fullName" class="form-label">이름</label>
-            <input type="text" class="form-control" id="fullName" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="email" class="form-label">이메일</label>
-            <input type="email" class="form-control" id="email" required>
+            <label for="certificateImage" class="form-label">재직증명서 등록</label>
+            <input type="file" class="form-control" id="certificateImage" name="certificateImage" accept="image/*">
         </div>
 
         <!-- 추가적인 필드들을 필요에 따라 추가할 수 있습니다. -->
@@ -50,7 +45,11 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch header content and append it to the container
-        fetch("header.html")
+        fetch("/header", {
+            headers: {
+                'Content-Type': 'text/html', // 또는 다른 적절한 Content-Type 설정
+            },
+        })
             .then(response => response.text())
             .then(data => {
                 document.getElementById("headerContainer").innerHTML = data;
