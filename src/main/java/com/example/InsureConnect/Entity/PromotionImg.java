@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Entity;
 
+import com.example.InsureConnect.Dto.PromotionImgDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,13 +18,10 @@ public class PromotionImg {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "promotion_id")
-    private Promotion promotion;
-
     @Column
     private String imgLink;
 
-    @Column
-    private int sequence;
+    public static PromotionImg toPromotionImg(PromotionImgDto dto) {
+        return new PromotionImg(dto.getId(), dto.getImgLink());
+    }
 }
