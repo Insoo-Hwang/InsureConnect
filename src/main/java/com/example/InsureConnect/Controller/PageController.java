@@ -43,20 +43,7 @@ public class PageController {
         UserDto userDto = userService.findByKakaoId(user.getId());
         List<ChatDto> chatDtos = chatGptService.chats(userDto.getId());
         model.addAttribute("chatDtos", chatDtos);
+        model.addAttribute("userId", userDto.getId());
         return "chat";
-    }
-
-    //TEST
-    @GetMapping("/chat/all")
-    public String chatTest(Model model){
-        List<ChatDto> chatDtos = chatGptService.chatTest();
-        model.addAttribute("chatDtos", chatDtos);
-        return "chat";
-    }
-
-    @GetMapping("/logintest")
-    public String main(@AuthenticationPrincipal CustomOAuth2User user, Model model){
-        model.addAttribute("we", user.getId());
-        return "logintest";
     }
 }
