@@ -26,6 +26,16 @@ public class PageController {
     private final ChatGptService chatGptService;
     private final UserService userService;
 
+    @GetMapping("/test")
+    public String test() {
+        return "testqwer";
+    }
+
+    @GetMapping("/header")
+    public String getTemplate(Model model) {
+        return "header";
+    }
+
     @GetMapping("/login")
     public String login(Model model) {
         model.addAttribute("kakaoUrl", kakaoService.getKakaoLogin());
@@ -39,7 +49,7 @@ public class PageController {
     }
 
     @GetMapping("/chat")
-    public String chat(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+    public String chat(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
         UserDto userDto = userService.findByKakaoId(user.getId());
         List<ChatDto> chatDtos = chatGptService.chats(userDto.getId());
         model.addAttribute("chatDtos", chatDtos);

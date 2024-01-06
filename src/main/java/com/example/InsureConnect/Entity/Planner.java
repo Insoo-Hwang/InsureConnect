@@ -1,16 +1,14 @@
 package com.example.InsureConnect.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
 @Getter
+@Builder
 public class Planner {
 
     @Id
@@ -29,4 +27,7 @@ public class Planner {
 
     @Column
     private String certificate;
+
+    @Column
+    private String status;
 }
