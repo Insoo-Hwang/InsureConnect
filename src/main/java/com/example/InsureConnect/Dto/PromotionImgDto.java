@@ -13,4 +13,6 @@ import lombok.Setter;
 public class PromotionImgDto {
     private Long id;
     private String imgLink;
+    @JsonProperty
+    private Long PromotionId;
 }

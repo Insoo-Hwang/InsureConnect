@@ -60,11 +60,4 @@ public class Promotion {
         promotionImages.remove(promotionImg);
     }
 
-    public static Promotion toPromotion(PromotionDto dto, Planner planner){
-        List<PromotionImg> promotionImgs = dto.getPromotionImgDtos()
-                .stream()
-                .map(promotionImgDto -> PromotionImg.toPromotionImg(promotionImgDto))
-                .collect(Collectors.toList());
-        return new Promotion(dto.getId(), planner, dto.getTitle(), dto.getContent(), dto.getWrite(), dto.getEdit(), promotionImgs);
-    }
 }

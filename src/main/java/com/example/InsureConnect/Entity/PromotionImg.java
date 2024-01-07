@@ -21,7 +21,7 @@ public class PromotionImg {
     @Column
     private String imgLink;
 
-    public static PromotionImg toPromotionImg(PromotionImgDto dto) {
-        return new PromotionImg(dto.getId(), dto.getImgLink());
-    }
+    @ManyToOne
+    @JoinColumn(name = "promotion_id")
+    private Promotion promotion;
 }
