@@ -4,25 +4,19 @@ import com.example.InsureConnect.Dto.ChatDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Service.ChatGptService;
-import com.example.InsureConnect.Service.KakaoService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
 public class PageController {
 
-    private final KakaoService kakaoService;
     private final ChatGptService chatGptService;
     private final UserService userService;
 
@@ -37,9 +31,7 @@ public class PageController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("kakaoUrl", kakaoService.getKakaoLogin());
-
+    public String login() {
         return "login";
     }
 

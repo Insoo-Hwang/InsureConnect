@@ -1,14 +1,11 @@
 package com.example.InsureConnect.Api;
 
-import com.example.InsureConnect.Dto.PromotionDto;
 import com.example.InsureConnect.Entity.Promotion;
 import com.example.InsureConnect.Service.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.net.URI;
 import java.util.List;

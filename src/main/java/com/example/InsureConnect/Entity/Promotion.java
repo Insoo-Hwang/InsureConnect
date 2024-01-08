@@ -1,12 +1,10 @@
 package com.example.InsureConnect.Entity;
 
-import com.example.InsureConnect.Dto.PromotionDto;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
