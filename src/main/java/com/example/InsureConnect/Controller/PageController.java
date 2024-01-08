@@ -56,4 +56,9 @@ public class PageController {
         model.addAttribute("userId", userDto.getId());
         return "chat";
     }
+
+    @GetMapping("/promotion/test")
+    public String promotion(){
+        return "promotion";
+    }
 }

@@ -1,17 +1,14 @@
 package com.example.InsureConnect.Entity;
 
-import com.example.InsureConnect.Dto.PromotionImgDto;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PromotionImg {
 
     @Id
@@ -24,4 +21,8 @@ public class PromotionImg {
     @ManyToOne
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
+
+    public void setPromotion(Promotion promotion){
+        this.promotion = promotion;
+    }
 }

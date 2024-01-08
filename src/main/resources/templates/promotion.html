@@ -9,9 +9,31 @@
 <div id="container">
     <input type="text" id="title-text"/>
     <input type="text" id="content-text"/>
-    <button type="submit" id="chat-submit-button">전송</button>
-    <input type="file" class="form-control" id="certificateImage" name="certificateImage" accept="image/*">
-    <input type="hidden" id="userId" th:value="${userId}">
+    <input type="file" id="images" name="images" multiple="multiple" accept="image/*">
+    <button type="submit" id="promotion-submit-button">전송</button>
 </div>
+<script>
+    {
+        const promotionSubmitBtn = document.querySelector("#promotion-submit-button")
+        promotionSubmitBtn.addEventListener("click", function(){
+            const promotion = {
+                title: document.querySelector("#title-text").value,
+                content: document.querySelector("#content-text").value
+            }
+            const url = "/api/promotion";
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify(promotion),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(response => {
+                const msg = (response.ok) ? "저장되었습니다!" : "저장 실패!";
+                alert(msg);
+                window.location.reload();
+            });
+        })
+    }
+</script>
 </body>
 </html>
