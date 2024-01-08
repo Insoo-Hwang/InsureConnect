@@ -51,6 +51,9 @@ public class Promotion {
     }
 
     public void addPromotionImage(PromotionImg promotionImg) {
+        if(this.promotionImages == null){
+            this.promotionImages = new ArrayList<>();
+        }
         promotionImages.add(promotionImg);
     }
 
