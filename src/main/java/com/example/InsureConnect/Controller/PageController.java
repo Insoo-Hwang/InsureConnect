@@ -57,7 +57,7 @@ public class PageController {
         return "chat";
     }
 
-    @GetMapping("/promotion/test")
+    @GetMapping("/promotion/new")
     public String promotion(){
         return "promotion";
     }
