@@ -3,13 +3,17 @@ package com.example.InsureConnect.Controller;
 import com.example.InsureConnect.Dto.ChatDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Entity.Promotion;
+import com.example.InsureConnect.Entity.PromotionImg;
 import com.example.InsureConnect.Service.ChatGptService;
+import com.example.InsureConnect.Service.PromotionService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -19,6 +23,7 @@ public class PageController {
 
     private final ChatGptService chatGptService;
     private final UserService userService;
+    private final PromotionService promotionService;
 
     @GetMapping("/test")
     public String test() {
@@ -52,5 +57,14 @@ public class PageController {
     @GetMapping("/promotion/new")
     public String promotion(){
         return "promotion";
+    }
+
+    @GetMapping("/promotion/{promotionId}")
+    public String showPromotion(@PathVariable Long promotionId, Model model){
+        Promotion promotion = promotionService.getPromotion(promotionId);
+        List<PromotionImg> promotionImgs = promotionService.getPromotionImgs(promotionId);
+        model.addAttribute("promotion", promotion);
+        model.addAttribute("promotionImgs", promotionImgs);
+        return "promotion_detail";
     }
 }

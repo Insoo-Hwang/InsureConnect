@@ -2,6 +2,7 @@ package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Entity.Promotion;
 import com.example.InsureConnect.Entity.PromotionImg;
+import com.example.InsureConnect.Handler.FileHandler;
 import com.example.InsureConnect.Repository.PromotionImgRepository;
 import com.example.InsureConnect.Repository.PromotionRepository;
 import jakarta.transaction.Transactional;
@@ -38,6 +39,18 @@ public class PromotionService {
                 promotionImgRepository.save(promotionImg);
             }
         }
+        return promotion;
+    }
+
+    public List<PromotionImg> getPromotionImgs(Long promotionId){
+        List<PromotionImg> promotionImgs = promotionImgRepository.findByPromotionId(promotionId);
+        if(promotionImgs == null) return null;
+        else return promotionImgs;
+    }
+
+    public Promotion getPromotion(Long promotionId){
+        Promotion promotion = promotionRepository.findById(promotionId)
+                .orElseThrow(() -> new IllegalArgumentException());
         return promotion;
     }
 }

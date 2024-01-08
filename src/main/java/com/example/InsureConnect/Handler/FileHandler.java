@@ -1,4 +1,4 @@
-package com.example.InsureConnect.Service;
+package com.example.InsureConnect.Handler;
 
 import com.example.InsureConnect.Entity.PromotionImg;
 import org.springframework.stereotype.Component;
@@ -27,13 +27,10 @@ public class FileHandler {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         String current_date = simpleDateFormat.format(new Date());
 
-        String absolutePath = new File("").getAbsolutePath() + "\\";
+        String absolutePath = new File("").getAbsolutePath()
+                + "/src/main/resources/static";
 
-        String path = "images/" + current_date;
-        File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+        String path = "/img/promotion/";
 
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
@@ -54,11 +51,11 @@ public class FileHandler {
                 }
                 String new_file_name = Long.toString(System.nanoTime()) + originalFileExtension;
                 PromotionImg boardPicture = PromotionImg.builder()
-                        .imgLink(path+"/"+new_file_name)
+                        .imgLink(path + new_file_name)
                         .build();
                         fileList.add(boardPicture);
 
-                file = new File(absolutePath + path + "/" + new_file_name);
+                File file = new File(absolutePath + path + new_file_name);
                 multipartFile.transferTo(file);
             }
         }
