@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.sql.Timestamp;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -28,6 +27,9 @@ public class ChatGptService {
 
     @Autowired
     private ChatRepository chatRepository;
+
+    @Autowired
+    private UserService userService;
 
     public HttpEntity<ChatGptRequestDto> buildHttpEntity(ChatGptRequestDto requestDto) {
         HttpHeaders headers = new HttpHeaders();
@@ -47,7 +49,8 @@ public class ChatGptService {
     }
 
     //chat gpt api를 통해 질문 전송
-    public ChatGptResponseDto askQuestion(QuestionRequestDto requestDto, User user) {
+    public ChatGptResponseDto askQuestion(QuestionRequestDto requestDto) {
+        User user = User.toUser(userService.findById(requestDto.getId()));
         ChatGptResponseDto responseDto = this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequestDto(
@@ -77,14 +80,6 @@ public class ChatGptService {
         List<ChatDto> chats = chatRepository.findByUserId(userId)
                 .stream()
                 .map(chat -> ChatDto.toDto(chat))
-                .collect(Collectors.toList());
-        return chats;
-    }
-
-    public List<ChatDto> chatTest(){
-        List<ChatDto> chats = chatRepository.findAll()
-                .stream()
-                .map(chat -> ChatDto.testDto(chat))
                 .collect(Collectors.toList());
         return chats;
     }

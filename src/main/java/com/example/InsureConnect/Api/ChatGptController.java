@@ -22,7 +22,6 @@ public class ChatGptController {
 
     @PostMapping("/question")
     public ChatGptResponseDto sendQuestion(@RequestBody QuestionRequestDto requestDto) {
-        //로그인 구현시 null 해제
-        return chatGptService.askQuestion(requestDto, null);
+        return chatGptService.askQuestion(requestDto);
     }
 }

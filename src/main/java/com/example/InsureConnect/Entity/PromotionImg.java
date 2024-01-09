@@ -1,29 +1,28 @@
 package com.example.InsureConnect.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Entity
 @Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class PromotionImg {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    private String imgLink;
+
     @ManyToOne
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
 
-    @Column
-    private String imgLink;
-
-    @Column
-    private int sequence;
+    public void setPromotion(Promotion promotion){
+        this.promotion = promotion;
+    }
 }
