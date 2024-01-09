@@ -5,6 +5,8 @@ server:
 
 spring:
     jpa:
+        hibernate:
+            ddl-auto: none
         defer-datasource-initialization: true
         properties:
             hibernate:
@@ -39,5 +41,5 @@ spring:
 
     servlet:
         multipart:
-            location: classpath:/static/planner
+            location: classpath:/static/img
             max-file-size: 5MB

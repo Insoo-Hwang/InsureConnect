@@ -48,42 +48,28 @@
     </div>
 
     <!-- 카드 목록 -->
-    <div class="row">
+    <div class="row" th:each="promotion : ${promotions}">
         <!-- 카드 1 -->
         <div class="col-lg-4 col-md-6 mb-4">
             <div class="card h-100">
-                <img class="card-img-top" src="profile1.jpg" alt="프로필 사진">
-                <div class="card-body">
-                    <h4 class="card-title">보험설계사 1</h4>
-                    <p class="card-text">평점: 4.5</p>
-                    <p class="card-text">리뷰 갯수: 20</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">최근 업데이트: 2024-01-01</small>
-                </div>
-            </div>
-        </div>
-
-        <!-- 카드 2 -->
-        <div class="col-lg-4 col-md-6 mb-4">
-            <div class="card h-100">
-                <img class="card-img-top" src="profile2.jpg" alt="프로필 사진">
-                <div class="card-body">
-                    <h4 class="card-title">보험설계사 2</h4>
-                    <p class="card-text">평점: 4.0</p>
-                    <p class="card-text">리뷰 갯수: 15</p>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">최근 업데이트: 2024-01-02</small>
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <img class="card-img-top" th:src="'profile' + ${promotion.planner_id} + '.jpg'" alt="프로필 사진">
+                        <div class="card-body">
+                            <h4 class="card-title" th:text="${promotion.title}"></h4>
+                            <p class="card-text" th:text="${promotion.content}"></p>
+                            <p class="card-text" th:text="${promotion.plannerRatio}"></p>
+                            <p class="card-text" th:text="${promotion.plannerReviewCount}"></p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted" th:text="${promotion.edit}"></small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 추가 카드들... -->
-
-    </div>
-
-    <!-- 검색 기능 -->
+            <!-- 검색 기능 -->
     <form class="mt-4">
         <div class="input-group">
             <input type="text" class="form-control" placeholder="제목 또는 내용 검색" aria-label="Search">
