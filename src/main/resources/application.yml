@@ -7,20 +7,18 @@ spring:
     jpa:
         hibernate:
             ddl-auto:
-
-        defer-datasource-initialization: true
         properties:
             hibernate:
                 show_sql: true
                 format_sql: true
     datasource:
-        url: jdbc:postgresql://localhost:5432/earl
-        username: earl
-        password: han
-        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/InsureConnect
+        username: postgres
+        password: hwang814
     sql:
         init:
             encoding: utf-8
+            mode: never
     security:
         oauth2:
             client:

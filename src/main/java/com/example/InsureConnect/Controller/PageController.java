@@ -3,8 +3,10 @@ package com.example.InsureConnect.Controller;
 import com.example.InsureConnect.Dto.ChatDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Entity.Promotion;
+import com.example.InsureConnect.Entity.PromotionImg;
 import com.example.InsureConnect.Service.ChatGptService;
-import com.example.InsureConnect.Service.KakaoService;
+import com.example.InsureConnect.Service.PromotionService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -12,13 +14,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @Controller
 @RequiredArgsConstructor
 public class PageController {
 
-    private final KakaoService kakaoService;
     private final ChatGptService chatGptService;
     private final UserService userService;
+    private final PromotionService promotionService;
 
     @GetMapping("/test")
     public String test(@AuthenticationPrincipal CustomOAuth2User user,Model model) {
@@ -32,9 +35,7 @@ public class PageController {
     }
 
     @GetMapping("/login")
-    public String login(Model model) {
-        model.addAttribute("kakaoUrl", kakaoService.getKakaoLogin());
-
+    public String login() {
         return "login";
     }
 
@@ -48,5 +49,4 @@ public class PageController {
         model.addAttribute("we", user.getId());
         return "logintest";
     }
-
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.*;
 
 @Entity
 @Getter
@@ -24,7 +25,7 @@ public class Promotion {
     @Column
     private String title;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column
@@ -40,4 +41,5 @@ public class Promotion {
     public void setEditToCurrentTime() {
         this.edit = new Timestamp(System.currentTimeMillis());
     }
+
 }

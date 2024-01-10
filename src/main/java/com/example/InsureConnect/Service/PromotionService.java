@@ -62,6 +62,4 @@ public class PromotionService {
                 .edit(promotion.getEdit())
                 .build();
     }
-
 }
-
