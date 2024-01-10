@@ -1,56 +1,65 @@
 package com.example.InsureConnect.Service;
 
+import com.example.InsureConnect.Dto.PromotionDto;
+import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.Promotion;
 import com.example.InsureConnect.Entity.PromotionImg;
-import com.example.InsureConnect.Handler.FileHandler;
+import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.PromotionImgRepository;
 import com.example.InsureConnect.Repository.PromotionRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.InsureConnect.handler.FileUploadHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
+@RequiredArgsConstructor
 @Service
 public class PromotionService {
+    private final PromotionRepository promotionRepository;
+    private final PromotionImgRepository promotionImgRepository;
+    private final PlannerRepository plannerRepository;
+    private final FileUploadHandler fileUploadHandler;
 
-    @Autowired
-    private FileHandler fileHandler;
+    public void savePromotion(String title, String content, MultipartFile[] images, CustomOAuth2User user) throws IOException {
+        Planner byUserKakaoId = plannerRepository.findByUser_KakaoId(user.getId());
+        String path = "classpath:/static/img/promotion";
+        Promotion promotion = Promotion.builder()
+                .planner(byUserKakaoId)
+                .title(title)
+                .content(content)
+                .edit(null)
+                .build();
+        promotion.setWriteToCurrentTime();
+        promotionRepository.save(promotion);
 
-    @Autowired
-    private PromotionRepository promotionRepository;
+        List<String> imgLinks = fileUploadHandler.uploadFiles(images, path);
+        List<PromotionImg> promotionImgs = new ArrayList<>();
 
-    @Autowired
-    private PromotionImgRepository promotionImgRepository;
-
-    @Transactional
-    public Promotion create(Promotion promotion, List<MultipartFile> files) throws Exception{
-        if(files != null){
-            List<PromotionImg> list = fileHandler.parseFileInfo(files);
-
-            for(PromotionImg promotionImg : list){
-                promotion.addPromotionImage(promotionImg);
-            }
-            promotion = promotionRepository.save(promotion);
-            for(PromotionImg promotionImg : list){
-                promotionImg.setPromotion(promotion);
-                promotionImgRepository.save(promotionImg);
-            }
+        for (int i = 0; i < imgLinks.size(); i++) {
+            PromotionImg promotionImg = PromotionImg.builder()
+                    .promotion(promotion)
+                    .imgLink(imgLinks.get(i))
+                    .sequence(i + 1)
+                    .build();
+            promotionImgs.add(promotionImg);
         }
-        return promotion;
+        promotionImgRepository.saveAll(promotionImgs);
     }
 
-    public List<PromotionImg> getPromotionImgs(Long promotionId){
-        List<PromotionImg> promotionImgs = promotionImgRepository.findByPromotionId(promotionId);
-        if(promotionImgs == null) return null;
-        else return promotionImgs;
-    }
-
-    public Promotion getPromotion(Long promotionId){
-        Promotion promotion = promotionRepository.findById(promotionId)
-                .orElseThrow(() -> new IllegalArgumentException());
-        return promotion;
+    public PromotionDto findByPlannerId(Long planner_id) {
+        Promotion promotion = promotionRepository.findByPlannerId(planner_id);
+        return PromotionDto.builder()
+                .id(promotion.getId())
+                .planner_id(planner_id)
+                .title(promotion.getTitle())
+                .content(promotion.getContent())
+                .write(promotion.getWrite())
+                .edit(promotion.getEdit())
+                .build();
     }
 }

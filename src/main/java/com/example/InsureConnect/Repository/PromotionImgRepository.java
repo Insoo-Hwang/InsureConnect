@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
+import java.util.List;
+
 public interface PromotionImgRepository extends JpaRepository<PromotionImg, Long> {
 
-    @Query(value = "SELECT * FROM promotion_img WHERE promotion_id = :promotionId", nativeQuery = true)
     List<PromotionImg> findByPromotionId(Long promotionId);
 }

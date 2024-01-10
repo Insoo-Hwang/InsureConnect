@@ -34,29 +34,12 @@ public class Promotion {
     @Column
     private Timestamp edit;
 
-    @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PromotionImg> promotionImages = new ArrayList<>();
-
-    @PrePersist
-    public void writePromotion(){
+    public void setWriteToCurrentTime() {
         this.write = new Timestamp(System.currentTimeMillis());
-        this.edit = this.write;
     }
 
-    @PreUpdate
-    public void editPromotion(){
+    public void setEditToCurrentTime() {
         this.edit = new Timestamp(System.currentTimeMillis());
-    }
-
-    public void addPromotionImage(PromotionImg promotionImg) {
-        if(this.promotionImages == null){
-            this.promotionImages = new ArrayList<>();
-        }
-        promotionImages.add(promotionImg);
-    }
-
-    public void removePromotionImage(PromotionImg promotionImg) {
-        promotionImages.remove(promotionImg);
     }
 
 }
