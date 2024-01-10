@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로모션 상세 정보</title>
+    <!-- 부트스트랩 CDN 링크 추가 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 th:text="${promotion.getTitle()}"></h2>
+
+    <p class="font-weight-bold">작성자: <span th:text="${user.getNickname()}"></span></p>
+
+    <p class="font-weight-bold">작성 시간: <span th:text="${#dates.format(promotion.write, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+
+    <!-- Display "수정 시간" only when it exists -->
+    <p th:if="${promotion.edit}" class="font-weight-bold">수정 시간: <span th:text="${#dates.format(promotion.edit, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
+
+    <div class="mt-3">
+        <p class="font-weight-bold">첨부 이미지:</p>
+        <div th:each="image : ${images}">
+            <img th:src="${image.imgLink}" class="img-thumbnail mr-2" style="width:100px; height:100px;">
+            <p th:text="${image.imgLink}"></p>
+        </div>
+    </div>
+    <a th:href="@{/}" class="btn btn-primary mt-3">홈으로 돌아가기</a>
+</div>
+
+<!-- 부트스트랩 및 관련 스크립트 CDN 추가 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

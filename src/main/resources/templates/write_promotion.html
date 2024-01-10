@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>설계사 홍보페이지</title>
+    <!-- 부트스트랩 CDN 링크 추가 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>설계사 홍보페이지</h2>
+    <form action="/registerPromotion" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">글 제목</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="글 제목을 입력하세요">
+        </div>
+        <div class="form-group">
+            <label for="content">본문</label>
+            <textarea class="form-control" id="content" rows="5" name="content" placeholder="본문을 입력하세요"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">이미지 첨부</label>
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="image" name="images" multiple>
+                    <label class="custom-file-label" for="image">이미지를 선택하세요 최대 4장 업로드 가능합니다.</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="image-list">
+            <!-- 이미지 목록이 여기에 표시될 것입니다. -->
+        </div>
+        <button type="submit" class="btn btn-primary">등록</button>
+        <button type="button" class="btn btn-secondary">취소</button>
+    </form>
+</div>
+
+<!-- 부트스트랩 및 관련 스크립트 CDN 추가 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // 이미지 제거 함수
+    function removeImage() {
+        var imageList = document.getElementById("image-list");
+        if (imageList.children.length > 0) {
+            imageList.removeChild(imageList.lastChild);
+        }
+    }
+
+    // 이미지 업로드 시 목록에 추가하는 이벤트 처리
+    document.getElementById("image").addEventListener("change", function () {
+        var imageList = document.getElementById("image-list");
+        var files = this.files;
+
+        // 이미지 목록 업데이트
+        for (var i = 0; i < files.length; i++) {
+            if (imageList.children.length < 4) { // 최대 4개까지만 허용
+                var imageItem = document.createElement("div");
+                imageItem.className = "d-inline-block mr-2";
+                imageItem.innerHTML = `
+                <img src="${URL.createObjectURL(files[i])}" class="img-thumbnail" style="width:100px; height:100px;">
+                <button type="button" class="btn btn-danger btn-sm mt-1" onclick="removeImageItem(this)">삭제</button>
+              `;
+                imageList.appendChild(imageItem);
+            } else {
+                alert("이미지는 최대 4개까지 업로드 가능합니다.");
+                return;
+            }
+        }
+    });
+
+    // 이미지 아이템 삭제 함수
+    function removeImageItem(button) {
+        var imageList = document.getElementById("image-list");
+        imageList.removeChild(button.parentNode);
+    }
+</script>
+
+</body>
+</html>

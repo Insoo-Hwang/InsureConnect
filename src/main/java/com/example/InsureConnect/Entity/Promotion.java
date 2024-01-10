@@ -1,10 +1,7 @@
 package com.example.InsureConnect.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.sql.Timestamp;
 
@@ -13,13 +10,14 @@ import java.sql.Timestamp;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Promotion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "planner_id")
     private Planner planner;
 
@@ -34,4 +32,12 @@ public class Promotion {
 
     @Column
     private Timestamp edit;
+
+    public void setWriteToCurrentTime() {
+        this.write = new Timestamp(System.currentTimeMillis());
+    }
+
+    public void setEditToCurrentTime() {
+        this.edit = new Timestamp(System.currentTimeMillis());
+    }
 }
