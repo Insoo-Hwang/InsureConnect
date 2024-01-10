@@ -26,12 +26,4 @@ public class ChatController {
         model.addAttribute("chatDtos", chatDtos);
         return "chat";
     }
-
-    //TEST
-    @GetMapping("/chat/all")
-    public String chatTest(Model model) {
-        List<ChatDto> chatDtos = chatGptService.chatTest();
-        model.addAttribute("chatDtos", chatDtos);
-        return "chat";
-    }
 }

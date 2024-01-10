@@ -14,15 +14,11 @@ public class PromotionImg {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private String imgLink;
-
     @ManyToOne
     @JoinColumn(name = "promotion_id")
     private Promotion promotion;
-
-    public void setPromotion(Promotion promotion){
-        this.promotion = promotion;
-    }
+    @Column
+    private String imgLink;
+    @Column
+    private int sequence;
 }
