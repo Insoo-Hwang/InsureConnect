@@ -24,6 +24,7 @@ public class ChatController {
         UserDto userDto = userService.findByKakaoId(user.getId());
         List<ChatDto> chatDtos = chatGptService.chats(userDto.getId());
         model.addAttribute("chatDtos", chatDtos);
+        model.addAttribute("userId", userDto.getId());
         return "chat";
     }
 }
