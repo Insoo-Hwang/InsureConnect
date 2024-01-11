@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
@@ -59,5 +60,18 @@ public class PlannerService {
     public UserDto findUserById(Long planner_id) {
         User userById = plannerRepository.findUserByPlannerId(planner_id);
         return UserDto.toDto(userById);
+    }
+
+    public PlannerDto findByUserId(UUID userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException());
+        Planner planner = plannerRepository.findByUser(user);
+        if(planner == null) return null;
+        else return PlannerDto.builder()
+                .id(planner.getId())
+                .certificate(planner.getCertificate())
+                .status(planner.getStatus())
+                .company(planner.getCompany())
+                .profile(planner.getProfile())
+                .build();
     }
 }

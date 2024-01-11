@@ -53,7 +53,8 @@ public class PromotionService {
 
     public PromotionDto findByPlannerId(Long planner_id) {
         Promotion promotion = promotionRepository.findByPlannerId(planner_id);
-        return PromotionDto.builder()
+        if(promotion == null) return null;
+        else return PromotionDto.builder()
                 .id(promotion.getId())
                 .planner_id(planner_id)
                 .title(promotion.getTitle())
