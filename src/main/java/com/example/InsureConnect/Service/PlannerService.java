@@ -7,7 +7,7 @@ import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
-import com.example.InsureConnect.handler.FileUploadHandler;
+import com.example.InsureConnect.Handler.FileUploadHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

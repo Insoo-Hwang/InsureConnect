@@ -44,4 +44,10 @@ public class User {
     public static User toUser(UserDto dto){
         return new User(dto.getId(), dto.getKakaoId(), dto.getNickname(), dto.getGender(), dto.getAge(), dto.getType());
     }
+
+    public void patch(UserDto userDto) {
+        this.nickname = userDto.getNickname();
+        this.age = userDto.getAge();
+        this.gender = userDto.getGender();
+    }
 }

@@ -19,10 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class PageController {
 
-    private final ChatGptService chatGptService;
-    private final UserService userService;
-    private final PromotionService promotionService;
-
     @GetMapping("/test")
     public String test(@AuthenticationPrincipal CustomOAuth2User user,Model model) {
         model.addAttribute("user", user);
