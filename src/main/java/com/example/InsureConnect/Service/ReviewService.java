@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Dto.ReviewDto;
+import com.example.InsureConnect.Entity.Review;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.ReviewImgRepository;
 import com.example.InsureConnect.Repository.ReviewRepository;
@@ -26,5 +27,11 @@ public class ReviewService {
                 .map(review -> ReviewDto.toDto(review))
                 .collect(Collectors.toList());
         return dto;
+    }
+
+    public ReviewDto delete(Long reviewId){
+        Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException());
+        reviewRepository.delete(review);
+        return ReviewDto.toDto(review);
     }
 }
