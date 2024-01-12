@@ -1,8 +1,6 @@
 package com.example.InsureConnect.Controller;
 
-import com.example.InsureConnect.Dto.PromotionDto;
-import com.example.InsureConnect.Dto.PromotionImgDto;
-import com.example.InsureConnect.Dto.UserDto;
+import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
@@ -26,13 +24,13 @@ public class PromotionController {
     private final PromotionImgService promotionImgService;
 
     //Promotion 등록
-    @GetMapping("/writePromotion")
+    @GetMapping("/promotion/new")
     public String writePromotion(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
         model.addAttribute("user", plannerService.findByUser_KakaoId(user.getId()));
         return "write_promotion";
     }
 
-    @PostMapping("/registerPromotion")
+    @PostMapping("/promotion/new")
     public String registerPromotion(@RequestParam(value = "title") String title,
                                     @RequestPart(value = "content") String content,
                                     @RequestPart("images") MultipartFile[] images,
@@ -43,7 +41,8 @@ public class PromotionController {
         return "home";
     }
 
-    @GetMapping("/detailPromotion/{planner_id}")
+    //Promotion 세부조회
+    @GetMapping("/promotion/{planner_id}")
     public String detailPromotion(@PathVariable("planner_id") Long planner_id,
                                   Model model) {
         UserDto user = plannerService.findUserById(planner_id);
@@ -55,6 +54,15 @@ public class PromotionController {
         model.addAttribute("user", user);
         model.addAttribute("promotion", promotion);
         return "detail_promotion";
+    }
+
+    //Promotion 조회
+
+    @GetMapping("/promotion")
+    public String promotion(Model model) {
+        List<PromotionAllDto> planners = plannerService.findAll();
+        model.addAttribute("planners", planners);
+        return "promotion";
     }
 
 //    @PostMapping("/updatePromotion")

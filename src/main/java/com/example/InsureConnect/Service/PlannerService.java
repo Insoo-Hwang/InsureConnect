@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Dto.PlannerDto;
+import com.example.InsureConnect.Dto.PromotionAllDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
@@ -98,7 +99,15 @@ public class PlannerService {
     public List<PlannerDto> findEnrollPlanner(){
         List<Planner> planners = plannerRepository.findByStatusEnroll();
         return planners.stream()
-                .map(planner -> PlannerDto.toDto(planner))
+                .map(PlannerDto::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<PromotionAllDto> findAll() {
+        List<Planner> planners = plannerRepository.findAll();
+
+        return planners.stream()
+                .map(PromotionAllDto::toDto)
                 .collect(Collectors.toList());
     }
 }

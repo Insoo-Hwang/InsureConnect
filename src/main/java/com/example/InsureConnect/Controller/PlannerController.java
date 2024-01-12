@@ -15,13 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class PlannerController {
     private final PlannerService plannerService;
 
-    @GetMapping("/registerPlanner")
+    @GetMapping("/planner/new")
     public String registerPlanner(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
         model.addAttribute("user_id", user.getId());
         return "signup_planner";
     }
 
-    @PostMapping("/registerPlanner")
+    @PostMapping("/planner/new")
     public String uploadPlanner(@RequestParam(value = "company") String company,
                                 @RequestPart(value = "profileImage") MultipartFile profileImage,
                                 @RequestPart(value = "certificateImage") MultipartFile certificateImage,

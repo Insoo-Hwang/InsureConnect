@@ -33,4 +33,5 @@ public class PlannerDto {
     public static PlannerDto toDto(Planner planner) {
         return new PlannerDto(planner.getId(),planner.getUser().getId(), planner.getProfile(), planner.getCompany(), planner.getCertificate(), planner.getStatus(), null);
     }
+
 }

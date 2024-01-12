@@ -5,7 +5,9 @@ import jakarta.persistence.Column;
 import lombok.*;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,4 +27,11 @@ public class ReviewDto {
     public static ReviewDto toDto(Review review) {
         return new ReviewDto(review.getId(), review.getPlanner().getId(), review.getUser().getId(), review.getTitle(), review.getContent(), review.getRate(), review.getWrite(), review.getEdit());
     }
+
+    public static List<ReviewDto> toDtoList(List<Review> reviews) {
+        return reviews.stream()
+                .map(ReviewDto::toDto)
+                .collect(Collectors.toList());
+    }
+
 }
