@@ -8,6 +8,7 @@ import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
 import com.example.InsureConnect.Handler.FileUploadHandler;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,5 +74,24 @@ public class PlannerService {
                 .company(planner.getCompany())
                 .profile(planner.getProfile())
                 .build();
+    }
+
+    @Transactional
+    public PlannerDto delete(Long id){
+        Planner target = plannerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+        if(target.getStatus().equals("permit")){
+            return null;
+        }
+        else {
+            plannerRepository.delete(target);
+            return PlannerDto.builder()
+                    .id(target.getId())
+                    .certificate(target.getCertificate())
+                    .status(target.getStatus())
+                    .company(target.getCompany())
+                    .profile(target.getProfile())
+                    .build();
+        }
     }
 }
