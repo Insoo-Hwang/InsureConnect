@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Dto;
 
+import com.example.InsureConnect.Entity.Promotion;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -21,4 +22,15 @@ public class PromotionDto {
     private Timestamp write;
 
     private Timestamp edit;
+
+    public static PromotionDto toDto(Promotion promotion) {
+        return PromotionDto.builder()
+                .id(promotion.getId())
+                .planner_id(promotion.getPlanner().getId())
+                .title(promotion.getTitle())
+                .content(promotion.getContent())
+                .write(promotion.getWrite())
+                .edit(promotion.getEdit())
+                .build();
+    }
 }

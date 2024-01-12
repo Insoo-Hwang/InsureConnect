@@ -34,6 +34,9 @@ public class User {
     @Column
     private String type;
 
+    @OneToOne(mappedBy = "user")
+    private Planner planner;
+
     @PrePersist
     private void generateUUID() {
         if (id == null) {
@@ -42,7 +45,7 @@ public class User {
     }
 
     public static User toUser(UserDto dto){
-        return new User(dto.getId(), dto.getKakaoId(), dto.getNickname(), dto.getGender(), dto.getAge(), dto.getType());
+        return new User(dto.getId(), dto.getKakaoId(), dto.getNickname(), dto.getGender(), dto.getAge(), dto.getType(), null);
     }
 
     public void patch(UserDto userDto) {

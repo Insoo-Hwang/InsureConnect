@@ -26,6 +26,10 @@
             <p th:text="${image.imgLink}"></p>
         </div>
     </div>
+    <div class="mt-3">
+        <div th:text="${promotion.getContent()}">
+        </div>
+    </div>
     <a th:href="@{/}" class="btn btn-primary mt-3">홈으로 돌아가기</a>
 </div>
 

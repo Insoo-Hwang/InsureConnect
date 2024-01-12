@@ -3,6 +3,8 @@ package com.example.InsureConnect.Entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -30,6 +32,12 @@ public class Planner {
 
     @Column
     private String status;
+
+    @OneToOne(mappedBy = "planner")
+    private Promotion promotion;
+
+    @OneToMany(mappedBy = "planner")
+    private List<Review> reviews;
 
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";
