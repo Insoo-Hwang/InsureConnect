@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 
@@ -18,7 +19,7 @@ public class PlannerDto {
 
     private Long id;
 
-    private UUID userId;
+    private UserDto userDto;
 
     private String profile;
 
@@ -28,10 +29,21 @@ public class PlannerDto {
 
     private String status;
 
+    private PromotionDto promotionDto;
+
+    private List<ReviewDto> reviewDto;
+
     private MultipartFile[] f = new MultipartFile[2];
 
     public static PlannerDto toDto(Planner planner) {
-        return new PlannerDto(planner.getId(),planner.getUser().getId(), planner.getProfile(), planner.getCompany(), planner.getCertificate(), planner.getStatus(), null);
+        return PlannerDto.builder()
+                .id(planner.getId())
+                .userDto(UserDto.toDto(planner.getUser()))
+                .profile(planner.getProfile())
+                .company(planner.getCompany())
+                .certificate(planner.getCertificate())
+                .status(planner.getStatus())
+                .promotionDto(PromotionDto.toDto(planner.getPromotion()))
+                .reviewDto(ReviewDto.toDtoList(planner.getReviews())).build();
     }
-
 }

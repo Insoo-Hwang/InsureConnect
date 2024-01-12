@@ -54,7 +54,7 @@ public class PlannerService {
         Planner byUserKakaoId = plannerRepository.findByUser_KakaoId(userId);
         return PlannerDto.builder()
                 .id(byUserKakaoId.getId())
-                .userId(byUserKakaoId.getUser().getId())
+                .userDto(UserDto.toDto(byUserKakaoId.getUser()))
                 .certificate(byUserKakaoId.getCertificate())
                 .status(byUserKakaoId.getStatus())
                 .company(byUserKakaoId.getCompany())
