@@ -30,4 +30,9 @@ public class Planner {
 
     @Column
     private String status;
+
+    public void changeStatus(boolean permit){
+        if(permit) this.status = "permit";
+        else this.status = "temp";
+    }
 }

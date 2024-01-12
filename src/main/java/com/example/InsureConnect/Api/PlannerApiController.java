@@ -5,10 +5,7 @@ import com.example.InsureConnect.Service.PlannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
@@ -34,5 +31,13 @@ public class PlannerApiController {
         PlannerDto deleteDto = plannerService.delete(plannerDto.getId());
         if(deleteDto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
+    }
+
+    //설계사 관리
+    @PatchMapping("/api/planner/{plannerId}/{status}")
+    public ResponseEntity<PlannerDto> managePlanner(@PathVariable Long plannerId, @PathVariable String status){
+        boolean permit = status.equals("permit");
+        PlannerDto plannerDto = plannerService.managePlanner(plannerId, permit);
+        return ResponseEntity.status(HttpStatus.OK).body(plannerDto);
     }
 }

@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -67,13 +69,7 @@ public class PlannerService {
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException());
         Planner planner = plannerRepository.findByUser(user);
         if(planner == null) return null;
-        else return PlannerDto.builder()
-                .id(planner.getId())
-                .certificate(planner.getCertificate())
-                .status(planner.getStatus())
-                .company(planner.getCompany())
-                .profile(planner.getProfile())
-                .build();
+        else return PlannerDto.toDto(planner);
     }
 
     @Transactional
@@ -85,13 +81,23 @@ public class PlannerService {
         }
         else {
             plannerRepository.delete(target);
-            return PlannerDto.builder()
-                    .id(target.getId())
-                    .certificate(target.getCertificate())
-                    .status(target.getStatus())
-                    .company(target.getCompany())
-                    .profile(target.getProfile())
-                    .build();
+            return PlannerDto.toDto(target);
         }
+    }
+
+    @Transactional
+    public PlannerDto managePlanner(Long id, boolean permit){
+        Planner target = plannerRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException());
+        target.changeStatus(permit);
+        Planner updated = plannerRepository.save(target);
+        return PlannerDto.toDto(updated);
+    }
+
+    public List<PlannerDto> findEnrollPlanner(){
+        List<Planner> planners = plannerRepository.findByStatusEnroll();
+        return planners.stream()
+                .map(planner -> PlannerDto.toDto(planner))
+                .collect(Collectors.toList());
     }
 }

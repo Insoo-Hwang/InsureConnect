@@ -1,6 +1,8 @@
 package com.example.InsureConnect.Dto;
 
+import com.example.InsureConnect.Entity.Planner;
 import lombok.*;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -23,12 +25,7 @@ public class PlannerDto {
 
     private MultipartFile[] f = new MultipartFile[2];
 
-    public PlannerDto toDto(Long id, String profile, String company, String certificate, String status) {
-        this.id = id;
-        this.profile = profile;
-        this.company = company;
-        this.certificate = certificate;
-        this.status = status;
-        return this;
+    public static PlannerDto toDto(Planner planner) {
+        return new PlannerDto(planner.getId(), planner.getProfile(), planner.getCompany(), planner.getCertificate(), planner.getStatus(), null);
     }
 }

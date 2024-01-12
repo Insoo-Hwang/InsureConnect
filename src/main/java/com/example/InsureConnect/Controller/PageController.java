@@ -75,4 +75,11 @@ public class PageController {
         model.addAttribute("plannerStatus", plannerStatus);
         return "myPage";
     }
+
+    @GetMapping("/management/planner")
+    public String managePlanner(Model model){
+        List<PlannerDto> plannerDtos = plannerService.findEnrollPlanner();
+        model.addAttribute("plannerDtos", plannerDtos);
+        return "management_planner";
+    }
 }
