@@ -19,7 +19,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    @Column
+    @Column(name = "kakao_id")
     private Long kakaoId;
 
     @Column
@@ -49,5 +49,9 @@ public class User {
         this.nickname = userDto.getNickname();
         this.age = userDto.getAge();
         this.gender = userDto.getGender();
+    }
+
+    public void delete(){
+        this.kakaoId = null;
     }
 }

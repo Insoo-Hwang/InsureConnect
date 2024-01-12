@@ -22,4 +22,11 @@ public class UserApiController {
         UserDto updated = userService.update(userId, userDto);
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
+
+    //유저 삭제
+    @PatchMapping("/api/user/{userId}/del")
+    private ResponseEntity<UserDto> deleteUser(@PathVariable UUID userId){
+        UserDto deleted = userService.deleteUser(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(deleted);
+    }
 }

@@ -82,4 +82,11 @@ public class PageController {
         model.addAttribute("plannerDtos", plannerDtos);
         return "management_planner";
     }
+
+    @GetMapping("/management/user")
+    public String manageUser(Model model){
+        List<UserDto> userDtos = userService.showAll();
+        model.addAttribute("userDtos", userDtos);
+        return "management_user";
+    }
 }

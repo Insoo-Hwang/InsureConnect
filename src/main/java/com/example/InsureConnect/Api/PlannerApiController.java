@@ -1,7 +1,9 @@
 package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.PlannerDto;
+import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Service.PlannerService;
+import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,7 @@ import java.util.UUID;
 public class PlannerApiController {
 
     private final PlannerService plannerService;
+    private final UserService userService;
 
     //설계사 가입 여부 확인
     @GetMapping("/api/planner/{userId}")
@@ -37,7 +40,11 @@ public class PlannerApiController {
     @PatchMapping("/api/planner/{plannerId}/{status}")
     public ResponseEntity<PlannerDto> managePlanner(@PathVariable Long plannerId, @PathVariable String status){
         boolean permit = status.equals("permit");
-        PlannerDto plannerDto = plannerService.managePlanner(plannerId, permit);
-        return ResponseEntity.status(HttpStatus.OK).body(plannerDto);
+        UserDto userDto = userService.findById(plannerService.findUserById(plannerId).getId());
+        if(userDto.getKakaoId() == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        else {
+            PlannerDto plannerDto = plannerService.managePlanner(plannerId, permit);
+            return ResponseEntity.status(HttpStatus.OK).body(plannerDto);
+        }
     }
 }

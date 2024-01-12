@@ -54,6 +54,7 @@
         <p th:text="${planner.profile}"></p>
         <p th:text="${planner.company}"></p>
         <p th:text="${planner.certificate}"></p>
+        <input type="hidden" id="userId" th:value="${planner.userId}">
         <button id="permit-planner-button" style="background-color: #0056b3;" th:value="${planner.id}" onclick="managePlanner(this.value, true)">설계사 등록</button>
         <button id="temp-planner-button" style="background-color: #FF6666;" th:value="${planner.id}" onclick="managePlanner(this.value, false)">설계사 반려</button>
     </li>
@@ -71,9 +72,23 @@
                     "Content-Type": "application/json"
                 }
             }).then(response => {
-                const msg = (response.ok) ? "반영되었습니다!" : "반영 실패!";
-                alert(msg);
-                window.location.reload();
+                if(response.status === 204){
+                    const userId = document.querySelector("#userId").value;
+                    const url = "/api/planner/" + userId;
+                    fetch(url, {
+                        method: "DELETE",
+                        headers: {}
+                    })
+                    alert("이미 탈퇴한 회원입니다!");
+                    window.location.reload();
+                }
+                else if(response.ok){
+                    alert("반영되었습니다!");
+                    window.location.reload();
+                }
+                else{
+                    alert("반영 실패!");
+                }
             });
         }
     }
