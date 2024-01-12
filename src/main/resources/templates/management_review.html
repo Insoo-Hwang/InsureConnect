@@ -17,7 +17,7 @@
         color: white;
     }
 
-    #user-container {
+    #review-container {
         width: 50vw;
         overflow: auto;
         background-color: white;
@@ -39,7 +39,13 @@
         border: 2px solid black;
     }
 
-    #delete-user-button {
+    .card .time {
+        font-size: 12px;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+
+    #delete-review-button {
         margin-top: 10px;
         border-radius: 10px;
         border: none;
@@ -47,57 +53,30 @@
         color: white;
         background-color: #FF6666;
     }
-
-    .user-detail {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        margin-bottom: 10px;
-    }
-
-    .user-detail div {
-        font-weight: bold;
-        flex: 1;
-    }
 </style>
 <body>
-<div id="user-container">
-    <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">사용자 관리</div>
-    <li th:each="user : ${userDtos}" class="card">
-        <div class="user-detail">
-            <div>ID</div>
-            <p th:text="${user.id}"></p>
-        </div>
-        <div class="user-detail">
-            <div>나이</div>
-            <p th:text="${user.age}"></p>
-        </div>
-        <div class="user-detail">
-            <div>성별</div>
-            <p th:text="${user.gender}"></p>
-        </div>
-        <div class="user-detail">
-            <div>카카오 ID</div>
-            <p th:text="${user.kakaoId}"></p>
-        </div>
-        <div class="user-detail">
-            <div>닉네임</div>
-            <p th:text="${user.nickname}"></p>
-        </div>
-        <button id="delete-user-button" th:value="${user.id}" onclick="deleteUser(this.value)">사용자 탈퇴</button>
+<div id="review-container">
+    <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">전체 리뷰</div>
+    <li th:each="review : ${reviewDtos}" class="card">
+        <p th:text="'상담사 : ' + ${review.plannerId}"></p>
+        <p style="font-size: 22px; font-weight: bold;" th:text="${review.title}"></p>
+        <p th:text="${review.content}"></p>
+        <p th:text="${review.rate}"></p>
+        <p class="time" th:text="'작성 시간 : '+${review.write}+' 수정 시간 : '+${review.edit}"></p>
+        <button id="delete-review-button" th:value="${review.id}" onclick="deleteReview(this.value)">리뷰 삭제</button>
     </li>
 </div>
 <script>
     {
-        function deleteUser(userId){
-            const url = "/api/user/"+userId+"/del";
+        function deleteReview(id){
+            const url = "/api/review/" + id;
             fetch(url, {
-                method: "PATCH",
+                method: "DELETE",
                 headers: {
 
                 }
             }).then(response => {
-                const msg = (response.ok) ? "사용자가 삭제되었습니다!" : "삭제 실패!";
+                const msg = (response.ok) ? "리뷰가 삭제되었습니다!" : "삭제 실패!";
                 alert(msg);
                 window.location.reload();
             })

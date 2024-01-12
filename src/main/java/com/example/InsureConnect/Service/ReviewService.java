@@ -6,6 +6,7 @@ import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.ReviewImgRepository;
 import com.example.InsureConnect.Repository.ReviewRepository;
 import com.example.InsureConnect.Repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,9 +30,17 @@ public class ReviewService {
         return dto;
     }
 
+    @Transactional
     public ReviewDto delete(Long reviewId){
         Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException());
         reviewRepository.delete(review);
         return ReviewDto.toDto(review);
+    }
+
+    public List<ReviewDto> findAll(){
+        return reviewRepository.findAll()
+                .stream()
+                .map(review -> ReviewDto.toDto(review))
+                .collect(Collectors.toList());
     }
 }

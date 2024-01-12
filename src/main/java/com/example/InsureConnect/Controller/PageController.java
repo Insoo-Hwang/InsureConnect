@@ -89,4 +89,16 @@ public class PageController {
         model.addAttribute("userDtos", userDtos);
         return "management_user";
     }
+
+    @GetMapping("/management/review")
+    public String manageReview(Model model){
+        List<ReviewDto> reviewDtos = reviewService.findAll();
+        model.addAttribute("reviewDtos", reviewDtos);
+        return "management_review";
+    }
+
+    @GetMapping("/management")
+    public String manage(){
+        return "management";
+    }
 }
