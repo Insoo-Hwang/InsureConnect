@@ -36,20 +36,18 @@ public class PageController {
         return "header";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping("/")
-    public String home() {
-        return "home";
-    }
-
-    @GetMapping("/logintest")
     public String home(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
-        model.addAttribute("we", user.getId());
-        return "logintest";
+        if(user == null){
+            model.addAttribute("user", "로그인을 해주세요!");
+            model.addAttribute("url", "/oauth2/authorization/kakao");
+        }
+        else {
+            UserDto dto = userService.findByKakaoId(user.getId());
+            model.addAttribute("user", dto.getNickname()+"님 안녕하세요!");
+            model.addAttribute("url", "/logout");
+        }
+        return "home";
     }
 
     @GetMapping("/mypage")

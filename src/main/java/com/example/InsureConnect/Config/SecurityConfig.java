@@ -24,12 +24,13 @@ public class SecurityConfig {
         http.csrf().disable();
         http.authorizeHttpRequests(config -> config.anyRequest().permitAll());
         http.oauth2Login(oauth2Configurer -> oauth2Configurer
-                .loginPage("/login")
+                .loginPage("/")
                 .defaultSuccessUrl("/")
                 .userInfoEndpoint()
                 .userService(oAuth2UserService))
                 .logout()
-                .logoutUrl("/logout");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/");
         return http.build();
     }
 }
