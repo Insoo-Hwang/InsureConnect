@@ -17,10 +17,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "planner_id")
-    private Planner planner;
-
     @Column
     private String category;
 }
