@@ -53,10 +53,6 @@ public class User {
         }
     }
 
-    public static User toUser(UserDto dto){
-        return modelMapper.map(dto, User.class);
-    }
-
     public void patch(UserDto userDto) {
         this.nickname = userDto.getNickname();
         this.age = userDto.getAge();

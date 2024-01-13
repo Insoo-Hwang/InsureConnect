@@ -18,7 +18,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class ReviewController {
     private final ReviewService reviewService;
-    private final PlannerService plannerService;
 
     @GetMapping("/review/new")
     public String writeReview() {

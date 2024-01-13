@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
@@ -30,18 +31,6 @@ public class PlannerDto {
     private List<ReviewDto> review;
 
     private MultipartFile[] f = new MultipartFile[2];
-
-//    public static PlannerDto toDto(Planner planner) {
-//        return PlannerDto.builder()
-//                .id(planner.getId())
-//                .userDto(UserDto.toDto(planner.getUser()))
-//                .profile(planner.getProfile())
-//                .company(planner.getCompany())
-//                .certificate(planner.getCertificate())
-//                .status(planner.getStatus())
-//                .promotionDto(PromotionDto.toDto(planner.getPromotion()))
-//                .reviewDto(ReviewDto.toDtoList(planner.getReviews())).build();
-//    }
 
     public double getAverageRating() {
         if (review != null && !review.isEmpty()) {

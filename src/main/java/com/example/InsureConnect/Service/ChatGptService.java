@@ -1,13 +1,12 @@
 package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Config.ChatGptConfig;
-import com.example.InsureConnect.Dto.ChatDto;
-import com.example.InsureConnect.Dto.ChatGptRequestDto;
-import com.example.InsureConnect.Dto.ChatGptResponseDto;
-import com.example.InsureConnect.Dto.QuestionRequestDto;
+import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.Chat;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.ChatRepository;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -22,14 +21,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ChatGptService {
     private static RestTemplate restTemplate = new RestTemplate();
 
-    @Autowired
-    private ChatRepository chatRepository;
+    private final ChatRepository chatRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final ModelMapper modelMapper;
 
     public HttpEntity<ChatGptRequestDto> buildHttpEntity(ChatGptRequestDto requestDto) {
         HttpHeaders headers = new HttpHeaders();
@@ -50,7 +50,8 @@ public class ChatGptService {
 
     //chat gpt api를 통해 질문 전송
     public ChatGptResponseDto askQuestion(QuestionRequestDto requestDto) {
-        User user = User.toUser(userService.findById(requestDto.getId()));
+        UserDto userDto = userService.findById(requestDto.getId());
+        User user = modelMapper.map(userDto, User.class);
         ChatGptResponseDto responseDto = this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequestDto(

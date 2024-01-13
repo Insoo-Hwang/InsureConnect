@@ -28,26 +28,4 @@ public class PromotionDto {
 
     private List<PromotionImgDto> promotionImg;
 
-//    public static PromotionDto toDto(Promotion promotion) {
-//
-//        return PromotionDto.builder()
-//                .id(promotion.getId())
-//                .planner(PlannerDto.toDto(promotion.getPlanner()))
-//                .title(promotion.getTitle())
-//                .content(promotion.getContent())
-//                .write(promotion.getWrite())
-//                .edit(promotion.getEdit())
-//                .build();
-//    }
-//    public static PromotionDto toDtoWithoutPlanner(Promotion promotion) {
-//
-//        return PromotionDto.builder()
-//                .id(promotion.getId())
-//                .planner(PlannerDto.toDto(promotion.getPlanner()))
-//                .title(promotion.getTitle())
-//                .content(promotion.getContent())
-//                .write(promotion.getWrite())
-//                .edit(promotion.getEdit())
-//                .build();
-//    }
 }

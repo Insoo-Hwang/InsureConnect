@@ -28,9 +28,6 @@ public class PlannerApiController {
         List<PlannerDto> permittedPlanners = plannerService.findAll().stream()
                 .filter(planner -> "permit".equals(planner.getStatus()))
                 .collect(Collectors.toList());
-        for (PlannerDto permittedPlanner : permittedPlanners) {
-            System.out.println("permittedPlanner = " + permittedPlanner);
-        }
         if (permittedPlanners.isEmpty()) {
             // 만약 특정 조건을 만족하는 플래너가 없으면 HTTP 상태 코드 204 (NO_CONTENT)를 반환
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
