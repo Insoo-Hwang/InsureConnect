@@ -10,6 +10,7 @@ import com.example.InsureConnect.Repository.PromotionImgRepository;
 import com.example.InsureConnect.Repository.PromotionRepository;
 import com.example.InsureConnect.Handler.FileUploadHandler;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +25,7 @@ public class PromotionService {
     private final PromotionImgRepository promotionImgRepository;
     private final PlannerRepository plannerRepository;
     private final FileUploadHandler fileUploadHandler;
+    private final ModelMapper modelMapper;
 
     public void savePromotion(String title, String content, MultipartFile[] images, CustomOAuth2User user) throws IOException {
         Planner byUserKakaoId = plannerRepository.findByUser_KakaoId(user.getId());
@@ -54,13 +56,6 @@ public class PromotionService {
     public PromotionDto findByPlannerId(Long planner_id) {
         Promotion promotion = promotionRepository.findByPlannerId(planner_id);
         if(promotion == null) return null;
-        else return PromotionDto.builder()
-                .id(promotion.getId())
-                .planner_id(planner_id)
-                .title(promotion.getTitle())
-                .content(promotion.getContent())
-                .write(promotion.getWrite())
-                .edit(promotion.getEdit())
-                .build();
+        return modelMapper.map(promotion, PromotionDto.class);
     }
 }

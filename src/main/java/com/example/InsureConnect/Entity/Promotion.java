@@ -18,7 +18,7 @@ public class Promotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planner_id")
     private Planner planner;
 
@@ -33,6 +33,9 @@ public class Promotion {
 
     @Column
     private Timestamp edit;
+
+    @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL)
+    private List<PromotionImg> promotionImg;
 
     public void setWriteToCurrentTime() {
         this.write = new Timestamp(System.currentTimeMillis());

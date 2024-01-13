@@ -35,7 +35,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 
         if(userRepository.findByKakaoId(id).isEmpty()){
-            UserDto newDto = new UserDto(null, id, nickname, null, 0, null);
+            UserDto newDto = new UserDto(null, id, nickname, null, 0, null,null,null,null);
             userRepository.save(User.toUser(newDto));
         }
         return new CustomOAuth2User(authorities, attributes, "id", id, nickname);

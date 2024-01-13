@@ -50,17 +50,17 @@
     <!-- 카드 목록 -->
     <div class="row">
         <!-- th:each로 반복문 적용 -->
-        <div th:each="promotion : ${planners}" class="col-lg-3 col-md-6 mb-4">
+        <div th:each="planner : ${planners}" class="col-lg-3 col-md-6 mb-4">
             <div class="card h-100">
-                <img class="card-img-top" th:src="'profile' + ${promotion.getProfile()} + '.jpg'" alt="프로필 사진">
+                <img class="card-img-top" th:src="'profile' + ${planner.getProfile()} + '.jpg'" alt="프로필 사진">
                 <div class="card-body">
-                    <h4 class="card-title" th:text="${promotion.getPromotionDto().getTitle()}"></h4>
-                    <p class="card-text" th:text="${promotion.getPromotionDto().getContent()}"></p>
-                    <p class="card-text" th:text="${promotion.calculateRatio(promotion.reviewDto)}"></p>
-                    <p class="card-text" th:text="${promotion.getReviewDto().size()}"></p>
+                    <h4 class="card-title" th:text="${planner.getPromotion().getTitle()}"></h4>
+                    <p class="card-text" th:text="${planner.getPromotion().getContent()}"></p>
+                    <p class="card-text" th:text="'평균평점 = ' + ${planner.getAverageRating()}"></p>
+                    <p class="card-text" th:text="'리뷰갯수 = ' + ${planner.getReview().size()}"></p>
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted" th:text="${promotion.getPromotionDto().getEdit()}"></small>
+                    <small class="text-muted" th:text="'작성시간 : ' + ${planner.getPromotion().getWrite()}"></small>
                 </div>
             </div>
         </div>

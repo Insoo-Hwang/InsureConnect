@@ -17,7 +17,7 @@ public class Planner {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User user;
 
@@ -33,11 +33,11 @@ public class Planner {
     @Column
     private String status;
 
-    @OneToOne(mappedBy = "planner")
+    @OneToOne(fetch = FetchType.LAZY,mappedBy = "planner")
     private Promotion promotion;
 
     @OneToMany(mappedBy = "planner")
-    private List<Review> reviews;
+    private List<Review> review;
 
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";

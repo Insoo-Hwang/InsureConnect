@@ -2,9 +2,11 @@ package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
+import com.example.InsureConnect.Service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,8 +28,7 @@ public class PromotionController {
 
     //Promotion 등록
     @GetMapping("/promotion/new")
-    public String writePromotion(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
-        model.addAttribute("user", plannerService.findByUser_KakaoId(user.getId()));
+    public String writePromotion() {
         return "write_promotion";
     }
 
@@ -60,8 +62,10 @@ public class PromotionController {
 
     @GetMapping("/promotion")
     public String promotion(Model model) {
-        List<PromotionAllDto> planners = plannerService.findAll();
+        List<PlannerDto> planners = plannerService.findAll();
+
         model.addAttribute("planners", planners);
+
         return "promotion";
     }
 

@@ -58,7 +58,7 @@
 <div id="review-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">전체 리뷰</div>
     <li th:each="review : ${reviewDtos}" class="card">
-        <p th:text="'상담사 : ' + ${review.plannerId}"></p>
+        <p th:text="'상담사 : ' + ${review.getPlanner().getId()}"></p>
         <p style="font-size: 22px; font-weight: bold;" th:text="${review.title}"></p>
         <p th:text="${review.content}"></p>
         <p th:text="${review.rate}"></p>
