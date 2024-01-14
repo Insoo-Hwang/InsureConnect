@@ -1,9 +1,6 @@
 package com.example.InsureConnect.Controller;
 
-import com.example.InsureConnect.Dto.ChatDto;
-import com.example.InsureConnect.Dto.PlannerDto;
-import com.example.InsureConnect.Dto.ReviewDto;
-import com.example.InsureConnect.Dto.UserDto;
+import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Promotion;
 import com.example.InsureConnect.Entity.PromotionImg;
@@ -24,6 +21,7 @@ public class PageController {
     private final UserService userService;
     private final ReviewService reviewService;
     private final PlannerService plannerService;
+    private final CategoryService categoryService;
 
     @GetMapping("/test")
     public String test(@AuthenticationPrincipal CustomOAuth2User user,Model model) {
@@ -71,6 +69,7 @@ public class PageController {
         else if(plannerDto.getStatus().equals("permit")) plannerStatus = "설계사";
         else if(plannerDto.getStatus().equals("temp")) plannerStatus = "반려";
         model.addAttribute("plannerStatus", plannerStatus);
+        if(plannerDto != null) model.addAttribute("plannerId", plannerDto.getId());
         return "myPage";
     }
 
@@ -96,6 +95,13 @@ public class PageController {
         List<ReviewDto> reviewDtos = reviewService.findAll();
         model.addAttribute("reviewDtos", reviewDtos);
         return "management_review";
+    }
+
+    @GetMapping("/management/category")
+    public String manageCategory(Model model){
+        List<CategoryDto> categoryDtos = categoryService.showAll();
+        model.addAttribute("categoryDtos", categoryDtos);
+        return "management_category";
     }
 
     @GetMapping("/management")
