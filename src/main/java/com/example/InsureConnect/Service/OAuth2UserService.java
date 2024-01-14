@@ -5,6 +5,7 @@ import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class OAuth2UserService extends DefaultOAuth2UserService {
 
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public CustomOAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -35,8 +37,9 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
 
         if(userRepository.findByKakaoId(id).isEmpty()){
-            UserDto newDto = new UserDto(null, id, nickname, null, 0, null);
-            userRepository.save(User.toUser(newDto));
+            UserDto newDto = new UserDto(null, id, nickname, null, 0, null,null,null,null);
+
+            userRepository.save(modelMapper.map(newDto, User.class));
         }
         return new CustomOAuth2User(authorities, attributes, "id", id, nickname);
     }

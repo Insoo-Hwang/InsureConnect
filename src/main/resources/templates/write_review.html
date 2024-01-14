@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 작성페이지</title>
+    <!-- 부트스트랩 CDN 링크 추가 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            justify-content: space-around;
+            padding: 0 0.2em;
+            text-align: center;
+            width: 5em;
+        }
+
+        .star-rating input {
+            display: none;
+        }
+
+        .star-rating label {
+            -webkit-text-fill-color: transparent; /* Will override color (regardless of order) */
+            -webkit-text-stroke-width: 2.3px;
+            -webkit-text-stroke-color: #2b2a29;
+            cursor: pointer;
+        }
+
+        .star-rating :checked ~ label {
+            -webkit-text-fill-color: gold;
+        }
+
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            -webkit-text-fill-color: gold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2>리뷰 작성</h2>
+    <form action="/review/new" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="title">글 제목</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="글 제목을 입력하세요">
+        </div>
+        <div class="form-group">
+            <select name="planner_id" id="plannerSelect">
+                <option disabled selected>설계사를 골라주세요</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="content">본문</label>
+            <textarea class="form-control" id="content" rows="5" name="content" placeholder="본문을 입력하세요"></textarea>
+        </div>
+        <div class="star-rating">
+            <input type="radio" id="5-stars" name="rate" value="5" v-model="ratings"/>
+            <label for="5-stars" class="star pr-4">★</label>
+            <input type="radio" id="4-stars" name="rate" value="4" v-model="ratings"/>
+            <label for="4-stars" class="star">★</label>
+            <input type="radio" id="3-stars" name="rate" value="3" v-model="ratings"/>
+            <label for="3-stars" class="star">★</label>
+            <input type="radio" id="2-stars" name="rate" value="2" v-model="ratings"/>
+            <label for="2-stars" class="star">★</label>
+            <input type="radio" id="1-star" name="rate" value="1" v-model="ratings" />
+            <label for="1-star" class="star">★</label>
+        </div>
+        <div class="form-group">
+            <label for="image">이미지 첨부</label>
+            <div class="input-group mb-3">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="image" name="images" multiple>
+                    <label class="custom-file-label" for="image">이미지를 선택하세요 최대 4장 업로드 가능합니다.</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group" id="image-list">
+            <!-- 이미지 목록이 여기에 표시될 것입니다. -->
+        </div>
+        <button type="submit" class="btn btn-primary">등록</button>
+        <button type="button" class="btn btn-secondary">취소</button>
+    </form>
+</div>
+
+<!-- 부트스트랩 및 관련 스크립트 CDN 추가 -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<script>
+    // 이미지 제거 함수
+    function removeImage() {
+        var imageList = document.getElementById("image-list");
+        if (imageList.children.length > 0) {
+            imageList.removeChild(imageList.lastChild);
+        }
+    }
+
+    // 이미지 업로드 시 목록에 추가하는 이벤트 처리
+    document.getElementById("image").addEventListener("change", function () {
+        var imageList = document.getElementById("image-list");
+        var files = this.files;
+
+        // 이미지 목록 업데이트
+        for (var i = 0; i < files.length; i++) {
+            if (imageList.children.length < 4) { // 최대 4개까지만 허용
+                var imageItem = document.createElement("div");
+                imageItem.className = "d-inline-block mr-2";
+                imageItem.innerHTML = `
+                <img src="${URL.createObjectURL(files[i])}" class="img-thumbnail" style="width:100px; height:100px;">
+                <button type="button" class="btn btn-danger btn-sm mt-1" onclick="removeImageItem(this)">삭제</button>
+              `;
+                imageList.appendChild(imageItem);
+            } else {
+                alert("이미지는 최대 4개까지 업로드 가능합니다.");
+                return;
+            }
+        }
+    });
+
+    // 이미지 아이템 삭제 함수
+    function removeImageItem(button) {
+        var imageList = document.getElementById("image-list");
+        imageList.removeChild(button.parentNode);
+    }
+
+    //planner 조회 함수
+    // 페이지가 로드될 때 실행
+    document.addEventListener("DOMContentLoaded", function () {
+        // 서버에서 플래너 목록을 가져오는 함수 호출
+        fetchPlanners();
+    });
+
+    // 서버에서 플래너 목록을 가져오는 함수
+    function fetchPlanners() {
+        // Fetch API를 사용하여 /api/planners 엔드포인트에 GET 요청을 보냄
+        fetch('/api/planners')
+            .then(response => response.json()) // JSON 형식으로 변환
+            .then(planners => {
+                // 가져온 플래너 목록을 사용하여 드롭다운을 업데이트
+                updateDropdown(planners);
+            })
+            .catch(error => console.error('Error fetching planners:', error));
+    }
+
+    // 드롭다운을 업데이트하는 함수
+    function updateDropdown(planners) {
+        // 드롭다운 요소를 선택
+        const dropdown = document.getElementById('plannerSelect');
+
+        // 이전에 추가된 옵션들을 모두 제거
+        dropdown.innerHTML = '<option disabled selected>설계사를 골라주세요</option>';
+
+        // 플래너 목록을 순회하면서 옵션을 추가
+        planners.forEach(planner => {
+            const option = document.createElement('option');
+            option.value = planner.id;
+            option.text = planner.user.nickname;
+            dropdown.appendChild(option);
+        });
+    }
+</script>
+
+</body>
+</html>

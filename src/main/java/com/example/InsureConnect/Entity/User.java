@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 @Table(name = "users")
@@ -14,6 +16,7 @@ import java.util.UUID;
 @Getter
 @Entity
 public class User {
+    private static ModelMapper modelMapper = new ModelMapper();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -34,18 +37,20 @@ public class User {
     @Column
     private String type;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY,mappedBy = "user")
     private Planner planner;
+
+    @OneToMany(mappedBy = "user")
+    private List<Review> review;
+
+    @OneToMany(mappedBy = "user")
+    private List<Chat> chat;
 
     @PrePersist
     private void generateUUID() {
         if (id == null) {
             id = UUID.randomUUID();
         }
-    }
-
-    public static User toUser(UserDto dto){
-        return new User(dto.getId(), dto.getKakaoId(), dto.getNickname(), dto.getGender(), dto.getAge(), dto.getType(), null);
     }
 
     public void patch(UserDto userDto) {

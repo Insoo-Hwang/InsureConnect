@@ -7,9 +7,12 @@ import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +20,22 @@ public class PlannerApiController {
 
     private final PlannerService plannerService;
     private final UserService userService;
+
+    //설계사 전체 조회
+    @GetMapping("/api/planners")
+    public ResponseEntity<List<PlannerDto>> allPlanner(Model model) {
+
+        List<PlannerDto> permittedPlanners = plannerService.findAll().stream()
+                .filter(planner -> "permit".equals(planner.getStatus()))
+                .collect(Collectors.toList());
+        if (permittedPlanners.isEmpty()) {
+            // 만약 특정 조건을 만족하는 플래너가 없으면 HTTP 상태 코드 204 (NO_CONTENT)를 반환
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        } else {
+            // 특정 조건을 만족하는 플래너가 있으면 HTTP 상태 코드 200 (OK)와 함께 해당 플래너 목록을 반환
+            return ResponseEntity.status(HttpStatus.OK).body(permittedPlanners);
+        }
+    }
 
     //설계사 가입 여부 확인
     @GetMapping("/api/planner/{userId}")

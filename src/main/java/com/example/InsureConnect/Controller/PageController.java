@@ -84,6 +84,9 @@ public class PageController {
     @GetMapping("/management/user")
     public String manageUser(Model model){
         List<UserDto> userDtos = userService.showAll();
+        for (UserDto userDto : userDtos) {
+            System.out.println("userDto = " + userDto);
+        }
         model.addAttribute("userDtos", userDtos);
         return "management_user";
     }

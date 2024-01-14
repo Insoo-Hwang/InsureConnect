@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Dto;
 
 import com.example.InsureConnect.Entity.Review;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import lombok.*;
 
@@ -15,23 +16,23 @@ import java.util.stream.Collectors;
 @Setter
 @Builder
 public class ReviewDto {
+
     private Long id;
-    private Long plannerId;
-    private UUID userId;
+
+    @JsonIgnore
+    private PlannerDto planner;
+
+    @JsonIgnore
+    private UserDto user;
+
     private String title;
+
     private String content;
+
     private int rate;
+
     private Timestamp write;
+
     private Timestamp edit;
-
-    public static ReviewDto toDto(Review review) {
-        return new ReviewDto(review.getId(), review.getPlanner().getId(), review.getUser().getId(), review.getTitle(), review.getContent(), review.getRate(), review.getWrite(), review.getEdit());
-    }
-
-    public static List<ReviewDto> toDtoList(List<Review> reviews) {
-        return reviews.stream()
-                .map(ReviewDto::toDto)
-                .collect(Collectors.toList());
-    }
 
 }
