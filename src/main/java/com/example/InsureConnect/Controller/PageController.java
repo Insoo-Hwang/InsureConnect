@@ -71,6 +71,7 @@ public class PageController {
         else if(plannerDto.getStatus().equals("permit")) plannerStatus = "설계사";
         else if(plannerDto.getStatus().equals("temp")) plannerStatus = "반려";
         model.addAttribute("plannerStatus", plannerStatus);
+        if(plannerDto != null) model.addAttribute("plannerId", plannerDto.getId());
         return "myPage";
     }
 

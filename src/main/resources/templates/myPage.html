@@ -88,6 +88,7 @@
 </head>
 <body>
 <input type="hidden" id="userId" th:value="${userId}">
+<input type="hidden" id="plannerId" th:value="${plannerId}">
 <div id="attribute-container" style="text-align: center;">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold">내 정보</div>
 
@@ -297,7 +298,8 @@
                         }
                     })
                         .then(data => {
-                            window.location.href = "/detailPromotion/" + data.planner_id;
+                            const plannerId = document.querySelector("#plannerId").value;
+                            window.location.href = "/promotion/" + plannerId;
                         })
                 }
                 else{
