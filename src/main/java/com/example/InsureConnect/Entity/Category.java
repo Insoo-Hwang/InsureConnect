@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Entity;
 
+import com.example.InsureConnect.Dto.CategoryDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +20,8 @@ public class Category {
 
     @Column
     private String category;
+
+    public static Category toCategory(CategoryDto dto){
+        return new Category(dto.getId(), dto.getCategory());
+    }
 }
