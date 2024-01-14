@@ -60,6 +60,42 @@
     }
 </style>
 <body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="/">Insure Connect</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <div th:if="${login}">
+                        <a class="nav-link" href="/logout">로그아웃</a>
+                    </div>
+                    <div th:unless="${login}">
+                        <a class="nav-link" href="/oauth2/authorization/kakao">로그인</a>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">알림</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        메뉴
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/mypage">마이페이지</a></li>
+                        <li><a class="dropdown-item" href="/chat">AI상담</a></li>
+                        <li><a class="dropdown-item" href="#">설계사 페이지</a></li>
+                        <li><a class="dropdown-item" href="#">리뷰 페이지</a></li>
+                        <li><a class="dropdown-item" href="/management">관리자페이지</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <div id="category-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">카테고리 관리</div>
     <div id="create-category-container">
