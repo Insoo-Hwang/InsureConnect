@@ -25,6 +25,8 @@ public class ChatController {
         List<ChatDto> chatDtos = chatGptService.chats(userDto.getId());
         model.addAttribute("chatDtos", chatDtos);
         model.addAttribute("userId", userDto.getId());
+        if(user == null) model.addAttribute("login", false);
+        else model.addAttribute("login", true);
         return "chat";
     }
 }
