@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +30,10 @@ public class PlannerDto {
 
     private String status;
 
+    private String kakaoLink;
+
     @JsonBackReference
-    private List<ConnectCategory> connectCategory;
+    private List<ConnectCategoryDto> connectCategory;
 
     @JsonBackReference
     private PromotionDto promotion;
@@ -38,6 +41,7 @@ public class PlannerDto {
     @JsonBackReference
     private List<ReviewDto> review;
 
+    @JsonIgnore
     private MultipartFile[] f = new MultipartFile[2];
 
     public double getAverageRating() {

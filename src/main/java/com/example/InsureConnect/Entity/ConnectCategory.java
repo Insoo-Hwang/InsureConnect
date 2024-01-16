@@ -7,7 +7,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -17,11 +16,11 @@ public class ConnectCategory {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "planner_id")
+    @JoinColumn(name = "planner_id",referencedColumnName = "id")
     private Planner planner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "category_id")
+    @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 
 }

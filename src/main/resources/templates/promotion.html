@@ -51,7 +51,7 @@
     <div class="row">
         <!-- th:each로 반복문 적용 -->
         <div th:each="planner : ${planners}" class="col-lg-3 col-md-6 mb-4">
-            <div class="card h-100">
+            <div class="card h-100" th:href="@{'/promotion/' + ${planner.getId()}}">
                 <img class="card-img-top" th:src="'profile' + ${planner.getProfile()} + '.jpg'" alt="프로필 사진">
                 <div class="card-body">
                     <h4 class="card-title" th:text="${planner.getPromotion().getTitle()}"></h4>
