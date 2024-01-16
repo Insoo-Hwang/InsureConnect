@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Getter
 @Builder
 public class Planner {
@@ -33,11 +32,17 @@ public class Planner {
     @Column
     private String status;
 
+    @Column
+    private String kakaoLink;
+
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "planner")
     private Promotion promotion;
 
     @OneToMany(mappedBy = "planner")
     private List<Review> review;
+
+    @OneToMany(mappedBy = "planner")
+    private List<ConnectCategory> connectCategory;
 
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";

@@ -53,8 +53,8 @@ public class PromotionService {
         promotionImgRepository.saveAll(promotionImgs);
     }
 
-    public PromotionDto findByPlannerId(Long planner_id) {
-        Promotion promotion = promotionRepository.findByPlannerId(planner_id);
+    public PromotionDto findByPlannerId(Long plannerId) {
+        Promotion promotion = promotionRepository.findByPlannerId(plannerId);
         if(promotion == null) return null;
         return modelMapper.map(promotion, PromotionDto.class);
     }

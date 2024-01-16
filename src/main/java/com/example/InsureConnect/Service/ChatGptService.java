@@ -78,10 +78,10 @@ public class ChatGptService {
 
     //사용자의 모든 채팅 불러오기
     public List<ChatDto> chats(UUID userId){
-        List<ChatDto> chats = chatRepository.findByUserId(userId)
+
+        return chatRepository.findByUserId(userId)
                 .stream()
-                .map(chat -> ChatDto.toDto(chat))
+                .map(chat -> modelMapper.map(chat, ChatDto.class))
                 .collect(Collectors.toList());
-        return chats;
     }
 }

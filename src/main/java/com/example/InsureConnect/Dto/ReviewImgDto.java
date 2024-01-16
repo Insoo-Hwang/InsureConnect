@@ -3,13 +3,12 @@ package com.example.InsureConnect.Dto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class PromotionImgDto {
+public class ReviewImgDto {
     private Long id;
 
     private String imgLink;
@@ -17,5 +16,5 @@ public class PromotionImgDto {
     private int sequence;
 
     @JsonManagedReference
-    private PromotionDto promotion;
+    private ReviewDto review;
 }

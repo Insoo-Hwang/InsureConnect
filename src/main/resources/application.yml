@@ -6,15 +6,16 @@ server:
 spring:
     jpa:
         hibernate:
-            ddl-auto:
+            ddl-auto: none
         properties:
             hibernate:
                 show_sql: true
                 format_sql: true
     datasource:
-        url: jdbc:postgresql://localhost:5432/InsureConnect
-        username: postgres
-        password: hwang814
+        url: jdbc:postgresql://localhost:5432/earl
+        username: earl
+        password: han
+        driver-class-name: org.postgresql.Driver
     sql:
         init:
             encoding: utf-8
@@ -37,7 +38,6 @@ spring:
                         token-uri: https://kauth.kakao.com/oauth/token
                         user-info-uri: https://kapi.kakao.com/v2/user/me
                         user-name-attribute: id
-
     servlet:
         multipart:
             max-file-size: 5MB

@@ -26,11 +26,22 @@ public class PromotionController {
     private final PromotionService promotionService;
     private final PromotionImgService promotionImgService;
 
+    //Promotion 조회
+    @GetMapping("/promotion")
+    public String promotion(Model model) {
+        List<PlannerDto> planners = plannerService.findAll();
+
+        model.addAttribute("planners", planners);
+
+        return "promotion";
+    }
+
     //Promotion 등록
     @GetMapping("/promotion/new")
     public String writePromotion() {
         return "write_promotion";
     }
+
 
     @PostMapping("/promotion/new")
     public String registerPromotion(@RequestParam(value = "title") String title,
@@ -56,17 +67,6 @@ public class PromotionController {
         model.addAttribute("user", user);
         model.addAttribute("promotion", promotion);
         return "detail_promotion";
-    }
-
-    //Promotion 조회
-
-    @GetMapping("/promotion")
-    public String promotion(Model model) {
-        List<PlannerDto> planners = plannerService.findAll();
-
-        model.addAttribute("planners", planners);
-
-        return "promotion";
     }
 
 //    @PostMapping("/updatePromotion")

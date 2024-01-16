@@ -16,22 +16,31 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">리뷰페이지</h2>
-    <!-- 리뷰 카드 목록 -->
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <!-- 카드 예시 -->
-        <div class="col">
-            <div class="card h-100">
-                <img src="https://via.placeholder.com/150" class="card-img-top" alt="이미지">
-                <div class="card-body">
-                    <h5 class="card-title">리뷰 제목</h5>
-                    <p class="card-text">리뷰 내용의 일부분...</p>
-                </div>
-                <div class="card-footer">
-                    <a href="#" class="btn btn-primary">자세히 보기</a>
-                </div>
+    <!-- 정렬 기능 -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="float-right">
+                <label class="mr-2">정렬:</label>
+                <select class="form-control">
+                    <option>평점</option>
+                    <option>리뷰</option>
+                    <option>작성일</option>
+                </select>
             </div>
         </div>
-        <!-- 추가적인 카드들을 필요에 따라 반복해서 추가할 수 있습니다. -->
+    </div>
+
+    <div class="row">
+        <ul th:each="review : ${reviewList}" class="list-group">
+            <li class="list-group-item">
+                <span th:text="'제목: ' + ${review.getTitle()}"></span>
+                <span th:text="' | 작성자: ' + ${review.getUser().getNickname()}"></span>
+                <span th:text="' | 상담사: ' + ${review.getPlanner().getUser().getNickname()}"></span>
+                <span th:text="' | 평점: ' + ${review.getRate()}"></span>
+                <span th:text="${review.getWrite()}"></span>
+                <a th:href="@{'/review/' + ${review.getId()}}">자세히 보기</a>
+            </li>
+        </ul>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -41,7 +50,7 @@
             <button class="btn btn-outline-secondary btn-lg" type="button">검색</button>
         </form>
         <!-- 글쓰기 버튼 -->
-        <a href="/writeReview">
+        <a href="/review/new">
         <button class="btn btn-primary" type="button">글쓰기</button>
         </a>
     </div>
@@ -77,7 +86,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Fetch header content and append it to the container
-        fetch("header.html")
+        fetch("/header")
             .then(response => response.text())
             .then(data => {
                 document.getElementById("headerContainer").innerHTML = data;
