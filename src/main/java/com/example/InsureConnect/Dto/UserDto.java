@@ -1,8 +1,10 @@
 package com.example.InsureConnect.Dto;
 
-import com.example.InsureConnect.Entity.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.UUID;
 
@@ -24,12 +26,13 @@ public class UserDto {
 
     private String type;
 
-    @JsonIgnore
+    @JsonBackReference
     private PlannerDto planner;
 
-    @JsonIgnore
+    @JsonBackReference
     private ChatDto chat;
 
+    @JsonBackReference
     private ReviewDto review;
 
 }

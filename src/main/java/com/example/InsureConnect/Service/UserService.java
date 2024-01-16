@@ -34,7 +34,7 @@ public class UserService {
 
     @Transactional
     public UserDto update(UUID id, UserDto userDto){
-        User target = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException());
+        User target = userRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         target.patch(userDto);
         User updated = userRepository.save(target);
         return modelMapper.map(updated, UserDto.class);
@@ -49,7 +49,7 @@ public class UserService {
 
     @Transactional
     public UserDto deleteUser(UUID userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException());
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
         user.delete();
         User deleted = userRepository.save(user);
         return modelMapper.map(deleted, UserDto.class);

@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Dto.ReviewDto;
+import com.example.InsureConnect.Dto.ReviewImgDto;
 import com.example.InsureConnect.Entity.*;
 import com.example.InsureConnect.Handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -32,12 +30,12 @@ public class ReviewService {
 
     public void saveReview(ReviewDto reviewDto, MultipartFile[] images, CustomOAuth2User user,Long planner_id) throws IOException {
         String path = "classpath:/static/img/review";
-        Optional<User> byUser = userRepository.findByKakaoId(user.getId());
-        Optional<Planner> byPlanner = plannerRepository.findById(planner_id);
+        User byUser = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
+        Planner byPlanner = plannerRepository.findById(planner_id).orElseThrow(IllegalArgumentException::new);
 
         Review review = Review.builder()
-                .planner(byPlanner.get())
-                .user(byUser.get())
+                .planner(byPlanner)
+                .user(byUser)
                 .rate(reviewDto.getRate())
                 .title(reviewDto.getTitle())
                 .content(reviewDto.getContent())
@@ -64,7 +62,7 @@ public class ReviewService {
     }
 
     public List<ReviewDto> findByUserId(UUID userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException());
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
         List<Review> reviews = reviewRepository.findByUser(user);
               return   reviews.stream()
                 .map(review -> modelMapper.map(review,ReviewDto.class))
@@ -84,4 +82,22 @@ public class ReviewService {
                 .map(review -> modelMapper.map(review, ReviewDto.class))
                 .collect(Collectors.toList());
     }
+
+    public ReviewDto findById(Long reviewId) {
+        Review byId = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new IllegalArgumentException("Review not found with id: " + reviewId));
+        ReviewDto reviewDto = modelMapper.map(byId, ReviewDto.class);
+        List<ReviewImgDto> reviewImgDtoList = reviewDto.getReviewImg();
+
+        if (reviewImgDtoList != null) {
+            List<ReviewImgDto> sortedReviewImgDto = reviewImgDtoList.stream()
+                    .sorted(Comparator.comparingInt(ReviewImgDto::getSequence))
+                    .collect(Collectors.toList());
+
+            reviewDto.setReviewImg(sortedReviewImgDto);
+        }
+        return reviewDto;
+    }
+
+
 }

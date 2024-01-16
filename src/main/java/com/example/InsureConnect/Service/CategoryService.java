@@ -13,6 +13,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@org.springframework.transaction.annotation.Transactional(readOnly = true)
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -25,7 +26,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryDto create(CategoryDto dto){
-        Category category = Category.toCategory(dto);
+        Category category = modelMapper.map(dto, Category.class);
         Category created = categoryRepository.save(category);
         return modelMapper.map(created, CategoryDto.class);
     }

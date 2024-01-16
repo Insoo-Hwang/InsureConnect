@@ -12,7 +12,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">설계사 가입신청</h2>
 
-    <form action="/planner/new" method="post" enctype="multipart/form-data">
+    <form action="/api/planner/save" method="post" enctype="multipart/form-data" id="plannerForm">
         <!-- 1. 프로필사진 등록 -->
         <div class="mb-3">
             <label for="profileImage" class="form-label">프로필사진 등록</label>
@@ -31,9 +31,12 @@
             <input type="file" class="form-control" id="certificateImage" name="certificateImage" accept="image/*">
         </div>
 
-        <!-- 추가적인 필드들을 필요에 따라 추가할 수 있습니다. -->
+        <!-- 4. 담당보험 카테고리 -->
+        <div class="form-group">
+            <div id="categoryCheckbox"></div>
+        </div>
 
-        <button type="submit" class="btn btn-primary">가입신청</button>
+        <button type="submit" class="btn btn-primary" onclick="submitPlannerForm()">가입신청</button>
     </form>
 </div>
 
@@ -56,6 +59,58 @@
             })
             .catch(error => console.error("Error fetching header:", error));
     });
+
+    //Category 조회 함수
+    document.addEventListener("DOMContentLoaded", function () {
+        // Fetch category data from the REST API
+        fetch("/api/category")
+            .then(response => response.json())
+            .then(data => {
+                // Update checkboxes with the received category data
+                updateCheckboxes(data);
+            })
+            .catch(error => console.error("Error fetching category data:", error));
+    });
+    function updateCheckboxes(category) {
+        // 체크박스 컨테이너 선택
+        const checkboxContainer = document.getElementById('categoryCheckbox');
+
+        // 이전에 추가된 체크박스들을 모두 제거
+        checkboxContainer.innerHTML = '';
+
+        category.forEach(categoryItem => {
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'category_id';
+            checkbox.value = categoryItem.id;
+
+            const label = document.createElement('label');
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(categoryItem.categoryName));
+
+            checkboxContainer.appendChild(label);
+        });
+    }
+
+    // 가입신청 폼 제출 시 실행되는 함수
+    function submitPlannerForm() {
+        event.preventDefault(); // 폼 제출 기본 동작 방지
+
+        // 폼 데이터를 FormData 객체로 가져옴
+        const formData = new FormData(document.getElementById('plannerForm'));
+
+        // Ajax로 POST 요청을 보냄
+        fetch('/api/connectCategory/save', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.json()) // JSON 형식으로 변환
+            .then(data => {
+                // 응답 데이터를 처리
+                console.log(data);
+            })
+            .catch(error => console.error('Error submitting planner form:', error));
+    }
 </script>
 </body>
 </html>

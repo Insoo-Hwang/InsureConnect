@@ -1,14 +1,11 @@
 package com.example.InsureConnect.Dto;
 
-import com.example.InsureConnect.Entity.Review;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,11 +16,14 @@ public class ReviewDto {
 
     private Long id;
 
-    @JsonIgnore
+    @JsonManagedReference
     private PlannerDto planner;
 
-    @JsonIgnore
+    @JsonManagedReference
     private UserDto user;
+
+    @JsonBackReference
+    private List<ReviewImgDto> reviewImg;
 
     private String title;
 

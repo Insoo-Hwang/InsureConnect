@@ -2,13 +2,17 @@ package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
+import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Service.ConnectCategoryService;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,11 +23,12 @@ import java.util.stream.Collectors;
 public class PlannerApiController {
 
     private final PlannerService plannerService;
+    private final ConnectCategoryService connectCategoryService;
     private final UserService userService;
 
     //설계사 전체 조회
     @GetMapping("/api/planners")
-    public ResponseEntity<List<PlannerDto>> allPlanner(Model model) {
+    public ResponseEntity<List<PlannerDto>> allPlanner() {
 
         List<PlannerDto> permittedPlanners = plannerService.findAll().stream()
                 .filter(planner -> "permit".equals(planner.getStatus()))
@@ -37,6 +42,19 @@ public class PlannerApiController {
         }
     }
 
+    //설계사 등록
+    @PostMapping("/api/planner/save")
+    public String uploadPlanner(@RequestParam(value = "company") String company,
+                                @RequestPart(value = "profileImage") MultipartFile profileImage,
+                                @RequestPart(value = "certificateImage") MultipartFile certificateImage,
+                                @AuthenticationPrincipal CustomOAuth2User user) {
+
+        PlannerDto plannerDto = new PlannerDto();
+        plannerDto.setCompany(company);
+
+        plannerService.savePlanner(plannerDto, user, profileImage, certificateImage);
+        return "redirect:/api/category/save";
+    }
     //설계사 가입 여부 확인
     @GetMapping("/api/planner/{userId}")
     public ResponseEntity<PlannerDto> checkPlanner(@PathVariable UUID userId){
