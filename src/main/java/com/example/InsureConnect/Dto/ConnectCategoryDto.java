@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ConnectCategory {
+public class ConnectCategoryDto {
 
     private Long id;
 

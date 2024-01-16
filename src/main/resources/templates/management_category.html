@@ -102,6 +102,7 @@
         <input class="form-control form-control-sm" id="create-category">
         <button id="create-category-button" style="background-color: #007BFF;">카테고리 추가</button>
     </div>
+
     <li th:if="${not #strings.isEmpty(category)}" th:each="category : ${categoryDtos}" class="card">
         <span th:text="${category.categoryName}"></span>
         <input type="hidden" id="categoryId" th:value="${category.id}">

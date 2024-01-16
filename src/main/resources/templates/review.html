@@ -33,12 +33,12 @@
     <div class="row">
         <ul th:each="review : ${reviewList}" class="list-group">
             <li class="list-group-item">
-                <a th:href="@{'/review/' + ${review.getId()}}">
                 <span th:text="'제목: ' + ${review.getTitle()}"></span>
                 <span th:text="' | 작성자: ' + ${review.getUser().getNickname()}"></span>
                 <span th:text="' | 상담사: ' + ${review.getPlanner().getUser().getNickname()}"></span>
                 <span th:text="' | 평점: ' + ${review.getRate()}"></span>
                 <span th:text="${review.getWrite()}"></span>
+                <a th:href="@{'/review/' + ${review.getId()}}">자세히 보기</a>
             </li>
         </ul>
     </div>
@@ -50,7 +50,7 @@
             <button class="btn btn-outline-secondary btn-lg" type="button">검색</button>
         </form>
         <!-- 글쓰기 버튼 -->
-        <a href="/writeReview">
+        <a href="/review/new">
         <button class="btn btn-primary" type="button">글쓰기</button>
         </a>
     </div>

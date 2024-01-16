@@ -12,7 +12,7 @@
 <div class="container mt-5">
     <h2 class="text-center mb-4">설계사 가입신청</h2>
 
-    <form action="/api/planner/save" method="post" enctype="multipart/form-data" id="plannerForm">
+    <form action="/planner/save" method="post" enctype="multipart/form-data" id="plannerForm">
         <!-- 1. 프로필사진 등록 -->
         <div class="mb-3">
             <label for="profileImage" class="form-label">프로필사진 등록</label>
@@ -31,12 +31,18 @@
             <input type="file" class="form-control" id="certificateImage" name="certificateImage" accept="image/*">
         </div>
 
-        <!-- 4. 담당보험 카테고리 -->
+        <!-- 4. 카카오링크 입력 -->
+        <div class="mb-3">
+            <label for="kakaoLink" class="form-label">카카오 오픈채팅 입력</label>
+            <input type="text" class="form-control" id="kakaoLink" name="kakaoLink">
+        </div>
+
+        <!-- 5. 카테고리 입력-->
         <div class="form-group">
             <div id="categoryCheckbox"></div>
         </div>
 
-        <button type="submit" class="btn btn-primary" onclick="submitPlannerForm()">가입신청</button>
+        <button type="submit" class="btn btn-primary">가입신청</button>
     </form>
 </div>
 
@@ -82,6 +88,7 @@
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
             checkbox.name = 'category_id';
+            checkbox.id = 'category_id';
             checkbox.value = categoryItem.id;
 
             const label = document.createElement('label');
@@ -90,26 +97,6 @@
 
             checkboxContainer.appendChild(label);
         });
-    }
-
-    // 가입신청 폼 제출 시 실행되는 함수
-    function submitPlannerForm() {
-        event.preventDefault(); // 폼 제출 기본 동작 방지
-
-        // 폼 데이터를 FormData 객체로 가져옴
-        const formData = new FormData(document.getElementById('plannerForm'));
-
-        // Ajax로 POST 요청을 보냄
-        fetch('/api/connectCategory/save', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => response.json()) // JSON 형식으로 변환
-            .then(data => {
-                // 응답 데이터를 처리
-                console.log(data);
-            })
-            .catch(error => console.error('Error submitting planner form:', error));
     }
 </script>
 </body>

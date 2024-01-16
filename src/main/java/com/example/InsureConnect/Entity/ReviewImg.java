@@ -5,7 +5,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -16,7 +15,7 @@ public class ReviewImg {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_id")
+    @JoinColumn(name = "review_id",referencedColumnName = "id")
     private Review review;
 
     @Column

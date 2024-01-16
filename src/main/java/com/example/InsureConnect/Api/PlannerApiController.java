@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 public class PlannerApiController {
 
     private final PlannerService plannerService;
-    private final ConnectCategoryService connectCategoryService;
     private final UserService userService;
 
     //설계사 전체 조회
@@ -42,43 +41,31 @@ public class PlannerApiController {
         }
     }
 
-    //설계사 등록
-    @PostMapping("/api/planner/save")
-    public String uploadPlanner(@RequestParam(value = "company") String company,
-                                @RequestPart(value = "profileImage") MultipartFile profileImage,
-                                @RequestPart(value = "certificateImage") MultipartFile certificateImage,
-                                @AuthenticationPrincipal CustomOAuth2User user) {
-
-        PlannerDto plannerDto = new PlannerDto();
-        plannerDto.setCompany(company);
-
-        plannerService.savePlanner(plannerDto, user, profileImage, certificateImage);
-        return "redirect:/api/category/save";
-    }
     //설계사 가입 여부 확인
     @GetMapping("/api/planner/{userId}")
-    public ResponseEntity<PlannerDto> checkPlanner(@PathVariable UUID userId){
+    public ResponseEntity<PlannerDto> checkPlanner(@PathVariable UUID userId) {
         PlannerDto dto = plannerService.findByUserId(userId);
-        if(dto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
-        else if(dto.getStatus().equals("enroll") || dto.getStatus().equals("temp")) return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(dto);
+        if (dto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        else if (dto.getStatus().equals("enroll") || dto.getStatus().equals("temp"))
+            return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT).body(dto);
         else return ResponseEntity.status(HttpStatus.OK).body(dto);
     }
 
     //설계사 내역 삭제
     @DeleteMapping("/api/planner/{userId}")
-    public ResponseEntity<PlannerDto> deletePlanner(@PathVariable UUID userId){
+    public ResponseEntity<PlannerDto> deletePlanner(@PathVariable UUID userId) {
         PlannerDto plannerDto = plannerService.findByUserId(userId);
         PlannerDto deleteDto = plannerService.delete(plannerDto.getId());
-        if(deleteDto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        if (deleteDto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
     }
 
     //설계사 관리
     @PatchMapping("/api/planner/{plannerId}/{status}")
-    public ResponseEntity<PlannerDto> managePlanner(@PathVariable Long plannerId, @PathVariable String status){
+    public ResponseEntity<PlannerDto> managePlanner(@PathVariable Long plannerId, @PathVariable String status) {
         boolean permit = status.equals("permit");
         UserDto userDto = userService.findById(plannerService.findUserById(plannerId).getId());
-        if(userDto.getKakaoId() == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+        if (userDto.getKakaoId() == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else {
             PlannerDto plannerDto = plannerService.managePlanner(plannerId, permit);
             return ResponseEntity.status(HttpStatus.OK).body(plannerDto);

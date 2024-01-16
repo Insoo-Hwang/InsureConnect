@@ -8,7 +8,6 @@ import java.util.*;
 
 @Entity
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -19,7 +18,7 @@ public class Promotion {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "planner_id")
+    @JoinColumn(name = "planner_id",referencedColumnName = "id")
     private Planner planner;
 
     @Column
