@@ -39,6 +39,9 @@ public class Planner {
     @OneToMany(mappedBy = "planner")
     private List<Review> review;
 
+    @OneToMany(mappedBy = "planner")
+    private List<ConnectCategory> connectCategory;
+
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";
         else this.status = "temp";

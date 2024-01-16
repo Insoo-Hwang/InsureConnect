@@ -5,9 +5,10 @@ import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
+import com.example.InsureConnect.Handler.FileUploadHandler;
+import com.example.InsureConnect.Repository.ConnectCategoryRepository;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
-import com.example.InsureConnect.Handler.FileUploadHandler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -30,30 +30,32 @@ public class PlannerService {
     private final FileUploadHandler fileUploadHandler;
     private final ModelMapper modelMapper;
 
-    public void savePlanner(PlannerDto plannerDto, CustomOAuth2User user, MultipartFile profileImage, MultipartFile certificateImage) {
+    public PlannerDto savePlanner(PlannerDto plannerDto, CustomOAuth2User user, MultipartFile profileImage, MultipartFile certificateImage) {
         try {
             String path = "classpath:/static/img/planner";
             String profileFileName = fileUploadHandler.uploadFile(profileImage, path);
             String certificateFileName = fileUploadHandler.uploadFile(certificateImage, path);
 
-            Optional<User> byKakaoId = userRepository.findByKakaoId(user.getId());
+            User byKakaoId = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
+
             Planner planner = Planner.builder()
                     .id(plannerDto.getId())
-                    .user(byKakaoId.get())
+                    .user(byKakaoId)
                     .company(plannerDto.getCompany())
                     .profile(profileFileName)
                     .certificate(certificateFileName)
                     .status("enroll")
                     .build();
 
-            plannerRepository.save(planner);
+            Planner savedPlanner = plannerRepository.save(planner);
+            return modelMapper.map(savedPlanner, PlannerDto.class);
         } catch (IOException e) {
             throw new RuntimeException("Unexpected error during file upload: " + e.getMessage());
         }
     }
 
-    public PlannerDto findById(Long planner_id) {
-        Optional<Planner> planner = plannerRepository.findById(planner_id);
+    public PlannerDto findById(Long plannerId) {
+        Optional<Planner> planner = plannerRepository.findById(plannerId);
         return modelMapper.map(planner, PlannerDto.class);
     }
     public PlannerDto findByUser_KakaoId(Long userId) {
@@ -61,13 +63,13 @@ public class PlannerService {
         return modelMapper.map(byUserKakaoId, PlannerDto.class);
     }
 
-    public UserDto findUserById(Long planner_id) {
-        User userById = plannerRepository.findUserByPlannerId(planner_id);
+    public UserDto findUserById(Long plannerId) {
+        User userById = plannerRepository.findUserByPlannerId(plannerId);
         return modelMapper.map(userById, UserDto.class);
     }
 
     public PlannerDto findByUserId(UUID userId){
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException());
+        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
         Planner planner = plannerRepository.findByUser(user);
         if(planner == null) return null;
         else return modelMapper.map(planner, PlannerDto.class);
@@ -76,7 +78,7 @@ public class PlannerService {
     @Transactional
     public PlannerDto delete(Long id){
         Planner target = plannerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(IllegalArgumentException::new);
         if(target.getStatus().equals("permit")){
             return null;
         }
@@ -89,7 +91,7 @@ public class PlannerService {
     @Transactional
     public PlannerDto managePlanner(Long id, boolean permit){
         Planner target = plannerRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException());
+                .orElseThrow(IllegalArgumentException::new);
         target.changeStatus(permit);
         Planner updated = plannerRepository.save(target);
         return modelMapper.map(updated, PlannerDto.class);

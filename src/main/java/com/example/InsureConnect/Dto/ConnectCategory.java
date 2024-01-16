@@ -1,21 +1,21 @@
 package com.example.InsureConnect.Dto;
 
+
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
-public class PromotionImgDto {
+public class ConnectCategory {
+
     private Long id;
 
-    private String imgLink;
-
-    private int sequence;
+    @JsonManagedReference
+    private PlannerDto planner;
 
     @JsonManagedReference
-    private PromotionDto promotion;
+    private CategoryDto category;
 }

@@ -102,10 +102,11 @@
         <input class="form-control form-control-sm" id="create-category">
         <button id="create-category-button" style="background-color: #007BFF;">카테고리 추가</button>
     </div>
-    <li th:each="category : ${categoryDtos}" class="card">
-        <p th:text="${category.category}"></p>
+    <li th:if="${not #strings.isEmpty(category)}" th:each="category : ${categoryDtos}" class="card">
+        <span th:text="${category.categoryName}"></span>
         <input type="hidden" id="categoryId" th:value="${category.id}">
-        <button id="delete-category-button" style="background-color: #FF6666;" th:value="${category.id}" onclick="deleteCategory(this.value)">카테고리 삭제</button>
+        <button id="delete-category-button" style="background-color: #FF6666;" th:value="${category.id}" onclick="deleteCategory(this.value)">
+            <span th:text="${category.categoryName}"></span>카테고리 삭제</button>
     </li>
 </div>
 <script>
@@ -114,7 +115,7 @@
         createCategoryBtn.addEventListener("click", function(){
             const url = "/api/category/new";
             const category = {
-                category: document.querySelector("#create-category").value
+                categoryName: document.querySelector("#create-category").value
             }
             fetch(url, {
                 method: "POST",

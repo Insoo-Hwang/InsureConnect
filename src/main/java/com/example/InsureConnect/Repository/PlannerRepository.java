@@ -13,9 +13,6 @@ public interface PlannerRepository extends JpaRepository<Planner, Long> {
 
     Planner findByUser(User user);
 
-    @Query("SELECT p FROM Planner p")
-    List<Planner> findAll();
-
     @Query("SELECT p.user FROM Planner p WHERE p.id = :plannerId")
     User findUserByPlannerId(@Param("plannerId") Long plannerId);
 
