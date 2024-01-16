@@ -38,7 +38,7 @@
                 <span th:text="' | 상담사: ' + ${review.getPlanner().getUser().getNickname()}"></span>
                 <span th:text="' | 평점: ' + ${review.getRate()}"></span>
                 <span th:text="${review.getWrite()}"></span>
-                <a th:href="@{'/review/' + ${review.getId()}}">자세히 보기</a>
+                <a th:href="@{'/review/detail/' + ${review.getId()}}">자세히 보기</a>
             </li>
         </ul>
     </div>

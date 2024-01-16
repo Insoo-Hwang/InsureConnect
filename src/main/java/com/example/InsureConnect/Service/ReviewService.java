@@ -100,4 +100,9 @@ public class ReviewService {
     }
 
 
+    public List<ReviewDto> findByPlannerId(Long plannerId) {
+        return reviewRepository.findByPlannerId(plannerId).stream()
+                .map(review -> modelMapper.map(review, ReviewDto.class))
+                .collect(Collectors.toList());
+    }
 }

@@ -29,14 +29,6 @@ public class ReviewController {
         return "/write_review";
     }
 
-    @GetMapping("/review/{review_id}")
-    public String detailReview(@PathVariable("review_id") Long reviewId, Model model) {
-        ReviewDto review = reviewService.findById(reviewId);
-
-        model.addAttribute("review", review);
-        return "review_detail";
-    }
-
     @PostMapping("/review/new")
     public String saveReview(@ModelAttribute ReviewDto reviewDto,
                              @AuthenticationPrincipal CustomOAuth2User user,
@@ -47,4 +39,18 @@ public class ReviewController {
         return "/home";
     }
 
+    @GetMapping("/review/detail/{review_id}")
+    public String detailReview(@PathVariable("review_id") Long reviewId, Model model) {
+        ReviewDto review = reviewService.findById(reviewId);
+
+        model.addAttribute("review", review);
+        return "review_detail";
+    }
+
+    @GetMapping("/review/{plannerId}")
+    public String reviewByPlanner(@PathVariable("plannerId")Long plannerId, Model model) {
+        List<ReviewDto> reviewList = reviewService.findByPlannerId(plannerId);
+        model.addAttribute("reviewList",reviewList);
+        return "review";
+    }
 }
