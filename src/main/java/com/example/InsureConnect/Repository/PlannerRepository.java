@@ -23,4 +23,7 @@ public interface PlannerRepository extends JpaRepository<Planner, Long> {
 
     Page<Planner> findAll(Pageable pageable);
 
+    @Query(value = "SELECT * FROM Planner WHERE status = 'permit'", nativeQuery = true)
+    List<Planner> findAllPermitPlanner();
+
 }

@@ -2,13 +2,12 @@ package com.example.InsureConnect.Entity;
 
 import com.example.InsureConnect.Dto.UserDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.modelmapper.ModelMapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -18,7 +17,6 @@ import java.util.UUID;
 @Getter
 @Entity
 public class User {
-    private static ModelMapper modelMapper = new ModelMapper();
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,11 +43,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     @JsonBackReference
-    private List<Review> review;
+    private List<Review> review = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     @JsonBackReference
-    private List<Chat> chat;
+    private List<Chat> chat = new ArrayList<>();
 
     @PrePersist
     private void generateUUID() {

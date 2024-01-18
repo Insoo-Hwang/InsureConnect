@@ -11,6 +11,7 @@ import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -108,8 +109,8 @@ public class PlannerService {
                 .collect(Collectors.toList());
     }
 
-    public List<PlannerDto> findAll() {
-        List<Planner> planners = plannerRepository.findAll();
+    public List<PlannerDto> findAllAllPermitPlanner() {
+        List<Planner> planners = plannerRepository.findAllPermitPlanner();
 
         return planners.stream()
                 .map(planner -> modelMapper.map(planner, PlannerDto.class))
@@ -130,6 +131,7 @@ public class PlannerService {
         };
 
         Page<Planner> findAllPlanner = plannerRepository.findAll(PageRequest.of(page - 1, size,sorting));
+
 
         return findAllPlanner.map(planner -> modelMapper.map(planner, PlannerDto.class));
     }

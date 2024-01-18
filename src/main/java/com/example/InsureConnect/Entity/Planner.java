@@ -1,11 +1,13 @@
 package com.example.InsureConnect.Entity;
 
-import com.example.InsureConnect.Dto.ReviewDto;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -45,11 +47,11 @@ public class Planner {
 
     @OneToMany(mappedBy = "planner")
     @JsonBackReference
-    private List<Review> review;
+    private List<Review> review = new ArrayList<>();
 
     @OneToMany(mappedBy = "planner")
     @JsonBackReference
-    private List<ConnectCategory> connectCategory;
+    private List<ConnectCategory> connectCategory = new ArrayList<>();
 
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";

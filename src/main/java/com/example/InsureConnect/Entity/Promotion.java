@@ -38,7 +38,7 @@ public class Promotion {
 
     @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<PromotionImg> promotionImg;
+    private List<PromotionImg> promotionImg = new ArrayList<>();
 
     public void setWriteToCurrentTime() {
         this.write = new Timestamp(System.currentTimeMillis());

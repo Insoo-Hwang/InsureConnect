@@ -49,20 +49,20 @@
 <div class="row">
     <!-- th:each로 반복문 적용 -->
     <div th:each="planner : ${planners}" class="col-lg-3 col-md-6 mb-4">
-        <div class="card h-100" th:if="${planner.getPromotion() != null}">
+        <div class="card h-100" th:if="${planner.getTitle() != null}">
             <a th:href="@{'/promotion/' + ${planner.getId()}}">
                 <img class="card-img-top" th:src="'profile' + ${planner.getProfile()} + '.jpg'" alt="프로필 사진">
                 <div class="card-body">
-                    <h4 class="card-title" th:text="${planner.getPromotion().getTitle()}"></h4>
-                    <p class="card-text" th:text="${planner.getPromotion().getContent()}"></p>
-                    <p class="card-text" th:text="'평균평점 = ' + ${planner.averageRating}"></p>
-                    <p class="card-text" th:text="'리뷰갯수 = ' + ${planner.getReview().size()}"
+                    <h4 class="card-title" th:text="${planner.getTitle()}"></h4>
+                    <p class="card-text" th:text="${planner.getContent()}"></p>
+                    <p class="card-text" th:text="'평균평점 = ' + ${planner.getAverageRating()}"></p>
+                    <p class="card-text" th:text="'리뷰갯수 = ' + ${planner.rate.size()}"
                        th:href="@{'/review/' + ${planner.getId()}}"></p>
                 </div>
                 <div class="card-footer">
-                    <small class="text-muted" th:text="'작성시간 : ' + ${planner.getPromotion().getWrite()}"></small>
-                    <div th:each="category : ${planner.getConnectCategory()}">
-                        <small class="text-muted" th:text="${category.getCategory().getCategoryName()}"></small>
+                    <small class="text-muted" th:text="'작성시간 : ' + ${planner.getWrite()}"></small>
+                    <div th:each="category : ${planner.getCategoryName()}">
+                        <small class="text-muted" th:text="${planner.getCategoryName()}"></small>
                     </div>
                 </div>
             </a>

@@ -16,5 +16,6 @@ public class PromotionImgDto {
 
     private int sequence;
 
+    @JsonManagedReference
     private PromotionDto promotion;
 }

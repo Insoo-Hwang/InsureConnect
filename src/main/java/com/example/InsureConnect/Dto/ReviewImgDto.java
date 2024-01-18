@@ -15,5 +15,6 @@ public class ReviewImgDto {
 
     private int sequence;
 
+    @JsonManagedReference
     private ReviewDto review;
 }

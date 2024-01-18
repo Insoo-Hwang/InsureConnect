@@ -15,8 +15,6 @@ import java.util.List;
 public class PromotionDto {
     private Long id;
 
-    private PlannerDto planner;
-
     private String title;
 
     private String content;
@@ -24,7 +22,5 @@ public class PromotionDto {
     private Timestamp write;
 
     private Timestamp edit;
-
-    private List<PromotionImgDto> promotionImg;
 
 }

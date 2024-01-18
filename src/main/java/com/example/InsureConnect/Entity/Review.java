@@ -7,6 +7,7 @@ import lombok.*;
 import org.springframework.context.annotation.Lazy;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -47,7 +48,7 @@ public class Review {
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<ReviewImg> reviewImg;
+    private List<ReviewImg> reviewImg = new ArrayList<>();
 
     public void setWriteToCurrentTime() {
         this.write = new Timestamp(System.currentTimeMillis());

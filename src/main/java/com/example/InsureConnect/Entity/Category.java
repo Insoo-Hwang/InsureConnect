@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,6 +24,6 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     @JsonManagedReference
-    private List<ConnectCategory> connectCategory;
+    private List<ConnectCategory> connectCategory = new ArrayList<>();
 
 }
