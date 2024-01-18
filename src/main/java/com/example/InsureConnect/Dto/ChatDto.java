@@ -19,7 +19,6 @@ import java.util.UUID;
 public class ChatDto {
     private Long id;
 
-    @JsonManagedReference
     private UserDto user;
 
     private String question;

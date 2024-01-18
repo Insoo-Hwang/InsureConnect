@@ -13,9 +13,7 @@ public class ConnectCategoryDto {
 
     private Long id;
 
-    @JsonManagedReference
     private PlannerDto planner;
 
-    @JsonManagedReference
     private CategoryDto category;
 }

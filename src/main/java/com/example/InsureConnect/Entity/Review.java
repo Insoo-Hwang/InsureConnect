@@ -1,5 +1,7 @@
 package com.example.InsureConnect.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.context.annotation.Lazy;
@@ -20,10 +22,12 @@ public class Review {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planner_id",referencedColumnName = "id")
+    @JsonManagedReference
     private Planner planner;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JsonManagedReference
     private User user;
 
     @Column
@@ -42,6 +46,7 @@ public class Review {
     private Timestamp edit;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<ReviewImg> reviewImg;
 
     public void setWriteToCurrentTime() {

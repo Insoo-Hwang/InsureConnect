@@ -16,13 +16,10 @@ public class ReviewDto {
 
     private Long id;
 
-    @JsonManagedReference
     private PlannerDto planner;
 
-    @JsonManagedReference
     private UserDto user;
 
-    @JsonBackReference
     private List<ReviewImgDto> reviewImg;
 
     private String title;

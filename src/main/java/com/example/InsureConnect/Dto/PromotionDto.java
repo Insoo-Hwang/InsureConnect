@@ -15,7 +15,6 @@ import java.util.List;
 public class PromotionDto {
     private Long id;
 
-    @JsonManagedReference
     private PlannerDto planner;
 
     private String title;
@@ -26,7 +25,6 @@ public class PromotionDto {
 
     private Timestamp edit;
 
-    @JsonBackReference
     private List<PromotionImgDto> promotionImg;
 
 }

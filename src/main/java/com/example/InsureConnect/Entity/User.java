@@ -1,6 +1,8 @@
 package com.example.InsureConnect.Entity;
 
 import com.example.InsureConnect.Dto.UserDto;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,12 +40,15 @@ public class User {
     private String type;
 
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "user")
+    @JsonBackReference
     private Planner planner;
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private List<Review> review;
 
     @OneToMany(mappedBy = "user")
+    @JsonBackReference
     private List<Chat> chat;
 
     @PrePersist

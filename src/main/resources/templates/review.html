@@ -16,22 +16,9 @@
 
 <div class="container mt-5">
     <h2 class="text-center mb-4">리뷰페이지</h2>
-    <!-- 정렬 기능 -->
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="float-right">
-                <label class="mr-2">정렬:</label>
-                <select class="form-control">
-                    <option>평점</option>
-                    <option>리뷰</option>
-                    <option>작성일</option>
-                </select>
-            </div>
-        </div>
-    </div>
 
     <div class="row">
-        <ul th:each="review : ${reviewList}" class="list-group">
+        <ul th:each="review : ${reviewsPage.content}" class="list-group">
             <li class="list-group-item">
                 <span th:text="'제목: ' + ${review.getTitle()}"></span>
                 <span th:text="' | 작성자: ' + ${review.getUser().getNickname()}"></span>
@@ -55,28 +42,27 @@
         </a>
     </div>
 
-    <!-- 마진을 추가한 페이징 -->
+    <!-- 페이징 -->
     <div class="pagination-container">
-        <nav aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <span class="page-link">이전</span>
-                </li>
-                <li class="page-item active" aria-current="page">
-                    <span class="page-link">1</span>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">다음</a>
-                </li>
-            </ul>
-        </nav>
+        <ul class="pagination">
+            <li th:class="${reviewsPage.first ? 'page-item disabled' : 'page-item'}">
+                <a class="page-link" th:href="@{/review(page=${reviewsPage.number - 1})}">&laquo;</a>
+            </li>
+            <li th:each="i : ${#numbers.sequence(1, reviewsPage.totalPages)}" th:class="${reviewsPage.number + 1 == i ? 'page-item active' : 'page-item'}">
+                <a class="page-link" th:href="@{/review(page=${i})}" th:text="${i}"></a>
+            </li>
+            <li th:class="${reviewsPage.last ? 'page-item disabled' : 'page-item'}">
+                <a class="page-link" th:href="@{/review(page=${reviewsPage.number + 1})}">&raquo;</a>
+            </li>
+        </ul>
     </div>
+
+
+
+
+
+
+
 </div>
 
 <!-- Bootstrap JS 및 jQuery -->

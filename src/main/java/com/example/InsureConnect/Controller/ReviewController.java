@@ -4,6 +4,8 @@ import com.example.InsureConnect.Dto.ReviewDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +21,15 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/review")
-    public String review(Model model) {
-        List<ReviewDto> reviewList = reviewService.findAll();
-        model.addAttribute("reviewList",reviewList);
+    public String review(@RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "2") int size,
+                         Model model) {
+        Page<ReviewDto> reviewsPage = reviewService.findAll(PageRequest.of(page - 1, size));
+
+        model.addAttribute("reviewsPage", reviewsPage);
         return "/review";
     }
+
     @GetMapping("/review/new")
     public String writeReview() {
         return "/write_review";

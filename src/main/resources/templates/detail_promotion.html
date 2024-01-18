@@ -31,6 +31,7 @@
         </div>
     </div>
     <a th:href="@{/}" class="btn btn-primary mt-3">홈으로 돌아가기</a>
+    <a th:href="@{/promotion/update/{plannerId}/{promotionId}(plannerId=${planner_id}, promotionId=${promotion.getId()})}" class="btn btn-primary mt-3">수정</a>
 </div>
 
 <!-- 부트스트랩 및 관련 스크립트 CDN 추가 -->

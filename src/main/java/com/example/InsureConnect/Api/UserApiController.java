@@ -20,6 +20,7 @@ public class UserApiController {
     @PatchMapping("/api/user/{userId}")
     public ResponseEntity<UserDto> updateAttribute(@PathVariable UUID userId, @RequestBody UserDto userDto){
         UserDto updated = userService.update(userId, userDto);
+        System.out.println("updated.getNickname() = " + updated.getNickname());
         return ResponseEntity.status(HttpStatus.OK).body(updated);
     }
 

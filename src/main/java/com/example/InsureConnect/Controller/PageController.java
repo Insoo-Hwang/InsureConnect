@@ -90,12 +90,12 @@ public class PageController {
         return "management_user";
     }
 
-    @GetMapping("/management/review")
-    public String manageReview(Model model){
-        List<ReviewDto> reviewDtos = reviewService.findAll();
-        model.addAttribute("reviewDtos", reviewDtos);
-        return "management_review";
-    }
+//    @GetMapping("/management/review")
+//    public String manageReview(Model model){
+//        List<ReviewDto> reviewDtos = reviewService.findAll();
+//        model.addAttribute("reviewDtos", reviewDtos);
+//        return "management_review";
+//    }
 
     @GetMapping("/management/category")
     public String manageCategory(Model model){

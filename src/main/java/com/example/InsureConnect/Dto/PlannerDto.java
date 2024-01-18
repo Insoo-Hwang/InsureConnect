@@ -19,7 +19,6 @@ public class PlannerDto {
 
     private Long id;
 
-    @JsonManagedReference
     private UserDto user;
 
     private String profile;
@@ -32,13 +31,10 @@ public class PlannerDto {
 
     private String kakaoLink;
 
-    @JsonBackReference
     private List<ConnectCategoryDto> connectCategory;
 
-    @JsonBackReference
     private PromotionDto promotion;
 
-    @JsonBackReference
     private List<ReviewDto> review;
 
     @JsonIgnore

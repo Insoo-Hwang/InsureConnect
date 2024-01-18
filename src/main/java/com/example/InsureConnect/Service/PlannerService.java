@@ -6,16 +6,20 @@ import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Handler.FileUploadHandler;
-import com.example.InsureConnect.Repository.ConnectCategoryRepository;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -111,5 +115,24 @@ public class PlannerService {
                 .map(planner -> modelMapper.map(planner, PlannerDto.class))
                 .collect(Collectors.toList());
     }
+
+    public Page<PlannerDto> findAllPaging(Pageable pageable) {
+        return plannerRepository.findAll(pageable)
+                .map(planner -> modelMapper.map(planner, PlannerDto.class));
+    }
+
+    public Page<PlannerDto> findAllSorted(String sort, int page, int size) {
+
+        Sort sorting = switch (sort) {
+            case "averageRate" -> Sort.by("averageRating");
+            case "reviewCount" -> Sort.by("review.size");
+            default -> Sort.by("promotion.write");
+        };
+
+        Page<Planner> findAllPlanner = plannerRepository.findAll(PageRequest.of(page - 1, size,sorting));
+
+        return findAllPlanner.map(planner -> modelMapper.map(planner, PlannerDto.class));
+    }
+
 
 }

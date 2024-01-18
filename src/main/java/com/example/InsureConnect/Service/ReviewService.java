@@ -11,6 +11,8 @@ import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -76,11 +78,9 @@ public class ReviewService {
         return modelMapper.map(review, ReviewDto.class);
     }
 
-    public List<ReviewDto> findAll(){
-        List<Review> reviews = reviewRepository.findAll();
-        return reviews.stream()
-                .map(review -> modelMapper.map(review, ReviewDto.class))
-                .collect(Collectors.toList());
+    public Page<ReviewDto> findAll(Pageable pageable){
+        Page<Review> reviews = reviewRepository.findAll(pageable);
+        return reviews.map(review -> modelMapper.map(review, ReviewDto.class));
     }
 
     public ReviewDto findById(Long reviewId) {

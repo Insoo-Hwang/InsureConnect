@@ -2,6 +2,8 @@ package com.example.InsureConnect.Repository;
 
 import com.example.InsureConnect.Entity.Review;
 import com.example.InsureConnect.Entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -13,4 +15,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByUser(User user);
 
     List<Review> findByPlannerId(Long plannerId);
+
+    Page<Review> findAll(Pageable pageable);
 }
