@@ -41,6 +41,9 @@ public class Planner {
     @Column
     private String kakaoLink;
 
+    @Column
+    private String plannerNickname;
+
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "planner")
     @JsonBackReference
     private Promotion promotion;

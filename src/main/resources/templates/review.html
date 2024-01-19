@@ -18,11 +18,11 @@
     <h2 class="text-center mb-4">리뷰페이지</h2>
 
     <div class="row">
-        <ul th:each="review : ${reviewsPage.content}" class="list-group">
+        <ul th:each="review : ${reviewsPage}" class="list-group">
             <li class="list-group-item">
                 <span th:text="'제목: ' + ${review.getTitle()}"></span>
                 <span th:text="' | 작성자: ' + ${review.getUser().getNickname()}"></span>
-                <span th:text="' | 상담사: ' + ${review.getPlanner().getUser().getNickname()}"></span>
+                <span th:text="' | 상담사: ' + ${review.getPlannerNickname()}"></span>
                 <span th:text="' | 평점: ' + ${review.getRate()}"></span>
                 <span th:text="${review.getWrite()}"></span>
                 <a th:href="@{'/review/detail/' + ${review.getId()}}">자세히 보기</a>
@@ -56,12 +56,6 @@
             </li>
         </ul>
     </div>
-
-
-
-
-
-
 
 </div>
 

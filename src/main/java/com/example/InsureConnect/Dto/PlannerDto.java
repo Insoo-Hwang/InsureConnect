@@ -28,18 +28,16 @@ public class PlannerDto {
 
     private String kakaoLink;
 
+    private String plannerNickname;
+
     //user
     private String nickname;
 
     //promotion
-    private String title;
-
-    private String content;
-
-    private Timestamp write;
+    private PromotionDto promotion;
 
     //review
-    private List<Integer> rate;
+    private List<ReviewDto> review;
 
     //connectCategory
     private List<String> categoryName;
@@ -49,10 +47,10 @@ public class PlannerDto {
     private MultipartFile[] f = new MultipartFile[2];
 
     public double getAverageRating() {
-        if (rate != null) {
-            double sum = rate.stream().mapToInt(Integer::intValue).sum();
-            if (!rate.isEmpty()) {
-                double average = sum / rate.size();
+        if (review != null) {
+            double sum = review.stream().mapToInt(ReviewDto::getRate).sum();
+            if (!review.isEmpty()) {
+                double average = sum / review.size();
                 // 평균을 소수점 한 자리까지 반올림하여 문자열로 변환
                 return Double.parseDouble(String.format("%.1f", average));
             }

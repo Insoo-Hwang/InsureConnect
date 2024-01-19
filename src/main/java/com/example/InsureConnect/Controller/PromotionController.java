@@ -3,6 +3,7 @@ package com.example.InsureConnect.Controller;
 import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
+import com.example.InsureConnect.Entity.PromotionImg;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
@@ -66,15 +67,13 @@ public class PromotionController {
 
     //Promotion 세부조회
     @GetMapping("/promotion/{planner_id}")
-    public String detailPromotion(@PathVariable("planner_id") Long planner_id,
+    public String detailPromotion(@PathVariable("planner_id") Long plannerId,
                                   Model model) {
-        UserDto user = plannerService.findUserById(planner_id);
-        PromotionDto promotion = promotionService.findByPlannerId(planner_id);
-        List<PromotionImgDto> images = promotionImgService.findByPromotionId(promotion.getId());
-        images.sort(Comparator.comparingInt(PromotionImgDto::getSequence));
+        PlannerDto planner = plannerService.findById(plannerId);
+        PromotionDto promotion = promotionService.findByPlannerId(plannerId);
+        promotion.getPromotionImg().sort(Comparator.comparingInt(PromotionImgDto::getSequence));
 
-        model.addAttribute("images", images);
-        model.addAttribute("user", user);
+        model.addAttribute("planner", planner);
         model.addAttribute("promotion", promotion);
         return "detail_promotion";
     }
