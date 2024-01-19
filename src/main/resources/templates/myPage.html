@@ -348,6 +348,8 @@
                         alert("삭제할 신청 내역이 없습니다!");
                     }
                     else if(response.status === 206){
+                        const plannerId = document.querySelector("#plannerId").value;
+                        const url = "/api/planner/" + plannerId;
                         fetch(url, {
                             method: "DELETE",
                             headers: {}

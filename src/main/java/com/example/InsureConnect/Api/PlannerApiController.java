@@ -55,9 +55,9 @@ public class PlannerApiController {
     }
 
     //설계사 내역 삭제
-    @DeleteMapping("/api/planner/{userId}")
-    public ResponseEntity<PlannerDto> deletePlanner(@PathVariable UUID userId) {
-        PlannerDto plannerDto = plannerService.findByUserId(userId);
+    @DeleteMapping("/api/planner/{id}")
+    public ResponseEntity<PlannerDto> deletePlanner(@PathVariable Long id) {
+        PlannerDto plannerDto = plannerService.findById(id);
         PlannerDto deleteDto = plannerService.delete(plannerDto.getId());
         if (deleteDto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
