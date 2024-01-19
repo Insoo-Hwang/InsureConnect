@@ -85,6 +85,10 @@
             <div>닉네임</div>
             <p th:text="${user.nickname}"></p>
         </div>
+        <div class="user-detail">
+            <div>email</div>
+            <p th:text="${user.email}"></p>
+        </div>
         <button id="delete-user-button" th:value="${user.id}" onclick="deleteUser(this.value)">사용자 탈퇴</button>
     </li>
 </div>

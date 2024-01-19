@@ -98,7 +98,7 @@ public class Planner {
                     cnt++;
                 }
             }
-            score = (score/cnt)+(cnt*30);
+            score = (score/cnt)+(cnt*20);
         }
         return score;
     }

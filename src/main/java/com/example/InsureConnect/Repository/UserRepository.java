@@ -16,6 +16,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findById(UUID id);
     Optional<User> findByKakaoId(Long kakaoId);
 
+    Optional<User> findByEmail(String email);
+
     @Query(value = "SELECT * FROM users WHERE kakao_id IS NOT NULL ", nativeQuery = true)
     List<User> findByNotNull();
 
