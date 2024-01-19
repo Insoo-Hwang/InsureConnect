@@ -7,13 +7,8 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -72,6 +67,11 @@ public class AppConfig {
                     mapping.map(src -> src.getPlanner().getId(), ConnectCategoryDto::setPlannerId);
                 });
 
+
+        //CategoryDto -> Category TypeMap
+        TypeMap<CategoryDto, Category> typeMap = modelMapper.createTypeMap(CategoryDto.class, Category.class);
+        typeMap.addMappings(mapper -> mapper.skip(Category::setConnectCategory));
+
         //Category -> CategoryDto TypeMap
         TypeMap<Category, CategoryDto> categoryTypeMap = modelMapper.createTypeMap(Category.class, CategoryDto.class);
         categoryTypeMap.addMappings(mapping -> {
@@ -79,6 +79,7 @@ public class AppConfig {
         });
 
         return modelMapper;
+
     }
 
     private Converter<List<Chat>,List<Long>> convertChatToLongList() {
