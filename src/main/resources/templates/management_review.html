@@ -55,6 +55,7 @@
     }
 </style>
 <body>
+<th:block th:replace="~{header :: header}"></th:block>
 <div id="review-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">전체 리뷰</div>
     <li th:each="review : ${reviewDtos}" class="card">

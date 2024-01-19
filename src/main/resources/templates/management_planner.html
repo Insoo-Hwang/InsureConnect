@@ -49,6 +49,7 @@
     }
 </style>
 <body>
+<th:block th:replace="~{header :: header}"></th:block>
 <div id="planner-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">설계사 신청 내역</div>
     <li th:each="planner : ${plannerDtos}" class="card">

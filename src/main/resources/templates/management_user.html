@@ -61,6 +61,7 @@
     }
 </style>
 <body>
+<th:block th:replace="~{header :: header}"></th:block>
 <div id="user-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">사용자 관리</div>
     <li th:each="user : ${userDtos}" class="card">

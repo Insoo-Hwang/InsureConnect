@@ -60,6 +60,7 @@
     }
 </style>
 <body>
+<th:block th:replace="~{header :: header}"></th:block>
 <div id="category-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">카테고리 관리</div>
     <div id="create-category-container">
@@ -68,10 +69,9 @@
     </div>
 
     <li th:if="${not #strings.isEmpty(category)}" th:each="category : ${categoryDtos}" class="card">
-        <span th:text="${category.categoryName}"></span>
+        <span style="text-align: center" th:text="${category.categoryName}"></span>
         <input type="hidden" id="categoryId" th:value="${category.id}">
-        <button id="delete-category-button" style="background-color: #FF6666;" th:value="${category.id}" onclick="deleteCategory(this.value)">
-            <span th:text="${category.categoryName}"></span>카테고리 삭제</button>
+        <button id="delete-category-button" style="background-color: #FF6666;" th:value="${category.id}" onclick="deleteCategory(this.value)">카테고리 삭제</button>
     </li>
 </div>
 <script>

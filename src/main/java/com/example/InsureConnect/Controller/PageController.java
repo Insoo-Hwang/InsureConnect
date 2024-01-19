@@ -29,11 +29,6 @@ public class PageController {
         return "testqwer";
     }
 
-    @GetMapping("/header")
-    public String getTemplate(Model model) {
-        return "header";
-    }
-
     @GetMapping("/")
     public String home(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
         if(user == null){
@@ -105,7 +100,7 @@ public class PageController {
     }
 
     @GetMapping("/management")
-    public String manage(){
+    public String manage(Model model){
         return "management";
     }
 }

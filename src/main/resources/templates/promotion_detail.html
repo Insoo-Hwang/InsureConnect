@@ -36,8 +36,8 @@
     </style>
 </head>
 <body>
-
-<div class="promotion-container">
+<th:block th:replace="~{header :: header}"></th:block>
+<div class="promotion-container" style="margin-top: 100px">
     <h2 th:text="${promotion.title}"></h2>
     <div th:each="img : ${promotionImgs}">
         <img th:src="${img.imgLink}" alt="Promotion Image" class="promotion-image">
