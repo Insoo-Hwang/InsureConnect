@@ -67,15 +67,10 @@ public class AppConfig {
                     mapping.map(src -> src.getPlanner().getId(), ConnectCategoryDto::setPlannerId);
                 });
 
-
-        //CategoryDto -> Category TypeMap
-        TypeMap<CategoryDto, Category> typeMap = modelMapper.createTypeMap(CategoryDto.class, Category.class);
-        typeMap.addMappings(mapper -> mapper.skip(Category::setConnectCategory));
-
         //Category -> CategoryDto TypeMap
         TypeMap<Category, CategoryDto> categoryTypeMap = modelMapper.createTypeMap(Category.class, CategoryDto.class);
         categoryTypeMap.addMappings(mapping -> {
-            mapping.using(convertConnectCategoryToLong()).map(src -> src.getConnectCategory(), CategoryDto::setConnectCategoryId);
+            mapping.using(convertConnectCategoryToLong()).map(src -> src.getConnectCategory(), CategoryDto::setConnectionId);
         });
 
         return modelMapper;
