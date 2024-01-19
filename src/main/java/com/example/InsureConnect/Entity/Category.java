@@ -26,6 +26,7 @@ public class Category {
     @JsonManagedReference
     private List<ConnectCategory> connectCategory = new ArrayList<>();
 
+    
     public void setConnectCategory(List<ConnectCategory> connectCategory) {
         this.connectCategory = connectCategory;
     }
