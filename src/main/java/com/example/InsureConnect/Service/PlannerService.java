@@ -102,6 +102,15 @@ public class PlannerService {
         return modelMapper.map(updated, PlannerDto.class);
     }
 
+    @Transactional
+    public PlannerDto deletePlanner(Long id){
+        Planner target = plannerRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        target.deleteStatus();
+        Planner deleted = plannerRepository.save(target);
+        return modelMapper.map(deleted, PlannerDto.class);
+    }
+
     public List<PlannerDto> findEnrollPlanner(){
         List<Planner> planners = plannerRepository.findByStatusEnroll();
         return planners.stream()
