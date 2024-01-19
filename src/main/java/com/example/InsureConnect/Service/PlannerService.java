@@ -126,23 +126,26 @@ public class PlannerService {
                 .collect(Collectors.toList());
     }
 
-    public Page<PlannerDto> findAllPaging(Pageable pageable) {
-        return plannerRepository.findAll(pageable)
-                .map(planner -> modelMapper.map(planner, PlannerDto.class));
-    }
 
-    public Page<PlannerDto> findAllSorted(String sort, int page, int size) {
+    public Page<PlannerDto> findAllPermitPlanner(Pageable pageable,String sort) {
+        if (sort.equals("write")) {
+            return plannerRepository.findAllPermitPlanner(pageable)
+                    .map(planner -> modelMapper.map(planner, PlannerDto.class));
+        } else if (sort.equals("rating")) {
+            return plannerRepository.findAllPermitPlannerOrderRating(pageable)
+                    .map(planner -> modelMapper.map(planner, PlannerDto.class));
+        } else if (sort.equals("count")) {
+            Page<PlannerDto> map = plannerRepository.findAllOrderByRateCount(pageable)
+                    .map(planner -> modelMapper.map(planner, PlannerDto.class));
+            for (PlannerDto plannerDto : map) {
+                System.out.println("plannerDto.getNickname() = " + plannerDto.getNickname());
+            }
+            return map;
 
-        Sort sorting = switch (sort) {
-            case "averageRate" -> Sort.by("averageRating");
-            case "reviewCount" -> Sort.by("review.size");
-            default -> Sort.by("promotion.write");
-        };
 
-        Page<Planner> findAllPlanner = plannerRepository.findAll(PageRequest.of(page - 1, size,sorting));
-
-
-        return findAllPlanner.map(planner -> modelMapper.map(planner, PlannerDto.class));
+        } else {
+            throw new IllegalArgumentException("Invalid sort parameter: " + sort);
+        }
     }
 
 

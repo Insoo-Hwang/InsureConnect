@@ -42,6 +42,7 @@ public class PlannerDto {
     //connectCategory
     private List<String> categoryName;
 
+    //review Size
 
     @JsonIgnore
     private MultipartFile[] f = new MultipartFile[2];
