@@ -37,7 +37,8 @@
         #edit-button,
         #register-planner-button,
         #register-promotion-button,
-        #delete-review-button {
+        #delete-review-button,
+        #delete-user-button {
             margin-top: 10px;
             border-radius: 10px;
             border: none;
@@ -47,12 +48,14 @@
             width: 100%;
         }
 
-        #delete-review-button {
+        #delete-review-button,
+        #delete-user-button {
             background-color: #FF6666;
         }
 
         #review-container,
-        #planner-container {
+        #planner-container,
+        #delete-user-container {
             width: 50vw;
             margin-top: 20px;
             overflow: auto;
@@ -231,6 +234,28 @@
                 const msg = (response.ok) ? "리뷰가 삭제되었습니다!" : "삭제 실패!";
                 alert(msg);
                 window.location.reload();
+            })
+        }
+    }
+</script>
+
+<div id="delete-user-container">
+    <button type="button" style="margin-top: 0px" id="delete-user-button" onclick="deleteUser()">사용자 탈퇴하기</button>
+</div>
+<script>
+    {
+        function deleteUser(){
+            const userId = document.querySelector("#userId").value;
+            const url = "/api/user/"+userId+"/del";
+            fetch(url, {
+                method: "PATCH",
+                headers: {
+
+                }
+            }).then(response => {
+                const msg = (response.ok) ? "사용자가 삭제되었습니다!" : "삭제 실패!";
+                alert(msg);
+                window.location.href="/logout";
             })
         }
     }
