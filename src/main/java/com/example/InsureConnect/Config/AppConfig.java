@@ -78,6 +78,10 @@ public class AppConfig {
             mapping.using(convertConnectCategoryToLong()).map(src -> src.getConnectCategory(), CategoryDto::setConnectCategoryId);
         });
 
+        //CategoryDto -> Category TypeMap
+        TypeMap<CategoryDto, Category> typeMap = modelMapper.createTypeMap(CategoryDto.class, Category.class);
+        typeMap.addMappings(mapper -> mapper.skip(Category::setConnectCategory));
+
         return modelMapper;
     }
 
