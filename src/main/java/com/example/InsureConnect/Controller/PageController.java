@@ -29,11 +29,6 @@ public class PageController {
         return "testqwer";
     }
 
-    @GetMapping("/header")
-    public String getTemplate(Model model) {
-        return "header";
-    }
-
     @GetMapping("/")
     public String home(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
         if(user == null){
@@ -70,54 +65,42 @@ public class PageController {
         else if(plannerDto.getStatus().equals("temp")) plannerStatus = "반려";
         model.addAttribute("plannerStatus", plannerStatus);
         if(plannerDto != null) model.addAttribute("plannerId", plannerDto.getId());
-        if(user == null) model.addAttribute("login", false);
-        else model.addAttribute("login", true);
         return "myPage";
     }
 
     @GetMapping("/management/planner")
-    public String managePlanner(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+    public String managePlanner(Model model){
         List<PlannerDto> plannerDtos = plannerService.findEnrollPlanner();
         model.addAttribute("plannerDtos", plannerDtos);
-        if(user == null) model.addAttribute("login", false);
-        else model.addAttribute("login", true);
         return "management_planner";
     }
 
     @GetMapping("/management/user")
-    public String manageUser(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+    public String manageUser(Model model){
         List<UserDto> userDtos = userService.showAll();
         for (UserDto userDto : userDtos) {
             System.out.println("userDto = " + userDto);
         }
         model.addAttribute("userDtos", userDtos);
-        if(user == null) model.addAttribute("login", false);
-        else model.addAttribute("login", true);
         return "management_user";
     }
 
     @GetMapping("/management/review")
-    public String manageReview(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+    public String manageReview(Model model){
         List<ReviewDto> reviewDtos = reviewService.findAll();
         model.addAttribute("reviewDtos", reviewDtos);
-        if(user == null) model.addAttribute("login", false);
-        else model.addAttribute("login", true);
         return "management_review";
     }
 
     @GetMapping("/management/category")
-    public String manageCategory(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+    public String manageCategory(Model model){
         List<CategoryDto> categoryDtos = categoryService.showAll();
         model.addAttribute("categoryDtos", categoryDtos);
-        if(user == null) model.addAttribute("login", false);
-        else model.addAttribute("login", true);
         return "management_category";
     }
 
     @GetMapping("/management")
-    public String manage(@AuthenticationPrincipal CustomOAuth2User user, Model model){
-        if(user == null) model.addAttribute("login", false);
-        else model.addAttribute("login", true);
+    public String manage(Model model){
         return "management";
     }
 }
