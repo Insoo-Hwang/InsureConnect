@@ -15,5 +15,5 @@ public class CategoryDto {
 
     private String categoryName;
 
-    private List<Long> connectCategoryId;
+    private List<Long> connectionId;
 }
