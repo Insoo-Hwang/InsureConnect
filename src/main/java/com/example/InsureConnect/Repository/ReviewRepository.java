@@ -15,6 +15,7 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByUser(User user);
 
     List<Review> findByPlannerId(Long plannerId);
+    List<Review> findAll();
 
     Page<Review> findAll(Pageable pageable);
 }

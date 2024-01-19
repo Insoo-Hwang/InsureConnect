@@ -83,6 +83,13 @@ public class ReviewService {
         return reviews.map(review -> modelMapper.map(review, ReviewDto.class));
     }
 
+    public List<ReviewDto> findAll(){
+        List<Review> reviewList = reviewRepository.findAll();
+        return reviewList.stream()
+                .map(review -> modelMapper.map(review, ReviewDto.class))
+                .collect(Collectors.toList());
+    }
+
     public ReviewDto findById(Long reviewId) {
         Review byId = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new IllegalArgumentException("Review not found with id: " + reviewId));
