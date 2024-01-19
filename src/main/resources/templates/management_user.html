@@ -97,8 +97,25 @@
                 headers: {
 
                 }
-            }).then(response => {
-                const msg = (response.ok) ? "사용자가 삭제되었습니다!" : "삭제 실패!";
+            }).then(response1 => {
+                const url = "/api/planner/" + userId;
+                fetch(url, {
+                    method:"GET",
+                    headers: {
+
+                    }
+                }).then(response2 => {
+                    if(response2.status === 200){
+                        const url = "/api/planner/" + userId + "/del";
+                        fetch(url, {
+                            method:"PATCH",
+                            headers: {
+
+                            }
+                        })
+                    }
+                })
+                const msg = (response1.ok) ? "사용자가 삭제되었습니다!" : "삭제 실패!";
                 alert(msg);
                 window.location.reload();
             })

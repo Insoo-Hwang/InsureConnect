@@ -61,6 +61,10 @@ public class Planner {
         else this.status = "temp";
     }
 
+    public void deleteStatus(){
+        this.status = "deleted";
+    }
+
     public double getAverageRating() {
         if (review != null && !review.isEmpty()) {
             double sum = review.stream().mapToInt(Review::getRate).sum();
