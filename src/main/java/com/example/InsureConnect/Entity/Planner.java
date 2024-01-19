@@ -7,6 +7,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,14 +69,37 @@ public class Planner {
         this.status = "deleted";
     }
 
-    public double getAverageRating() {
-        if (review != null && !review.isEmpty()) {
-            double sum = review.stream().mapToInt(Review::getRate).sum();
-            double average = sum / review.size();
-
-            // 평균을 소수점 한 자리까지 반올림하여 문자열로 변환
-            return Double.parseDouble(String.format("%.1f", average));
+    public int getRecommendRating(){
+        int score = 0;
+        if(review != null && !review.isEmpty()){
+            int cnt = 0;
+            for(Review reviewScore : review){
+                Timestamp before = reviewScore.getWrite();
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                Instant beforeIns = before.toInstant();
+                Instant nowIns = now.toInstant();
+                Duration duration = Duration.between(beforeIns, nowIns);
+                long day = Math.abs(duration.toDays());
+                if(day > 365) continue;
+                else if(day > 180){
+                    score+=reviewScore.getRate()*20;
+                    cnt++;
+                }
+                else if(day > 90){
+                    score+=reviewScore.getRate()*33;
+                    cnt++;
+                }
+                else if(day > 30){
+                    score+=reviewScore.getRate()*44;
+                    cnt++;
+                }
+                else{
+                    score+=reviewScore.getRate()*58;
+                    cnt++;
+                }
+            }
+            score = (score/cnt)+(cnt*30);
         }
-        return 0.0; // 평점이 없는 경우 0으로 반환하거나 다른 값을 지정할 수 있습니다.
+        return score;
     }
 }

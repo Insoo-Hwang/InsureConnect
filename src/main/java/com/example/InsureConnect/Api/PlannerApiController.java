@@ -3,9 +3,11 @@ package com.example.InsureConnect.Api;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Service.ConnectCategoryService;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.UserService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +76,7 @@ public class PlannerApiController {
         }
     }
 
+    //설계사 삭제
     @PatchMapping("/api/planner/{userId}/del")
     public ResponseEntity<PlannerDto> deletedPlanner(@PathVariable UUID userId){
         PlannerDto plannerDto = plannerService.findByUserId(userId);

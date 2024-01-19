@@ -9,6 +9,8 @@ import com.example.InsureConnect.Handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
@@ -20,10 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -148,5 +147,31 @@ public class PlannerService {
         }
     }
 
+    public List<PlannerDto> recommendPlanner(){
+        List<Planner> planners = plannerRepository.findAllPermitPlanner();
+        List<Recommend> recommends = new ArrayList<>();
+        for(Planner planner : planners){
+            recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
+        }
+        Collections.sort(recommends);
+        List<PlannerDto> plannerDtos = new ArrayList<>();
+        for(Recommend recommend : recommends){
+            plannerDtos.add(recommend.getPlannerDto());
+        }
+        return plannerDtos;
+    }
 
+    @Getter
+    @AllArgsConstructor
+    static class Recommend implements Comparable<Recommend>{
+        int cnt;
+        int score;
+        PlannerDto plannerDto;
+
+        @Override
+        public int compareTo(Recommend o) {
+            if(this.score == o.score) return o.cnt-this.cnt;
+            else return o.score-this.score;
+        }
+    }
 }
