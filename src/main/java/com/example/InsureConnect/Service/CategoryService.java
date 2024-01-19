@@ -10,6 +10,8 @@ import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -21,7 +23,7 @@ public class CategoryService {
 
     public List<CategoryDto> showAll(){
         List<Category> categoryList = categoryRepository.findAll();
-        return modelMapper.map(categoryList, new TypeToken<List<CategoryDto>>() {}.getType());
+        return categoryList.stream().filter(Objects::nonNull).map(category -> modelMapper.map(category, CategoryDto.class)).collect(Collectors.toList());
     }
 
     @Transactional

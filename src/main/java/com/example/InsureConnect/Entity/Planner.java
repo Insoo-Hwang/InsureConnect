@@ -1,8 +1,13 @@
 package com.example.InsureConnect.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +23,7 @@ public class Planner {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JsonBackReference
     private User user;
 
     @Column
@@ -35,17 +41,34 @@ public class Planner {
     @Column
     private String kakaoLink;
 
+    @Column
+    private String plannerNickname;
+
     @OneToOne(fetch = FetchType.LAZY,mappedBy = "planner")
+    @JsonBackReference
     private Promotion promotion;
 
     @OneToMany(mappedBy = "planner")
-    private List<Review> review;
+    @JsonBackReference
+    private List<Review> review = new ArrayList<>();
 
     @OneToMany(mappedBy = "planner")
-    private List<ConnectCategory> connectCategory;
+    @JsonBackReference
+    private List<ConnectCategory> connectCategory = new ArrayList<>();
 
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";
         else this.status = "temp";
+    }
+
+    public double getAverageRating() {
+        if (review != null && !review.isEmpty()) {
+            double sum = review.stream().mapToInt(Review::getRate).sum();
+            double average = sum / review.size();
+
+            // 평균을 소수점 한 자리까지 반올림하여 문자열로 변환
+            return Double.parseDouble(String.format("%.1f", average));
+        }
+        return 0.0; // 평점이 없는 경우 0으로 반환하거나 다른 값을 지정할 수 있습니다.
     }
 }

@@ -1,7 +1,5 @@
 package com.example.InsureConnect.Dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import java.util.List;
@@ -17,6 +15,5 @@ public class CategoryDto {
 
     private String categoryName;
 
-    @JsonIgnore
-    private List<ConnectCategoryDto> connectCategory;
+    private List<Long> connectCategoryId;
 }

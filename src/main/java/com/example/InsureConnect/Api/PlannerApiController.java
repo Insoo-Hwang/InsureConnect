@@ -29,12 +29,15 @@ public class PlannerApiController {
     @GetMapping("/api/planners")
     public ResponseEntity<List<PlannerDto>> allPlanner() {
 
-        List<PlannerDto> permittedPlanners = plannerService.findAll().stream()
-                .filter(planner -> "permit".equals(planner.getStatus()))
-                .collect(Collectors.toList());
+        List<PlannerDto> permittedPlanners = plannerService.findAllAllPermitPlanner();
+        System.out.println("permittedPlanners.size() = " + permittedPlanners.size());
+        System.out.println("permittedPlanners.isEmpty() = " + permittedPlanners.isEmpty());
+        for (PlannerDto permittedPlanner : permittedPlanners) {
+            System.out.println("permittedPlanner.getStatus() = " + permittedPlanner.getStatus());
+        }
         if (permittedPlanners.isEmpty()) {
             // 만약 특정 조건을 만족하는 플래너가 없으면 HTTP 상태 코드 204 (NO_CONTENT)를 반환
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+            return ResponseEntity.noContent().build();
         } else {
             // 특정 조건을 만족하는 플래너가 있으면 HTTP 상태 코드 200 (OK)와 함께 해당 플래너 목록을 반환
             return ResponseEntity.status(HttpStatus.OK).body(permittedPlanners);

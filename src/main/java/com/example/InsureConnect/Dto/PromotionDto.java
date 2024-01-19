@@ -1,7 +1,5 @@
 package com.example.InsureConnect.Dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import java.sql.Timestamp;
@@ -15,9 +13,6 @@ import java.util.List;
 public class PromotionDto {
     private Long id;
 
-    @JsonManagedReference
-    private PlannerDto planner;
-
     private String title;
 
     private String content;
@@ -26,7 +21,10 @@ public class PromotionDto {
 
     private Timestamp edit;
 
-    @JsonBackReference
+    //Planner
+    private Long plannerId;
+
+    //PromotionImg
     private List<PromotionImgDto> promotionImg;
 
 }

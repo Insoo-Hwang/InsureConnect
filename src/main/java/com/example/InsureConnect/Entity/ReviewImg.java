@@ -1,5 +1,7 @@
 package com.example.InsureConnect.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +18,7 @@ public class ReviewImg {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_id",referencedColumnName = "id")
+    @JsonManagedReference
     private Review review;
 
     @Column

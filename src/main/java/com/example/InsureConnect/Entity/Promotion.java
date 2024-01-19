@@ -1,5 +1,7 @@
 package com.example.InsureConnect.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +21,7 @@ public class Promotion {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "planner_id",referencedColumnName = "id")
+    @JsonManagedReference
     private Planner planner;
 
     @Column
@@ -34,7 +37,8 @@ public class Promotion {
     private Timestamp edit;
 
     @OneToMany(mappedBy = "promotion", cascade = CascadeType.ALL)
-    private List<PromotionImg> promotionImg;
+    @JsonBackReference
+    private List<PromotionImg> promotionImg = new ArrayList<>();
 
     public void setWriteToCurrentTime() {
         this.write = new Timestamp(System.currentTimeMillis());

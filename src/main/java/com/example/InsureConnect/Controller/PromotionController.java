@@ -3,11 +3,15 @@ package com.example.InsureConnect.Controller;
 import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
+import com.example.InsureConnect.Entity.PromotionImg;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
 import com.example.InsureConnect.Service.ReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +19,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,11 +36,14 @@ public class PromotionController {
 
     //Promotion 조회
     @GetMapping("/promotion")
-    public String promotion(Model model) {
-        List<PlannerDto> planners = plannerService.findAll();
+    public String promotion(@RequestParam(defaultValue = "1") int page,
+                            @RequestParam(defaultValue = "2") int size,
+                            @RequestParam(defaultValue = "write", value = "sortField") String sortField,
+                            Model model) {
+
+        Page<PlannerDto> planners = plannerService.findAllSorted(sortField,page, size);
 
         model.addAttribute("planners", planners);
-
         return "promotion";
     }
 
@@ -56,31 +67,25 @@ public class PromotionController {
 
     //Promotion 세부조회
     @GetMapping("/promotion/{planner_id}")
-    public String detailPromotion(@PathVariable("planner_id") Long planner_id,
+    public String detailPromotion(@PathVariable("planner_id") Long plannerId,
                                   Model model) {
-        UserDto user = plannerService.findUserById(planner_id);
-        PromotionDto promotion = promotionService.findByPlannerId(planner_id);
-        List<PromotionImgDto> images = promotionImgService.findByPromotionId(promotion.getId());
-        images.sort(Comparator.comparingInt(PromotionImgDto::getSequence));
+        PlannerDto planner = plannerService.findById(plannerId);
+        PromotionDto promotion = promotionService.findByPlannerId(plannerId);
+        promotion.getPromotionImg().sort(Comparator.comparingInt(PromotionImgDto::getSequence));
 
-        model.addAttribute("images", images);
-        model.addAttribute("user", user);
+        model.addAttribute("planner", planner);
         model.addAttribute("promotion", promotion);
         return "detail_promotion";
     }
 
-//    @PostMapping("/updatePromotion")
-//    public String updatePromotion(@RequestParam("promotionId") Long promotionId,
-//                                  @RequestParam("title") String title,
-//                                  @RequestParam("content") String content,
-//                                  @RequestPart("images") MultipartFile[] images,
-//                                  @AuthenticationPrincipal CustomOAuth2User user) throws IOException {
-//
-//        // promotionId에 해당하는 Promotion을 업데이트
-//        promotionService.updatePromotion(promotionId, title, content, images, user);
-//
-//        return "redirect:/home"; // 수정 후 홈 화면으로 리다이렉션
-//    }
-
+    @GetMapping("/promotion/update/{plannerId}/{promotionId}")
+    public String updatePromotion(@PathVariable("plannerId") Long plannerId,
+                                  @PathVariable("promotionId") Long promotionId, Model model) {
+        PromotionDto promotion = promotionService.findByPlannerId(plannerId);
+        List<PromotionImgDto> images = promotionImgService.findByPromotionId(promotionId);
+        model.addAttribute("promotion", promotion);
+        model.addAttribute("images", images);
+        return "update_promotion"; // 수정 후 홈 화면으로 리다이렉션
+    }
 
 }

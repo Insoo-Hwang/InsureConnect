@@ -42,6 +42,12 @@
         </div>
         <div class="col-md-12 section-divider"></div>
 
+        <!-- 평점 -->
+        <div class="col-md-12">
+            <p>평점 : <span th:text="${review.getRate()}"></span></p>
+        </div>
+        <div class="col-md-12 section-divider"></div>
+
         <!-- 본문 -->
         <div class="col-md-12">
             <div th:each="reviewImgs : ${review.getReviewImg()}">

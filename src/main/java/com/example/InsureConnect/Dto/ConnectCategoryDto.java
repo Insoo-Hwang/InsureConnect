@@ -1,7 +1,6 @@
 package com.example.InsureConnect.Dto;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 @AllArgsConstructor
@@ -13,9 +12,7 @@ public class ConnectCategoryDto {
 
     private Long id;
 
-    @JsonManagedReference
-    private PlannerDto planner;
+    private Long plannerId;
 
-    @JsonManagedReference
-    private CategoryDto category;
+    private Long categoryId;
 }

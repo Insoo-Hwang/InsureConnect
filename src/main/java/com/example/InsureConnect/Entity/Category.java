@@ -1,10 +1,12 @@
 package com.example.InsureConnect.Entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,6 +23,7 @@ public class Category {
     private String categoryName;
 
     @OneToMany(mappedBy = "category")
-    private List<ConnectCategory> connectCategory;
+    @JsonManagedReference
+    private List<ConnectCategory> connectCategory = new ArrayList<>();
 
 }

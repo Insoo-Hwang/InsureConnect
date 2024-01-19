@@ -1,16 +1,15 @@
 package com.example.InsureConnect.Dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
+@Builder
 public class UserDto {
 
     private UUID id;
@@ -25,13 +24,10 @@ public class UserDto {
 
     private String type;
 
-    @JsonBackReference
-    private PlannerDto planner;
+    private Long plannerId;
 
-    @JsonBackReference
-    private ChatDto chat;
+    private List<Long> chatId;
 
-    @JsonBackReference
-    private ReviewDto review;
+    private List<Long> reviewId;
 
 }

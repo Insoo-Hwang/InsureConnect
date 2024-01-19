@@ -1,11 +1,10 @@
 package com.example.InsureConnect.Dto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -19,9 +18,6 @@ public class PlannerDto {
 
     private Long id;
 
-    @JsonManagedReference
-    private UserDto user;
-
     private String profile;
 
     private String company;
@@ -32,25 +28,32 @@ public class PlannerDto {
 
     private String kakaoLink;
 
-    @JsonBackReference
-    private List<ConnectCategoryDto> connectCategory;
+    private String plannerNickname;
 
-    @JsonBackReference
+    //user
+    private String nickname;
+
+    //promotion
     private PromotionDto promotion;
 
-    @JsonBackReference
+    //review
     private List<ReviewDto> review;
+
+    //connectCategory
+    private List<String> categoryName;
+
 
     @JsonIgnore
     private MultipartFile[] f = new MultipartFile[2];
 
     public double getAverageRating() {
-        if (review != null && !review.isEmpty()) {
+        if (review != null) {
             double sum = review.stream().mapToInt(ReviewDto::getRate).sum();
-            double average = sum / review.size();
-
-            // 평균을 소수점 한 자리까지 반올림하여 문자열로 변환
-            return Double.parseDouble(String.format("%.1f", average));
+            if (!review.isEmpty()) {
+                double average = sum / review.size();
+                // 평균을 소수점 한 자리까지 반올림하여 문자열로 변환
+                return Double.parseDouble(String.format("%.1f", average));
+            }
         }
         return 0.0; // 평점이 없는 경우 0으로 반환하거나 다른 값을 지정할 수 있습니다.
     }
