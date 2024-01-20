@@ -5,7 +5,7 @@ import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
-import com.example.InsureConnect.Handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;

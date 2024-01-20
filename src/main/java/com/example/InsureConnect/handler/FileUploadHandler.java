@@ -1,4 +1,4 @@
-package com.example.InsureConnect.Handler;
+package com.example.InsureConnect.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ResourceLoader;

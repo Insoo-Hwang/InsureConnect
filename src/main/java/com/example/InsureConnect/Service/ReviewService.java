@@ -4,7 +4,7 @@ import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Dto.ReviewDto;
 import com.example.InsureConnect.Dto.ReviewImgDto;
 import com.example.InsureConnect.Entity.*;
-import com.example.InsureConnect.Handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.ReviewImgRepository;
 import com.example.InsureConnect.Repository.ReviewRepository;
