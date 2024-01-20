@@ -49,11 +49,11 @@ public class User implements UserDetails {
     @JsonBackReference
     private Planner planner;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonBackReference
     private List<Review> review = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     @JsonBackReference
     private List<Chat> chat = new ArrayList<>();
 
