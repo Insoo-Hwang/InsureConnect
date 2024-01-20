@@ -1,14 +1,14 @@
 package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Dto.PromotionDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.Promotion;
 import com.example.InsureConnect.Entity.PromotionImg;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.PromotionImgRepository;
 import com.example.InsureConnect.Repository.PromotionRepository;
-import com.example.InsureConnect.Handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileUploadHandler;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.example.InsureConnect.Entity;
+package com.example.InsureConnect.Config.OAuth;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,15 +13,17 @@ public class CustomOAuth2User extends DefaultOAuth2User {
     private Map<String, Object> attributes;
     private Long id;
     private String nickname;
+    private String email;
 
     @Builder
     public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities,
                             Map<String, Object> attributes, String nameAttributeKey,
-                            Long id, String nickname) {
+                            Long id, String nickname, String email) {
         super(authorities, attributes, nameAttributeKey);
         this.attributes = attributes;
         this.id = id;
         this.nickname = nickname;
+        this.email = email;
     }
 
     public static CustomOAuth2User kakao(Long id, Map<String, Object> attributes){
@@ -30,6 +32,7 @@ public class CustomOAuth2User extends DefaultOAuth2User {
 
         return CustomOAuth2User.builder()
                 .nickname((String) kakaoProfile.get("nickname"))
+                .email((String) kakaoAccount.get("email"))
                 .attributes(attributes)
                 .nameAttributeKey("id")
                 .id(id)

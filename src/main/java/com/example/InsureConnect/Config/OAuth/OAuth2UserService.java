@@ -1,13 +1,11 @@
-package com.example.InsureConnect.Service;
+package com.example.InsureConnect.Config.OAuth;
 
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -33,14 +31,19 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
 
         CustomOAuth2User customOAuth2User = CustomOAuth2User.kakao(id, attributes);
         String nickname = customOAuth2User.getNickname();
+        String email = customOAuth2User.getEmail();
 
-        List<GrantedAuthority> authorities = AuthorityUtils.createAuthorityList("ROLE_USER");
-
+        List<GrantedAuthority> authorities;
         if(userRepository.findByKakaoId(id).isEmpty()){
-            UserDto newDto = new UserDto(null, id, nickname, null, 0, null,null,null,null);
-
-            userRepository.save(modelMapper.map(newDto, User.class));
+            UserDto newDto = new UserDto(null, id, nickname, email, null, 0, "user",null,null,null);
+            User user = userRepository.save(modelMapper.map(newDto, User.class));
+            authorities = (List<GrantedAuthority>) user.getAuthorities();
         }
-        return new CustomOAuth2User(authorities, attributes, "id", id, nickname);
+        else{
+            User user = userRepository.findByKakaoId(id).orElseThrow(() -> new IllegalArgumentException());
+            authorities = (List<GrantedAuthority>) user.getAuthorities();
+        }
+
+        return new CustomOAuth2User(authorities, attributes, "id", id, nickname, email);
     }
 }

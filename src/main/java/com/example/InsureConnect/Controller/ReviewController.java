@@ -1,8 +1,7 @@
 package com.example.InsureConnect.Controller;
 
-import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.ReviewDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.ReviewService;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller

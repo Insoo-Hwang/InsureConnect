@@ -2,8 +2,6 @@ package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.CategoryDto;
 import com.example.InsureConnect.Service.CategoryService;
-import com.example.InsureConnect.Service.ConnectCategoryService;
-import com.example.InsureConnect.Service.PlannerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

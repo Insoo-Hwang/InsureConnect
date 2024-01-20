@@ -2,7 +2,7 @@ package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.ChatDto;
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Service.ChatGptService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;

@@ -3,26 +3,25 @@ package com.example.InsureConnect.Service;
 import com.example.InsureConnect.Config.PlannerSpecification;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
-import com.example.InsureConnect.Handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.function.Predicate;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -101,7 +100,17 @@ public class PlannerService {
         return modelMapper.map(updated, PlannerDto.class);
     }
 
-    public List<PlannerDto> findEnrollPlanner() {
+
+    @Transactional
+    public PlannerDto deletePlanner(Long id){
+        Planner target = plannerRepository.findById(id)
+                .orElseThrow(IllegalArgumentException::new);
+        target.deleteStatus();
+        Planner deleted = plannerRepository.save(target);
+        return modelMapper.map(deleted, PlannerDto.class);
+    }
+
+    public List<PlannerDto> findEnrollPlanner(){
         List<Planner> planners = plannerRepository.findByStatusEnroll();
         return planners.stream()
                 .map(planner -> modelMapper.map(planner, PlannerDto.class))
@@ -122,5 +131,34 @@ public class PlannerService {
 
         return plannerRepository.findAll(spec, pageable)
                 .map(planner -> modelMapper.map(planner, PlannerDto.class));
+    }
+
+
+    public List<PlannerDto> recommendPlanner(){
+        List<Planner> planners = plannerRepository.findAllPermitPlanner();
+        List<Recommend> recommends = new ArrayList<>();
+        for(Planner planner : planners){
+            recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
+        }
+        Collections.sort(recommends);
+        List<PlannerDto> plannerDtos = new ArrayList<>();
+        for(Recommend recommend : recommends){
+            plannerDtos.add(recommend.getPlannerDto());
+        }
+        return plannerDtos;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    static class Recommend implements Comparable<Recommend>{
+        int cnt;
+        int score;
+        PlannerDto plannerDto;
+
+        @Override
+        public int compareTo(Recommend o) {
+            if(this.score == o.score) return o.cnt-this.cnt;
+            else return o.score-this.score;
+        }
     }
 }

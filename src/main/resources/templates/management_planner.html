@@ -56,7 +56,6 @@
         <p th:text="${planner.profile}"></p>
         <p th:text="${planner.company}"></p>
         <p th:text="${planner.certificate}"></p>
-        <input type="hidden" id="userId" th:value="${planner.getUser().getId()}">
         <button id="permit-planner-button" style="background-color: #0056b3;" th:value="${planner.id}" onclick="managePlanner(this.value, true)">설계사 등록</button>
         <button id="temp-planner-button" style="background-color: #FF6666;" th:value="${planner.id}" onclick="managePlanner(this.value, false)">설계사 반려</button>
     </li>
@@ -75,8 +74,7 @@
                 }
             }).then(response => {
                 if(response.status === 204){
-                    const userId = document.querySelector("#userId").value;
-                    const url = "/api/planner/" + userId;
+                    const url = "/api/planner/" + plannerId;
                     fetch(url, {
                         method: "DELETE",
                         headers: {}

@@ -18,6 +18,8 @@ public class UserDto {
 
     private String nickname;
 
+    private String email;
+
     private String gender;
 
     private int age;

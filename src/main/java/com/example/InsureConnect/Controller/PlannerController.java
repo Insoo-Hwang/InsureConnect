@@ -1,7 +1,7 @@
 package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.PlannerDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Service.ConnectCategoryService;
 import com.example.InsureConnect.Service.PlannerService;
 import lombok.RequiredArgsConstructor;

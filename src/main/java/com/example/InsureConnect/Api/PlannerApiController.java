@@ -2,21 +2,15 @@ package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
-import com.example.InsureConnect.Service.ConnectCategoryService;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,10 +49,9 @@ public class PlannerApiController {
     }
 
     //설계사 내역 삭제
-    @DeleteMapping("/api/planner/{userId}")
-    public ResponseEntity<PlannerDto> deletePlanner(@PathVariable UUID userId) {
-        PlannerDto plannerDto = plannerService.findByUserId(userId);
-        PlannerDto deleteDto = plannerService.delete(plannerDto.getId());
+    @DeleteMapping("/api/planner/{id}")
+    public ResponseEntity<PlannerDto> deletePlanner(@PathVariable Long id) {
+        PlannerDto deleteDto = plannerService.delete(id);
         if (deleteDto == null) return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
         else return ResponseEntity.status(HttpStatus.OK).body(deleteDto);
     }
@@ -73,5 +66,13 @@ public class PlannerApiController {
             PlannerDto plannerDto = plannerService.managePlanner(plannerId, permit);
             return ResponseEntity.status(HttpStatus.OK).body(plannerDto);
         }
+    }
+
+    //설계사 삭제
+    @PatchMapping("/api/planner/{userId}/del")
+    public ResponseEntity<PlannerDto> deletedPlanner(@PathVariable UUID userId){
+        PlannerDto plannerDto = plannerService.findByUserId(userId);
+        PlannerDto deleted = plannerService.deletePlanner(plannerDto.getId());
+        return ResponseEntity.status(HttpStatus.OK).body(deleted);
     }
 }

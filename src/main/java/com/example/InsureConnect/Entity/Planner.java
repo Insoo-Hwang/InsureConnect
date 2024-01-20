@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +62,43 @@ public class Planner {
     public void changeStatus(boolean permit){
         if(permit) this.status = "permit";
         else this.status = "temp";
+    }
+
+    public void deleteStatus(){
+        this.status = "deleted";
+    }
+
+    public int getRecommendRating(){
+        int score = 0;
+        if(review != null && !review.isEmpty()){
+            int cnt = 0;
+            for(Review reviewScore : review){
+                Timestamp before = reviewScore.getWrite();
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                Instant beforeIns = before.toInstant();
+                Instant nowIns = now.toInstant();
+                Duration duration = Duration.between(beforeIns, nowIns);
+                long day = Math.abs(duration.toDays());
+                if(day > 365) continue;
+                else if(day > 180){
+                    score+=reviewScore.getRate()*20;
+                    cnt++;
+                }
+                else if(day > 90){
+                    score+=reviewScore.getRate()*33;
+                    cnt++;
+                }
+                else if(day > 30){
+                    score+=reviewScore.getRate()*44;
+                    cnt++;
+                }
+                else{
+                    score+=reviewScore.getRate()*58;
+                    cnt++;
+                }
+            }
+            score = (score/cnt)+(cnt*20);
+        }
+        return score;
     }
 }
