@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Service;
 
+import com.example.InsureConnect.Config.PlannerSpecification;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
@@ -13,8 +14,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,6 +61,7 @@ public class PlannerService {
         Optional<Planner> planner = plannerRepository.findById(plannerId);
         return modelMapper.map(planner, PlannerDto.class);
     }
+
     public PlannerDto findByUser_KakaoId(Long userId) {
         Planner byUserKakaoId = plannerRepository.findByUser_KakaoId(userId);
         return modelMapper.map(byUserKakaoId, PlannerDto.class);
@@ -69,34 +72,34 @@ public class PlannerService {
         return modelMapper.map(userById, UserDto.class);
     }
 
-    public PlannerDto findByUserId(UUID userId){
+    public PlannerDto findByUserId(UUID userId) {
         User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
         Planner planner = plannerRepository.findByUser(user);
-        if(planner == null) return null;
+        if (planner == null) return null;
         else return modelMapper.map(planner, PlannerDto.class);
     }
 
     @Transactional
-    public PlannerDto delete(Long id){
+    public PlannerDto delete(Long id) {
         Planner target = plannerRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-        if(target.getStatus().equals("permit")){
+        if (target.getStatus().equals("permit")) {
             return null;
-        }
-        else {
+        } else {
             plannerRepository.delete(target);
             return modelMapper.map(target, PlannerDto.class);
         }
     }
 
     @Transactional
-    public PlannerDto managePlanner(Long id, boolean permit){
+    public PlannerDto managePlanner(Long id, boolean permit) {
         Planner target = plannerRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
         target.changeStatus(permit);
         Planner updated = plannerRepository.save(target);
         return modelMapper.map(updated, PlannerDto.class);
     }
+
 
     @Transactional
     public PlannerDto deletePlanner(Long id){
@@ -123,26 +126,13 @@ public class PlannerService {
     }
 
 
-    public Page<PlannerDto> findAllPermitPlanner(Pageable pageable,String sort) {
-        if (sort.equals("write")) {
-            return plannerRepository.findAllPermitPlanner(pageable)
-                    .map(planner -> modelMapper.map(planner, PlannerDto.class));
-        } else if (sort.equals("rating")) {
-            return plannerRepository.findAllPermitPlannerOrderRating(pageable)
-                    .map(planner -> modelMapper.map(planner, PlannerDto.class));
-        } else if (sort.equals("count")) {
-            Page<PlannerDto> map = plannerRepository.findAllOrderByRateCount(pageable)
-                    .map(planner -> modelMapper.map(planner, PlannerDto.class));
-            for (PlannerDto plannerDto : map) {
-                System.out.println("plannerDto.getNickname() = " + plannerDto.getNickname());
-            }
-            return map;
+    public Slice<PlannerDto> findAllPermitPlanner(Pageable pageable, String sort, String search, String criteria) {
+        Specification<Planner> spec = PlannerSpecification.buildSpecification(search, criteria, sort);
 
-
-        } else {
-            throw new IllegalArgumentException("Invalid sort parameter: " + sort);
-        }
+        return plannerRepository.findAll(spec, pageable)
+                .map(planner -> modelMapper.map(planner, PlannerDto.class));
     }
+
 
     public List<PlannerDto> recommendPlanner(){
         List<Planner> planners = plannerRepository.findAllPermitPlanner();

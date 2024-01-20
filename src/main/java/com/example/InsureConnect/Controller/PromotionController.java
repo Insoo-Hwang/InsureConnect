@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.*;
+
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
@@ -28,22 +29,9 @@ public class PromotionController {
 
     //Promotion 조회
     @GetMapping("/promotion")
-    public String promotion(@RequestParam(defaultValue = "1") int page,
-                            @RequestParam(defaultValue = "2") int size,
-                            @RequestParam(defaultValue = "write", value = "sortField") String sortField,
-                            Model model) {
-
-
-        Pageable pageable = PageRequest.of(page - 1, size);
-
-        Page<PlannerDto> planners = plannerService.findAllPermitPlanner(pageable,sortField);
-
-        model.addAttribute("sortField", sortField);
-        model.addAttribute("planners", planners);
-
+    public String promotion() {
         return "promotion";
     }
-
     //Promotion 등록
     @GetMapping("/promotion/new")
     public String writePromotion() {
