@@ -7,7 +7,6 @@ import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.ChatRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

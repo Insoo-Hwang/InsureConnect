@@ -4,7 +4,7 @@ import com.example.InsureConnect.Config.OAuth.OAuth2AuthorizationRequestBasedOnC
 import com.example.InsureConnect.Config.OAuth.OAuth2SuccessHandler;
 import com.example.InsureConnect.Config.jwt.TokenProvider;
 import com.example.InsureConnect.Repository.RefreshTokenRepository;
-import com.example.InsureConnect.Service.OAuth2UserService;
+import com.example.InsureConnect.Config.OAuth.OAuth2UserService;
 import com.example.InsureConnect.Service.UserDetailService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;

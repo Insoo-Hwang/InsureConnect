@@ -1,7 +1,7 @@
 package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Dto.PromotionDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.Promotion;
 import com.example.InsureConnect.Entity.PromotionImg;

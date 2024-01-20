@@ -1,9 +1,7 @@
 package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.*;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
-import com.example.InsureConnect.Entity.Promotion;
-import com.example.InsureConnect.Entity.PromotionImg;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

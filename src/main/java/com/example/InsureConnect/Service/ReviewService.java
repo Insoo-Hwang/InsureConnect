@@ -1,5 +1,6 @@
 package com.example.InsureConnect.Service;
 
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Dto.ReviewDto;
 import com.example.InsureConnect.Dto.ReviewImgDto;
 import com.example.InsureConnect.Entity.*;
@@ -30,7 +31,7 @@ public class ReviewService {
     private final FileUploadHandler fileUploadHandler;
     private final ModelMapper modelMapper;
 
-    public void saveReview(ReviewDto reviewDto, MultipartFile[] images, CustomOAuth2User user,Long planner_id) throws IOException {
+    public void saveReview(ReviewDto reviewDto, MultipartFile[] images, CustomOAuth2User user, Long planner_id) throws IOException {
         String path = "classpath:/static/img/review";
         User byUser = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
         Planner byPlanner = plannerRepository.findById(planner_id).orElseThrow(IllegalArgumentException::new);

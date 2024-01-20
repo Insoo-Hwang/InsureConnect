@@ -1,4 +1,4 @@
-package com.example.InsureConnect.Entity;
+package com.example.InsureConnect.Config.OAuth;
 
 import lombok.Builder;
 import lombok.Getter;

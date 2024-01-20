@@ -1,13 +1,11 @@
-package com.example.InsureConnect.Service;
+package com.example.InsureConnect.Config.OAuth;
 
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;

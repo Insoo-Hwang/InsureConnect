@@ -2,7 +2,7 @@ package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Handler.FileUploadHandler;
@@ -13,11 +13,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeMap;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

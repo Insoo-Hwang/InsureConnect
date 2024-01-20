@@ -2,23 +2,15 @@ package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
-import com.example.InsureConnect.Entity.Planner;
-import com.example.InsureConnect.Service.ConnectCategoryService;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.UserService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor

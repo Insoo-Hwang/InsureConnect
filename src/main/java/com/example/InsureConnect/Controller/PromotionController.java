@@ -1,18 +1,14 @@
 package com.example.InsureConnect.Controller;
 
 import com.example.InsureConnect.Dto.*;
-import com.example.InsureConnect.Entity.CustomOAuth2User;
-import com.example.InsureConnect.Entity.Planner;
-import com.example.InsureConnect.Entity.PromotionImg;
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
-import com.example.InsureConnect.Service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
