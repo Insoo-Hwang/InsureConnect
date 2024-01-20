@@ -58,4 +58,32 @@ public class PromotionService {
         if(promotion == null) return null;
         return modelMapper.map(promotion, PromotionDto.class);
     }
+
+    public PromotionDto updatePromotion(PromotionDto promotionDto, MultipartFile[] images) throws IOException {
+        Planner planner = plannerRepository.findById(promotionDto.getPlannerId()).orElseThrow(IllegalArgumentException::new);
+        String path = "classpath:/static/img/promotion";
+        Promotion promotion = Promotion.builder()
+                .planner(planner)
+                .title(promotionDto.getTitle())
+                .content(promotionDto.getContent())
+                .edit(promotionDto.getEdit())
+                .build();
+        promotion.setEditToCurrentTime();
+        Promotion save = promotionRepository.save(promotion);
+
+        List<String> imgLinks = fileUploadHandler.uploadFiles(images, path);
+        List<PromotionImg> promotionImgs = new ArrayList<>();
+
+        for (int i = 0; i < imgLinks.size(); i++) {
+            PromotionImg promotionImg = PromotionImg.builder()
+                    .promotion(promotion)
+                    .imgLink(imgLinks.get(i))
+                    .sequence(i + 1)
+                    .build();
+            promotionImgs.add(promotionImg);
+        }
+        promotionImgRepository.saveAll(promotionImgs);
+
+        return modelMapper.map(save, PromotionDto.class);
+    }
 }
