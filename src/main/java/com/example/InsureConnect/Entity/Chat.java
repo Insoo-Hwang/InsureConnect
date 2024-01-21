@@ -1,6 +1,5 @@
 package com.example.InsureConnect.Entity;
 
-import com.example.InsureConnect.Dto.ChatDto;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,9 +19,9 @@ public class Chat {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @JoinColumn(name = "chatRoom_id",referencedColumnName = "id")
     @JsonManagedReference
-    private User user;
+    private ChatRoom chatRoom;
 
     @Column
     private String question;
@@ -32,8 +31,4 @@ public class Chat {
 
     @Column
     private Timestamp time;
-
-    public static Chat toChat(ChatDto dto, User user){
-        return new Chat(dto.getId(), user, dto.getQuestion(), dto.getAnswer(), dto.getTime());
-    }
 }

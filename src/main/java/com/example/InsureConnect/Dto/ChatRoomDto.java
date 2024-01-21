@@ -6,20 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class ChatDto {
+public class ChatRoomDto {
+
     private Long id;
 
-    private ChatRoomDto chatRoomDto;
+    private UUID code;
 
-    private String question;
+    private UserDto userDto;
 
-    private String answer;
+    private Timestamp timestamp;
 
-    private Timestamp time;
+    private List<Long> chatId;
 
 }

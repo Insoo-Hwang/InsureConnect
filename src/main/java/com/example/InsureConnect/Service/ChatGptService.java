@@ -3,8 +3,11 @@ package com.example.InsureConnect.Service;
 import com.example.InsureConnect.Config.ChatGptConfig;
 import com.example.InsureConnect.Dto.*;
 import com.example.InsureConnect.Entity.Chat;
+import com.example.InsureConnect.Entity.ChatRoom;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.ChatRepository;
+import com.example.InsureConnect.Repository.ChatRoomRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpEntity;
@@ -25,6 +28,8 @@ public class ChatGptService {
     private static RestTemplate restTemplate = new RestTemplate();
 
     private final ChatRepository chatRepository;
+
+    private final ChatRoomRepository chatRoomRepository;
 
     private final UserService userService;
 
@@ -49,8 +54,7 @@ public class ChatGptService {
 
     //chat gpt api를 통해 질문 전송
     public ChatGptResponseDto askQuestion(QuestionRequestDto requestDto) {
-        UserDto userDto = userService.findById(requestDto.getId());
-        User user = modelMapper.map(userDto, User.class);
+        ChatRoom chatRoom = chatRoomRepository.findById(requestDto.getId()).orElseThrow(() -> new IllegalArgumentException());
         ChatGptResponseDto responseDto = this.getResponse(
                 this.buildHttpEntity(
                         new ChatGptRequestDto(
@@ -62,25 +66,36 @@ public class ChatGptService {
                         )
                 )
         );
-        saveChat(requestDto.getQuestion(), responseDto.getChoices().get(0).getText(), user);
+        saveChat(requestDto.getQuestion(), responseDto.getChoices().get(0).getText(), chatRoom);
         return responseDto;
     }
 
     //채팅 내용을 DB에 저장
-    private void saveChat(String question, String answer, User user){
+    private void saveChat(String question, String answer, ChatRoom chatRoom){
         ChatDto chatDto = new ChatDto();
         chatDto.setQuestion(question);
         chatDto.setAnswer(answer);
         chatDto.setTime(new Timestamp(System.currentTimeMillis()));
-        chatRepository.save(Chat.toChat(chatDto, user));
+        chatDto.setChatRoomDto(modelMapper.map(chatRoom, ChatRoomDto.class));
+        chatRepository.save(modelMapper.map(chatDto, Chat.class));
     }
 
-    //사용자의 모든 채팅 불러오기
-    public List<ChatDto> chats(UUID userId){
+    //채팅방의 모든 채팅 불러오기
+    public List<ChatDto> chats(Long chatRoomId){
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException());
 
-        return chatRepository.findByUserId(userId)
+        return chatRepository.findByChatRoom(chatRoom)
                 .stream()
                 .map(chat -> modelMapper.map(chat, ChatDto.class))
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteAll(Long chatRoomId){
+        ChatRoom chatRoom = chatRoomRepository.findById(chatRoomId).orElseThrow(() -> new IllegalArgumentException());
+        List<Chat> chats = chatRepository.findByChatRoom(chatRoom);
+        for(Chat chat : chats){
+            chatRepository.delete(chat);
+        }
     }
 }

@@ -26,8 +26,15 @@ public class AppConfig {
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
                     mapping.using(convertReviewToLongList()).map(User::getReview, UserDto::setReviewId);
-                    mapping.using(convertChatToLongList()).map(User::getChat, UserDto::setChatId);
+                    mapping.using(convertChatRoomToLongList()).map(User::getChatRooms, UserDto::setChatRoomId);
                 });
+
+
+        //ChatRoom -> ChatRoomDto TypeMap
+        modelMapper.createTypeMap(ChatRoom.class, ChatRoomDto.class)
+                        .addMappings(mapping -> {
+                            mapping.using(convertChatToLongList()).map(ChatRoom::getChats, ChatRoomDto::setChatId);
+                        });
 
         //Planner -> PlannerDto TypeMap
         modelMapper.createTypeMap(Planner.class, PlannerDto.class)
@@ -76,6 +83,13 @@ public class AppConfig {
 
         return modelMapper;
 
+    }
+
+    private Converter<List<ChatRoom>, List<Long>> convertChatRoomToLongList(){
+        return context -> context.getSource()
+                .stream()
+                .map(ChatRoom::getId)
+                .collect(Collectors.toList());
     }
 
     private Converter<List<Chat>,List<Long>> convertChatToLongList() {

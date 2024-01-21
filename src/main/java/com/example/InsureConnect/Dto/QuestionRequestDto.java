@@ -7,6 +7,6 @@ import java.util.UUID;
 
 @Getter
 public class QuestionRequestDto implements Serializable {
-    private UUID id;
+    private Long id;
     private String question;
 }
