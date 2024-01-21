@@ -1,6 +1,7 @@
 package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.ChatRoomDto;
+import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,15 +17,9 @@ public class ChatRoomApiController {
 
     private final ChatRoomService chatRoomService;
 
-    @GetMapping("/api/chatroom/{userId}")
-    public ResponseEntity<List<ChatRoomDto>> showAll(@PathVariable UUID userId){
-        List<ChatRoomDto> chatRoomDtos = chatRoomService.showAll(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(chatRoomDtos);
-    }
-
-    @PostMapping("/api/chatroom/new")
-    public ResponseEntity<ChatRoomDto> create(@RequestBody ChatRoomDto dto){
-        ChatRoomDto created = chatRoomService.create(dto);
+    @PostMapping("/api/chatroom/{userId}")
+    public ResponseEntity<ChatRoomDto> create(@PathVariable UUID userId){
+        ChatRoomDto created = chatRoomService.create(userId);
         return ResponseEntity.status(HttpStatus.OK).body(created);
     }
 

@@ -24,8 +24,11 @@ public class ChatRoomService {
     private final ModelMapper modelMapper;
 
     @Transactional
-    public ChatRoomDto create(ChatRoomDto dto){
-        ChatRoom chatRoom = modelMapper.map(dto, ChatRoom.class);
+    public ChatRoomDto create(UUID userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException());
+        ChatRoom chatRoom = ChatRoom.builder()
+                .user(user)
+                .build();
         ChatRoom created = chatRoomRepository.save(chatRoom);
         return modelMapper.map(created, ChatRoomDto.class);
     }

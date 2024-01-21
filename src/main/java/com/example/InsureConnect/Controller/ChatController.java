@@ -22,13 +22,23 @@ import java.util.UUID;
 public class ChatController {
     private final ChatGptService chatGptService;
     private final ChatRoomService chatRoomService;
+    private final UserService userService;
+
+    @GetMapping("/chat")
+    public String chatroom(@AuthenticationPrincipal CustomOAuth2User user, Model model){
+        UserDto dto = userService.findByKakaoId(user.getId());
+        List<ChatRoomDto> chatRoomDtos = chatRoomService.showAll(dto.getId());
+        model.addAttribute("chatRoomDtos", chatRoomDtos);
+        model.addAttribute("userId", dto.getId());
+        return "chatRoom";
+    }
 
     @GetMapping("/chat/{code}")
     public String chat(@PathVariable UUID code, Model model) {
         ChatRoomDto chatRoomDto = chatRoomService.findByCode(code);
         List<ChatDto> chatDtos = chatGptService.chats(chatRoomDto.getId());
         model.addAttribute("chatDtos", chatDtos);
-        model.addAttribute("charRoomId", chatRoomDto.getId());
+        model.addAttribute("chatRoomId", chatRoomDto.getId());
         return "chat";
     }
 }

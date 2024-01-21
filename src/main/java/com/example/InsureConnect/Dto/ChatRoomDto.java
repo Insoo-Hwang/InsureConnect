@@ -21,8 +21,6 @@ public class ChatRoomDto {
 
     private UserDto userDto;
 
-    private Timestamp timestamp;
-
-    private List<Long> chatId;
+    private Timestamp time;
 
 }

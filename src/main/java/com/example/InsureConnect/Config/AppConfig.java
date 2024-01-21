@@ -30,12 +30,6 @@ public class AppConfig {
                 });
 
 
-        //ChatRoom -> ChatRoomDto TypeMap
-        modelMapper.createTypeMap(ChatRoom.class, ChatRoomDto.class)
-                        .addMappings(mapping -> {
-                            mapping.using(convertChatToLongList()).map(ChatRoom::getChats, ChatRoomDto::setChatId);
-                        });
-
         //Planner -> PlannerDto TypeMap
         modelMapper.createTypeMap(Planner.class, PlannerDto.class)
                 .addMappings(mapping -> {
@@ -89,13 +83,6 @@ public class AppConfig {
         return context -> context.getSource()
                 .stream()
                 .map(ChatRoom::getId)
-                .collect(Collectors.toList());
-    }
-
-    private Converter<List<Chat>,List<Long>> convertChatToLongList() {
-        return context -> context.getSource()
-                .stream()
-                .map(Chat::getId)
                 .collect(Collectors.toList());
     }
 
