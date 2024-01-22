@@ -2,6 +2,7 @@ package com.example.InsureConnect.Service;
 
 import com.example.InsureConnect.Config.PlannerSpecification;
 import com.example.InsureConnect.Dto.PlannerDto;
+import com.example.InsureConnect.Dto.RecommendDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
@@ -140,11 +141,12 @@ public class PlannerService {
     }
 
 
-    public List<PlannerDto> recommendPlanner(){
+    public RecommendDto recommendPlanner(){
         List<PlannerDto> plannerDtos = new ArrayList<>();
         RecommendPlanner recommendPlanner = recommendPlannerRepository.findFirstByOrderByTimeDesc();
+        Timestamp time = null;
         if(recommendPlanner != null){
-            Timestamp time = recommendPlanner.getTime();
+            time = recommendPlanner.getTime();
             Timestamp now = new Timestamp(System.currentTimeMillis());
             Instant beforeIns = time.toInstant();
             Instant nowIns = now.toInstant();
@@ -174,13 +176,18 @@ public class PlannerService {
                 s+=",";
             }
             s+="A,A,A,A,A";
+            time = new Timestamp(System.currentTimeMillis());
             RecommendPlanner created = RecommendPlanner.builder()
-                    .time(new Timestamp(System.currentTimeMillis()))
+                    .time(time)
                     .list(s)
                     .build();
             recommendPlannerRepository.save(created);
         }
-        return plannerDtos;
+        RecommendDto recommendDto = RecommendDto.builder()
+                .list(plannerDtos)
+                .time(time)
+                .build();
+        return recommendDto;
     }
 
     @Getter
