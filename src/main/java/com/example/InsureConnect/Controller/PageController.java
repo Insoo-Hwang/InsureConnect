@@ -40,9 +40,11 @@ public class PageController {
             model.addAttribute("url", "/logout");
         }
         List<PlannerDto> plannerDtos = plannerService.recommendPlanner();
-        List<PlannerDto> resultDtos = plannerDtos.subList(0, Math.min(5, plannerDtos.size()));
-
-        model.addAttribute("recommendDtos", resultDtos);
+        List<PlannerDto> recommendDtos = plannerDtos.subList(0, Math.min(5, plannerDtos.size()));
+        model.addAttribute("recommendDtos", recommendDtos);
+        List<ReviewDto> reviewDtos = reviewService.findAll();
+        List<ReviewDto> recentDtos = reviewDtos.subList(0, Math.min(5, reviewDtos.size()));
+        model.addAttribute("recentDtos", recentDtos);
         return "home";
     }
 

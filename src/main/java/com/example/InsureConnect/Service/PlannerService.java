@@ -5,9 +5,11 @@ import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
+import com.example.InsureConnect.Entity.RecommendPlanner;
 import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
+import com.example.InsureConnect.Repository.RecommendPlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -21,6 +23,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -31,6 +36,7 @@ public class PlannerService {
     private final PlannerRepository plannerRepository;
     private final UserRepository userRepository;
     private final FileUploadHandler fileUploadHandler;
+    private final RecommendPlannerRepository recommendPlannerRepository;
     private final ModelMapper modelMapper;
 
     public PlannerDto savePlanner(PlannerDto plannerDto, CustomOAuth2User user, MultipartFile profileImage, MultipartFile certificateImage) {
@@ -135,15 +141,44 @@ public class PlannerService {
 
 
     public List<PlannerDto> recommendPlanner(){
-        List<Planner> planners = plannerRepository.findAllPermitPlanner();
-        List<Recommend> recommends = new ArrayList<>();
-        for(Planner planner : planners){
-            recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
-        }
-        Collections.sort(recommends);
         List<PlannerDto> plannerDtos = new ArrayList<>();
-        for(Recommend recommend : recommends){
-            plannerDtos.add(recommend.getPlannerDto());
+        RecommendPlanner recommendPlanner = recommendPlannerRepository.findFirstByOrderByTimeDesc();
+        if(recommendPlanner != null){
+            Timestamp time = recommendPlanner.getTime();
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+            Instant beforeIns = time.toInstant();
+            Instant nowIns = now.toInstant();
+            Duration duration = Duration.between(beforeIns, nowIns);
+            long hour = Math.abs(duration.toHours());
+            if(hour < 1){
+                String [] s = recommendPlanner.getList().split(",");
+                for(int i = 0; i < 5; i++){
+                    if(s[i].equals("A")) break;
+                    Planner planner = plannerRepository.findById(Long.parseLong(s[i])).orElseThrow(IllegalArgumentException::new);
+                    plannerDtos.add(modelMapper.map(planner, PlannerDto.class));
+                }
+            }
+            else recommendPlanner = null;
+        }
+        if(recommendPlanner == null) {
+            List<Planner> planners = plannerRepository.findAllPermitPlanner();
+            List<Recommend> recommends = new ArrayList<>();
+            for (Planner planner : planners) {
+                recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
+            }
+            Collections.sort(recommends);
+            String s = "";
+            for (Recommend recommend : recommends) {
+                plannerDtos.add(recommend.getPlannerDto());
+                s+=recommend.getPlannerDto().getId();
+                s+=",";
+            }
+            s+="A,A,A,A,A";
+            RecommendPlanner created = RecommendPlanner.builder()
+                    .time(new Timestamp(System.currentTimeMillis()))
+                    .list(s)
+                    .build();
+            recommendPlannerRepository.save(created);
         }
         return plannerDtos;
     }
