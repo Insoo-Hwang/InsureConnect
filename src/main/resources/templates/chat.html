@@ -109,6 +109,24 @@
             answerContainer.scrollTop = answerContainer.scrollHeight;
         });
     }
+    {
+        window.addEventListener('beforeunload', function (){
+            const chatRoomId = document.querySelector("#chatRoomId").value;
+            const url = "/api/chatroom/" + chatRoomId;
+            fetch(url, {
+                method: "GET",
+                headers: {}
+            }).then(response => {
+                if(response.status === 204){
+                    const url = "/api/chatroom/" + chatRoomId;
+                    fetch(url, {
+                        method: "DELETE",
+                        headers: {}
+                    })
+                }
+            })
+        });
+    }
 </script>
 </body>
 </html>
