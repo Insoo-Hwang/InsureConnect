@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,6 +39,10 @@ public class PageController {
             model.addAttribute("user", dto.getNickname()+"님 안녕하세요!");
             model.addAttribute("url", "/logout");
         }
+        List<PlannerDto> plannerDtos = plannerService.recommendPlanner();
+        List<PlannerDto> resultDtos = plannerDtos.subList(0, Math.min(5, plannerDtos.size()));
+
+        model.addAttribute("recommendDtos", resultDtos);
         return "home";
     }
 
