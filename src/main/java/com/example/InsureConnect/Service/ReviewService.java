@@ -8,7 +8,7 @@ import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.ReviewImgRepository;
 import com.example.InsureConnect.Repository.ReviewRepository;
 import com.example.InsureConnect.Repository.UserRepository;
-import com.example.InsureConnect.handler.FileHandler;
+import com.example.InsureConnect.Handler.FileHandler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

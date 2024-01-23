@@ -11,7 +11,7 @@ import com.example.InsureConnect.Entity.User;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.RecommendPlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
-import com.example.InsureConnect.handler.FileHandler;
+import com.example.InsureConnect.Handler.FileHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
