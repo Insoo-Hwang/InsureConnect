@@ -9,6 +9,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 public class PromotionImgDto {
     private Long id;
 
@@ -18,4 +19,5 @@ public class PromotionImgDto {
 
     //Promotion
     private Long promotionId;
+
 }

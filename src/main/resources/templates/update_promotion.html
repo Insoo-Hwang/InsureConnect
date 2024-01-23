@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!-- 부트스트랩 CDN 링크 추가 -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* 부트스트랩 기본 배경색 */
+        }
+
+        .container {
+            background-color: #ffffff; /* 부트스트랩 기본 컨테이너 배경색 */
+            border-radius: 10px; /* 컨테이너 테두리 둥글게 만들기 */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+            padding: 20px; /* 내부 패딩 조절 */
+            margin-top: 50px; /* 상단 여백 조절 */
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .img-thumbnail {
+            width: 150px; /* 이미지 크기 조절 */
+            height: 150px;
+            margin: 10px; /* 이미지 간격 조절 */
+            border-radius: 10px; /* 이미지 테두리 둥글게 만들기 */
+        }
+
+        .custom-file-label {
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background-color: #007bff; /* 버튼 색상 */
+            border: none; /* 테두리 제거 */
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* 마우스 호버시 버튼 색상 변경 */
+        }
+    </style>
+</head>
+<body>
+<form id="updateForm" method="post" class="container" enctype="multipart/form-data">
+
+    <div class="form-group">
+        <label for="title">제목:</label>
+        <input type="text" id="title" name="title" th:value="${promotion.getTitle()}" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <label for="content">내용:</label>
+        <textarea id="content" name="content" rows="5" class="form-control" th:text="${promotion.getContent()}"></textarea>
+    </div>
+
+    <div id="image-container">
+        <p class="font-weight-bold">첨부 이미지:</p>
+        <div th:each="promotionImage : ${promotion.getPromotionImg()}" class="mt-3 image-item">
+            <img th:src="${promotionImage.imgLink}" class="img-thumbnail mr-2">
+            <button type="button" class="btn btn-danger btn-sm mt-1" onclick="removeImage(this)">삭제</button>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label for="image">이미지 첨부</label>
+        <div class="input-group mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="image" name="images" multiple accept="image/*">
+                <label class="custom-file-label" for="image">이미지를 선택하세요. 최대 4장 업로드 가능합니다.</label>
+            </div>
+        </div>
+        <div class="form-group" id="image-list">
+            <!-- 이미지 목록이 여기에 표시될 것입니다. -->
+        </div>
+    </div>
+    <button type="submit" class="btn btn-primary">수정 완료</button>
+    <a th:href="@{/}" class="btn btn-secondary mt-3">취소</a>
+</form>
+
+<!-- 부트스트랩 및 관련 스크립트 CDN 추가 -->
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script th:inline="javascript">
+    var plannerId = [[${plannerId}]]
+    var promotionId =[[${promotionId}]]
+</script>
+
+<script>
+    function removeImage(button) {
+        var imageItem = document.getElementById("image-container");
+        imageItem.removeChild(button.parentNode);
+    }
+
+    // 이미지 업로드 시 목록에 추가하는 이벤트 처리
+    document.getElementById("image").addEventListener("change", function () {
+        var imageList = document.getElementById("image-list");
+        var files = this.files;
+
+        console.log("파일 개수:", files.length);
+
+        // 이미지 목록 업데이트
+        for (var i = 0; i < files.length; i++) {
+            if (imageList.children.length < 4) {
+                var imageItem = document.createElement("div");
+                imageItem.className = "d-inline-block mr-2";
+                imageItem.innerHTML = `
+                        <img src="${URL.createObjectURL(files[i])}" class="img-thumbnail">
+                        <button type="button" class="btn btn-danger btn-sm mt-1" onclick="removeImageItem(this)">삭제</button>
+                    `;
+                imageList.appendChild(imageItem);
+            } else {
+                alert("이미지는 최대 4개까지 업로드 가능합니다.");
+                return;
+            }
+        }
+        console.log("파일 개수:", files.length);
+    });
+
+    // 이미지 아이템 삭제 함수
+    function removeImageItem(button) {
+        var imageList = document.getElementById("image-list");
+        imageList.removeChild(button.parentNode);
+    }
+
+    // Patch 전송
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById("updateForm").addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            var form = event.target;
+            var formData = new FormData(form);
+
+            // 이미지 파일 추가
+            var imageContainer = document.getElementById("image-container");
+            var existingImageItems = imageContainer.querySelectorAll(".image-item");
+            var imageInput = document.getElementById("image");
+
+            console.log("image input", imageInput.files.length);
+            console.log("existingImageItems",existingImageItems.length)
+
+            for (var i = 0; i < existingImageItems.length; i++) {
+                var currentImageItem = existingImageItems[i];
+                var imgElement = currentImageItem.querySelector("img");
+                var absolutePath = imgElement.src;
+                var relativePath = absolutePath.replace(window.location.origin, "");
+
+                formData.append("existingImages", relativePath);
+            }
+
+            if (existingImageItems.length + imageInput.files.length < 5) {
+
+                if (imageInput.files.length === 0) {
+                    formData.delete("images");
+                }
+
+                $.ajax({
+                    url: `/api/promotion/update/${plannerId}/${promotionId}`,
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',   // JSON 응답을 기대함
+                    success: function(data, status) {
+                        console.log("data",data)
+                        console.log("status", status);
+                            window.location.href = '/promotion';
+                            alert("프로모션이 수정되었습니다!");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error("에러:", xhr);
+                        console.error("상태:", status);
+                        console.error("서버 응답:", xhr.responseText); // 서버 응답 내용도 출력해 보세요
+                    }
+                });
+            } else {
+                alert("이미지는 최대 4개까지 선택 가능합니다");
+            }
+        });
+    });
+</script>
+</body>
+</html>

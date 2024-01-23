@@ -48,11 +48,11 @@ public class User implements UserDetails {
     @JsonBackReference
     private Planner planner;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
     private List<Review> review = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
     private List<ChatRoom> chatRooms = new ArrayList<>();
 

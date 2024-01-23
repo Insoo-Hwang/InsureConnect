@@ -1,15 +1,13 @@
 package com.example.InsureConnect.Controller;
 
-import com.example.InsureConnect.Dto.*;
-
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
+import com.example.InsureConnect.Dto.PlannerDto;
+import com.example.InsureConnect.Dto.PromotionDto;
+import com.example.InsureConnect.Dto.PromotionImgDto;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,7 +40,7 @@ public class PromotionController {
     @PostMapping("/promotion/new")
     public String registerPromotion(@RequestParam(value = "title") String title,
                                     @RequestPart(value = "content") String content,
-                                    @RequestPart("images") MultipartFile[] images,
+                                    @RequestPart("images") List<MultipartFile> images,
                                     @AuthenticationPrincipal CustomOAuth2User user) throws IOException {
 
         promotionService.savePromotion(title, content, images, user);
@@ -65,12 +63,14 @@ public class PromotionController {
 
     @GetMapping("/promotion/update/{plannerId}/{promotionId}")
     public String updatePromotion(@PathVariable("plannerId") Long plannerId,
-                                  @PathVariable("promotionId") Long promotionId, Model model) {
+                                  @PathVariable("promotionId") Long promotionId,
+                                  Model model) {
         PromotionDto promotion = promotionService.findByPlannerId(plannerId);
-        List<PromotionImgDto> images = promotionImgService.findByPromotionId(promotionId);
+
+        model.addAttribute("plannerId", plannerId);
+        model.addAttribute("promotionId", promotionId);
         model.addAttribute("promotion", promotion);
-        model.addAttribute("images", images);
-        return "update_promotion"; // 수정 후 홈 화면으로 리다이렉션
+        return "update_promotion";
     }
 
 }

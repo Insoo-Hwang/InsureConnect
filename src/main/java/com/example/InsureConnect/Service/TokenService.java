@@ -28,4 +28,5 @@ public class TokenService {
 
         return tokenProvider.generateToken(user, Duration.ofHours(2));
     }
+
 }

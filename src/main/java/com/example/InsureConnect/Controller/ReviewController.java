@@ -44,7 +44,7 @@ public class ReviewController {
     public String saveReview(@ModelAttribute ReviewDto reviewDto,
                              @AuthenticationPrincipal CustomOAuth2User user,
                              @RequestParam("planner_id") Long plannerId,
-                             @RequestPart("images") MultipartFile[] images) throws IOException {
+                             @RequestPart("images") List<MultipartFile> images) throws IOException {
         reviewService.saveReview(reviewDto,images,user,plannerId);
 
         return "/home";

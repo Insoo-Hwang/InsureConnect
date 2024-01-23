@@ -25,6 +25,7 @@ public class AppConfig {
         modelMapper.createTypeMap(User.class, UserDto.class)
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
+
                     mapping.using(convertReviewToLongList()).map(User::getReview, UserDto::setReviewId);
                     mapping.using(convertChatRoomToLongList()).map(User::getChatRooms, UserDto::setChatRoomId);
                 });
@@ -43,6 +44,7 @@ public class AppConfig {
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), PromotionDto::setPlannerId);
                 });
+
 
         //PromotionImg -> PromotionImgDto TypeMap
         modelMapper.createTypeMap(PromotionImg.class, PromotionImgDto.class)
