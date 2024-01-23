@@ -31,7 +31,6 @@
     </div>
 </div>
 
-<!-- Add these buttons to your HTML code -->
 <div class="container" style="margin-top: 20px;">
     <div class="btn-group" role="group" aria-label="Sort By">
         <button type="button" class="btn btn-secondary sort-button" data-sort-field="write">작성일 ↑</button>
@@ -67,8 +66,9 @@
     <button id="loadMoreBtn" class="btn btn-primary">더보기</button>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         var currentPage = 0;
@@ -111,13 +111,12 @@
 
         function loadMoreData() {
             // 현재 페이지 번호를 증가시키고 데이터를 로드합니다.
-
             $.ajax({
                 type: "GET",
                 url: "/api/promotion",
                 data: {
                     page: currentPage,
-                    size: 2,
+                    size: 4,
                     sortField: currentSort,
                     criteria: criteria,  // 검색 조건 전달
                     search: search     // 검색어 전달
@@ -167,10 +166,10 @@
                         '<div class="card-header">' +
                         '<small class="text-muted">' + planner.categoryName+ '</small>' +
                         '</div>' +
-                        '<img class="card-img-top" src="profile' + planner.profileImage + '.jpg" alt="프로필 사진">' +
+                        '<img class="card-img-top" src="profile' + planner.profile + '.jpg" alt="프로필 사진">' +
                         '<div class="card-body">' +
-                        '<h4 class="card-title">' + planner.title + '</h4>' +
-                        '<p class="card-text">' + planner.content + '</p>' +
+                        '<h4 class="card-title">' + planner.promotion.title + '</h4>' +
+                        '<p class="card-text">' + planner.promotion.content + '</p>' +
                         '<p class="card-text">평균평점 = ' + planner.averageRating + '</p>' +
                         '<p class="card-text">' +
                         '<a href="/review/' + planner.id + '">리뷰갯수 = ' + planner.review.length + '</a>' +
@@ -187,9 +186,8 @@
                         '</a>' +
                         '</div>';
                     resultContainer.append(cardHtml);
-                    console.log(resultContainer)
 
-                    if ((index + 1) % 2 === 0) {
+                    if ((index + 1) % 4 === 0) {
                         resultContainer.append('<div class="w-100"></div>');
                     }
                 });

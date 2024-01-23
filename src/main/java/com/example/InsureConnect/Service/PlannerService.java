@@ -1,6 +1,6 @@
 package com.example.InsureConnect.Service;
 
-import com.example.InsureConnect.Config.PlannerSpecification;
+import com.example.InsureConnect.Config.Paging.PlannerSpecification;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.RecommendDto;
 import com.example.InsureConnect.Dto.UserDto;
@@ -47,7 +47,7 @@ public class PlannerService {
             String path = "classpath:/static/img/planner";
             String profileFileName = fileHandler.uploadFile(profileImage, path);
             String certificateFileName = fileHandler.uploadFile(certificateImage, path);
-//파일명 인코딩 추가,메서드 분리
+            //파일명 인코딩 추가,메서드 분리
             User byKakaoId = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
 
             Planner planner = Planner.builder()

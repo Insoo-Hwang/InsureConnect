@@ -22,8 +22,7 @@
     <div class="mt-3">
         <p class="font-weight-bold">첨부 이미지:</p>
         <div th:each=" image : ${promotion.promotionImg}">
-            <img th:src="${image.imgLink}" class="img-thumbnail mr-2" style="width:100px; height:100px;">
-            <p th:text="${image.imgLink}"></p>
+            <img th:src="${image.imgLink}" class="img-thumbnail mr-2" style="width:100px; height:100px;" alt="promotionImage">
         </div>
     </div>
     <div class="mt-3">
@@ -31,12 +30,8 @@
         </div>
     </div>
     <a th:href="@{/}" class="btn btn-primary mt-3">홈으로 돌아가기</a>
-    <a th:href="@{/promotion/update/{plannerId}/{promotionId}(plannerId=${planner_id}, promotionId=${promotion.getId()})}" class="btn btn-primary mt-3">수정</a>
+    <a th:href="@{/promotion/update/{plannerId}/{promotionId}(plannerId=${planner.getId()}, promotionId=${promotion.getId()})}"
+       class="btn btn-primary mt-3">수정</a>
 </div>
-
-<!-- 부트스트랩 및 관련 스크립트 CDN 추가 -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-
 </body>
 </html>

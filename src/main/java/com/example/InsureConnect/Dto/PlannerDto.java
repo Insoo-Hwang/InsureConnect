@@ -1,10 +1,7 @@
 package com.example.InsureConnect.Dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 
@@ -41,11 +38,6 @@ public class PlannerDto {
 
     //connectCategory
     private List<String> categoryName;
-
-    //review Size
-
-    @JsonIgnore
-    private MultipartFile[] f = new MultipartFile[2];
 
     public double getAverageRating() {
         if (review != null) {

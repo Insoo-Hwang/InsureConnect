@@ -23,7 +23,6 @@ import java.util.List;
 public class PromotionController {
     private final PlannerService plannerService;
     private final PromotionService promotionService;
-    private final PromotionImgService promotionImgService;
 
     //Promotion 조회
     @GetMapping("/promotion")
