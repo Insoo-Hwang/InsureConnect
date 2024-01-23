@@ -164,22 +164,17 @@
                     data: formData,
                     processData: false,
                     contentType: false,
-                    success: function(data) {
-                        if (data.status === 'OK') {
+                    dataType: 'json',   // JSON 응답을 기대함
+                    success: function(data, status) {
+                        console.log("data",data)
+                        console.log("status", status);
                             window.location.href = '/promotion';
                             alert("프로모션이 수정되었습니다!");
-                            alert(data.message);  // 출력되는 메시지를 서버에서 보낸 메시지로 변경
-                        } else {
-                            window.location.reload();
-                            alert("수정 실패!");
-                        }
-                        console.log(data);
                     },
                     error: function(xhr, status, error) {
                         console.error("에러:", xhr);
                         console.error("상태:", status);
                         console.error("서버 응답:", xhr.responseText); // 서버 응답 내용도 출력해 보세요
-
                     }
                 });
             } else {
@@ -187,8 +182,6 @@
             }
         });
     });
-
 </script>
-
 </body>
 </html>

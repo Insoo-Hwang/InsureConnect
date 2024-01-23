@@ -64,11 +64,8 @@ public class PromotionApiController {
                                                         @RequestPart(value = "images", required = false) List<MultipartFile> images,
                                                         @RequestParam(value = "existingImages", required = false)List<String> existingImages) throws IOException {
         PromotionDto promotion = promotionService.findByPlannerId(plannerId);
-        promotion.setContent(content);
-        promotion.setTitle(title);
 
-        return promotionService.updatePromotion(promotion, images, existingImages);
-
+        return promotionService.updatePromotion(promotion, title, content, images, existingImages);
     }
 
 }

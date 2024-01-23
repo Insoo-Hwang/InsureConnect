@@ -46,11 +46,13 @@ public class PromotionService {
     }
 
     @Transactional //Promotion 수정
-    public ResponseEntity<PromotionDto> updatePromotion(PromotionDto promotionDto,List<MultipartFile> images,
+    public ResponseEntity<PromotionDto> updatePromotion(PromotionDto promotionDto,
+                                                        String title, String content,
+                                                        List<MultipartFile> images,
                                                         List<String> existingImages) throws IOException {
 
         Promotion promotion = getPromotionById(promotionDto.getId());
-        updatePromotionDetails(promotion, promotionDto);
+        updatePromotionDetails(promotion, title, content, promotionDto);
         handlePromotionImages(promotion, images, existingImages);
 
         return ResponseEntity.ok(modelMapper.map(promotion, PromotionDto.class));
@@ -79,12 +81,13 @@ public class PromotionService {
     }
 
     //promotion db 수정
-    private void updatePromotionDetails(Promotion promotion, PromotionDto promotionDto) {
+    private void updatePromotionDetails(Promotion promotion, String title, String content,
+                                        PromotionDto promotionDto) {
         promotion = Promotion.builder()
                 .id(promotion.getId())
                 .planner(promotion.getPlanner())
-                .title(promotionDto.getTitle())
-                .content(promotionDto.getContent())
+                .title(title)
+                .content(content)
                 .write(promotion.getWrite())
                 .edit(promotionDto.getEdit())
                 .promotionImg(promotion.getPromotionImg())

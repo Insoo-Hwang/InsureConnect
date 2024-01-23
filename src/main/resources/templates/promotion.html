@@ -144,26 +144,43 @@
             var resultContainer = $("#resultContainer");
             var planners = data.content;
 
+
             if (planners.length > 0) {
                 planners.forEach(function (planner, index) {
+                    var writeDate = new Date(planner.promotion.write);
+                    var formattedWriteDate = writeDate.getFullYear() + '-' +
+                        ('0' + (writeDate.getMonth() + 1)).slice(-2) + '-' +
+                        ('0' + writeDate.getDate()).slice(-2) + ' ' +
+                        ('0' + writeDate.getHours()).slice(-2) + ':' +
+                        ('0' + writeDate.getMinutes()).slice(-2);
+
+                    var editDate = new Date(planner.promotion.edit);
+                    var formattedEditDate = editDate.getFullYear() + '-' +
+                        ('0' + (editDate.getMonth() + 1)).slice(-2) + '-' +
+                        ('0' + editDate.getDate()).slice(-2) + ' ' +
+                        ('0' + editDate.getHours()).slice(-2) + ':' +
+                        ('0' + editDate.getMinutes()).slice(-2);
+
                     var cardHtml = '<div class="col-lg-3 col-md-6 mb-4">' +
                         '<div class="card h-100">' +
                         '<a href="/promotion/' + planner.id + '">' +
-                        '<img class="card-img-top" src="profile' + planner.profile + '.jpg" alt="프로필 사진">' +
+                        '<div class="card-header">' +
+                        '<small class="text-muted">' + planner.categoryName+ '</small>' +
+                        '</div>' +
+                        '<img class="card-img-top" src="profile' + planner.profileImage + '.jpg" alt="프로필 사진">' +
                         '<div class="card-body">' +
-                        '<h4 class="card-title">' + planner.promotion.title + '</h4>' +
-                        '<p class="card-text">' + planner.promotion.content + '</p>' +
+                        '<h4 class="card-title">' + planner.title + '</h4>' +
+                        '<p class="card-text">' + planner.content + '</p>' +
                         '<p class="card-text">평균평점 = ' + planner.averageRating + '</p>' +
                         '<p class="card-text">' +
                         '<a href="/review/' + planner.id + '">리뷰갯수 = ' + planner.review.length + '</a>' +
                         '</p>' +
                         '</div>' +
                         '<div class="card-footer">' +
-                        '<small class="text-muted">작성시간 : ' + planner.promotion.write + '</small>' +
+                        '<small class="text-muted">작성시간 : ' + formattedWriteDate + '</small>' +
                         '<div>' +
-                        '<small class="text-muted">' +
-                        (planner.promotion.edit ? '수정시간 : ' + planner.promotion.edit : '') +
-                        '</small>' +
+                        '<small class="text-muted">수정시간 : ' + formattedEditDate + '</small>' +
+
                         '</div>' +
                         '</div>' +
                         '</div>' +
