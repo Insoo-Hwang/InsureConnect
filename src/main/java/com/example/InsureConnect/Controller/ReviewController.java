@@ -1,13 +1,11 @@
 package com.example.InsureConnect.Controller;
 
-import com.example.InsureConnect.Dto.ReviewDto;
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
+import com.example.InsureConnect.Dto.PlannerDto;
+import com.example.InsureConnect.Dto.ReviewDto;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.ReviewService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,15 +22,8 @@ public class ReviewController {
     private final PlannerService plannerService;
 
     @GetMapping("/review")
-    public String review(@RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "2") int size,
-                         Model model) {
-        Page<ReviewDto> reviewsPage = reviewService.findAll(
-                PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "write"))
-        );
-
-        model.addAttribute("reviewsPage", reviewsPage);
-        return "/review";
+    public String review() {
+        return "review";
     }
 
     @GetMapping("/review/new")
@@ -53,15 +44,10 @@ public class ReviewController {
     @GetMapping("/review/detail/{review_id}")
     public String detailReview(@PathVariable("review_id") Long reviewId, Model model) {
         ReviewDto review = reviewService.findById(reviewId);
+        PlannerDto planner = plannerService.findById(review.getPlannerId());
 
+        model.addAttribute("planner", planner);
         model.addAttribute("review", review);
         return "review_detail";
-    }
-
-    @GetMapping("/review/{plannerId}")
-    public String reviewByPlanner(@PathVariable("plannerId")Long plannerId, Model model) {
-        List<ReviewDto> reviewList = reviewService.findByPlannerId(plannerId);
-        model.addAttribute("reviewList",reviewList);
-        return "review";
     }
 }

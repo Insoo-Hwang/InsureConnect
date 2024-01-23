@@ -1,4 +1,4 @@
-package com.example.InsureConnect.Config;
+package com.example.InsureConnect.Config.Paging;
 
 import com.example.InsureConnect.Entity.Planner;
 import org.springframework.data.jpa.domain.Specification;
