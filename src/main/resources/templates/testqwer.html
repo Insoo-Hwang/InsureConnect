@@ -6,20 +6,6 @@
 </head>
 <body>
 <h2>User Information</h2>
-<tr th:each="planner : ${planners}">
-    <td>planner id : <span th:text="${planner.getId()}"></span></td>
-    <br>
-    <td>planner user id : <span th:text="${planner.getUserDto().getId()}"></span></td>
-    <br>
-
-    <td>promotion title : <span th:text="${planner.getPromotionDto().getTitle()}"></span></td>
-    <br>
-
-    <span th:each="review : ${planner.getReviewDto()}">
-        <td>review rate : <span th:text="${review.getRate()}"></span></td>
-    </span>
-</tr>
-<!--<p>User Nickname: <span th:text="${user}"></span></p>-->
 
 </body>
 </html>

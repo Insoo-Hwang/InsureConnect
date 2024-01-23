@@ -6,10 +6,9 @@ import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.User;
-import com.example.InsureConnect.handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
-import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +17,7 @@ import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,15 +30,16 @@ public class PlannerService {
 
     private final PlannerRepository plannerRepository;
     private final UserRepository userRepository;
-    private final FileUploadHandler fileUploadHandler;
+    private final FileHandler fileHandler;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public PlannerDto savePlanner(PlannerDto plannerDto, CustomOAuth2User user, MultipartFile profileImage, MultipartFile certificateImage) {
         try {
             String path = "classpath:/static/img/planner";
-            String profileFileName = fileUploadHandler.uploadFile(profileImage, path);
-            String certificateFileName = fileUploadHandler.uploadFile(certificateImage, path);
-
+            String profileFileName = fileHandler.uploadFile(profileImage, path);
+            String certificateFileName = fileHandler.uploadFile(certificateImage, path);
+//파일명 인코딩 추가,메서드 분리
             User byKakaoId = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
 
             Planner planner = Planner.builder()

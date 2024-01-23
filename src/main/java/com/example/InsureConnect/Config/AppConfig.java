@@ -25,8 +25,8 @@ public class AppConfig {
         modelMapper.createTypeMap(User.class, UserDto.class)
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
-                    mapping.using(convertReviewToLongList()).map(User::getReview, UserDto::setReviewId);
-                    mapping.using(convertChatToLongList()).map(User::getChat, UserDto::setChatId);
+                    mapping.skip(UserDto::setReviewId);
+                    mapping.skip(UserDto::setChatId);
                 });
 
         //Planner -> PlannerDto TypeMap
@@ -42,6 +42,7 @@ public class AppConfig {
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), PromotionDto::setPlannerId);
                 });
+
 
         //PromotionImg -> PromotionImgDto TypeMap
         modelMapper.createTypeMap(PromotionImg.class, PromotionImgDto.class)
@@ -76,20 +77,6 @@ public class AppConfig {
 
         return modelMapper;
 
-    }
-
-    private Converter<List<Chat>,List<Long>> convertChatToLongList() {
-        return context -> context.getSource()
-                .stream()
-                .map(Chat::getId)
-                .collect(Collectors.toList());
-    }
-
-    private Converter<List<Review>, List<Long>> convertReviewToLongList() {
-        return context -> context.getSource()
-                .stream()
-                .map(Review::getId)
-                .collect(Collectors.toList());
     }
 
     private Converter<List<ConnectCategory>, List<Long>> convertConnectCategoryToLong() {

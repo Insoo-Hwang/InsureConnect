@@ -4,7 +4,7 @@ import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Dto.ReviewDto;
 import com.example.InsureConnect.Dto.ReviewImgDto;
 import com.example.InsureConnect.Entity.*;
-import com.example.InsureConnect.handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.ReviewImgRepository;
 import com.example.InsureConnect.Repository.ReviewRepository;
@@ -28,10 +28,10 @@ public class ReviewService {
     private final ReviewImgRepository reviewImgRepository;
     private final UserRepository userRepository;
     private final PlannerRepository plannerRepository;
-    private final FileUploadHandler fileUploadHandler;
+    private final FileHandler fileHandler;
     private final ModelMapper modelMapper;
 
-    public void saveReview(ReviewDto reviewDto, MultipartFile[] images, CustomOAuth2User user, Long planner_id) throws IOException {
+    public void saveReview(ReviewDto reviewDto,  List<MultipartFile> images, CustomOAuth2User user, Long planner_id) throws IOException {
         String path = "classpath:/static/img/review";
         User byUser = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
         Planner byPlanner = plannerRepository.findById(planner_id).orElseThrow(IllegalArgumentException::new);
@@ -49,7 +49,7 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        List<String> imgLinks = fileUploadHandler.uploadFiles(images, path);
+        List<String> imgLinks = fileHandler.uploadFiles(images, path);
         List<ReviewImg> reviewImgs = new ArrayList<>();
 
         for (int i = 0; i < imgLinks.size(); i++) {

@@ -14,7 +14,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class FileUploadHandler {
+public class FileHandler {
     private final ResourceLoader resourceLoader;
 
     public String uploadFile(MultipartFile file, String serverPath) throws IOException {
@@ -28,7 +28,7 @@ public class FileUploadHandler {
         return storagePath.toString();
     }
 
-    public List<String> uploadFiles(MultipartFile[] files, String serverPath) throws IOException {
+    public List<String> uploadFiles(List<MultipartFile> files, String serverPath) throws IOException {
         List<String> fileUrls = new ArrayList<>();
 
         for (MultipartFile file : files) {
@@ -45,5 +45,13 @@ public class FileUploadHandler {
 
         return fileUrls;
     }
+
+    public void deleteFile(String filePath) throws IOException {
+        // 파일 삭제
+        Path path = Path.of(filePath);
+
+        Files.deleteIfExists(path);
+    }
+
 }
 
