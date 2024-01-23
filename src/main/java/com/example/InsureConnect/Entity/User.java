@@ -54,7 +54,7 @@ public class User implements UserDetails {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
-    private List<ChatRoom> chatRooms = new ArrayList<>();
+    private List<ChatRoom> chatRoom = new ArrayList<>();
 
     @PrePersist
     private void generateUUID() {

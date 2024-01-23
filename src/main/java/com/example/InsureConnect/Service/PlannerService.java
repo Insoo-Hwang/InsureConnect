@@ -8,10 +8,10 @@ import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.RecommendPlanner;
 import com.example.InsureConnect.Entity.User;
-import com.example.InsureConnect.Handler.FileUploadHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.RecommendPlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
+import com.example.InsureConnect.handler.FileHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class PlannerService {
     private final PlannerRepository plannerRepository;
     private final UserRepository userRepository;
 
-    private final FileUploadHandler fileUploadHandler;
+    private final FileHandler fileHandler;
     private final RecommendPlannerRepository recommendPlannerRepository;
     private final ModelMapper modelMapper;
 

@@ -2,32 +2,26 @@ package com.example.InsureConnect.Api;
 
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.PromotionDto;
-import com.example.InsureConnect.Dto.PromotionImgDto;
 import com.example.InsureConnect.Service.PlannerService;
-import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class PromotionApiController {
 
     private final PromotionService promotionService;
-    private final PromotionImgService promotionImgService;
     private final PlannerService plannerService;
 
     //홍보글 존재 여부
