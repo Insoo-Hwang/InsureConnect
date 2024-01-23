@@ -9,7 +9,7 @@ import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.PromotionImgRepository;
 import com.example.InsureConnect.Repository.PromotionRepository;
 
-import com.example.InsureConnect.Handler.FileUploadHandler;
+import com.example.InsureConnect.handler.FileHandler;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;

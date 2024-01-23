@@ -26,8 +26,8 @@ public class AppConfig {
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
 
-                    mapping.using(convertReviewToLongList()).map(User::getReview, UserDto::setReviewId);
-                    mapping.using(convertChatRoomToLongList()).map(User::getChatRooms, UserDto::setChatRoomId);
+                    mapping.skip(User::getReview, UserDto::setReviewId);
+                    mapping.skip(User::getChatRoom, UserDto::setChatRoomId);
                 });
 
 
