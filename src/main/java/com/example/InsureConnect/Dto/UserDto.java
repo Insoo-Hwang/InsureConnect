@@ -28,7 +28,7 @@ public class UserDto {
 
     private Long plannerId;
 
-    private List<Long> chatId;
+    private List<Long> chatRoomId;
 
     private List<Long> reviewId;
 

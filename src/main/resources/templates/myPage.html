@@ -341,8 +341,10 @@
                         }
                     })
                         .then(data => {
-                            const plannerId = document.querySelector("#plannerId").value;
-                            window.location.href = "/promotion/" + plannerId;
+                            if(data) {
+                                const plannerId = document.querySelector("#plannerId").value;
+                                window.location.href = "/promotion/" + plannerId;
+                            }
                         })
                 }
                 else{

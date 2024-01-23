@@ -80,16 +80,16 @@
     <div>ex) 이번에 새로운 자동차를 구매했는데 어떤 보험이 좋을까?</div>
     <input type="text" id="question-text"/>
     <button type="submit" id="chat-submit-button">전송</button>
-    <input type="hidden" id="userId" th:value="${userId}">
+    <input type="hidden" id="chatRoomId" th:value="${chatRoomId}">
 </div>
 <script>
     {
         const chatSubmitBtn = document.querySelector("#chat-submit-button")
         chatSubmitBtn.addEventListener("click", function(){
             const question = {
-                id: document.querySelector("#userId").value,
+                id: document.querySelector("#chatRoomId").value,
                 question: document.querySelector("#question-text").value
-            }
+            };
             const url = "/chat-gpt/question";
             fetch(url, {
                 method: "POST",
@@ -107,6 +107,24 @@
         const answerContainer = document.querySelector("#answer-container");
         window.addEventListener("load", function() {
             answerContainer.scrollTop = answerContainer.scrollHeight;
+        });
+    }
+    {
+        window.addEventListener('beforeunload', function (){
+            const chatRoomId = document.querySelector("#chatRoomId").value;
+            const url = "/api/chatroom/" + chatRoomId;
+            fetch(url, {
+                method: "GET",
+                headers: {}
+            }).then(response => {
+                if(response.status === 204){
+                    const url = "/api/chatroom/" + chatRoomId;
+                    fetch(url, {
+                        method: "DELETE",
+                        headers: {}
+                    })
+                }
+            })
         });
     }
 </script>

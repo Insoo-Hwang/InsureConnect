@@ -25,9 +25,11 @@ public class AppConfig {
         modelMapper.createTypeMap(User.class, UserDto.class)
                 .addMappings(mapping -> {
                     mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
-                    mapping.skip(UserDto::setReviewId);
-                    mapping.skip(UserDto::setChatId);
+
+                    mapping.using(convertReviewToLongList()).map(User::getReview, UserDto::setReviewId);
+                    mapping.using(convertChatRoomToLongList()).map(User::getChatRooms, UserDto::setChatRoomId);
                 });
+
 
         //Planner -> PlannerDto TypeMap
         modelMapper.createTypeMap(Planner.class, PlannerDto.class)
@@ -77,6 +79,20 @@ public class AppConfig {
 
         return modelMapper;
 
+    }
+
+    private Converter<List<ChatRoom>, List<Long>> convertChatRoomToLongList(){
+        return context -> context.getSource()
+                .stream()
+                .map(ChatRoom::getId)
+                .collect(Collectors.toList());
+    }
+
+    private Converter<List<Review>, List<Long>> convertReviewToLongList() {
+        return context -> context.getSource()
+                .stream()
+                .map(Review::getId)
+                .collect(Collectors.toList());
     }
 
     private Converter<List<ConnectCategory>, List<Long>> convertConnectCategoryToLong() {

@@ -35,6 +35,18 @@
         .custom-dropdown {
             position: relative;
         }
+
+        .custom-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .truncate-text {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 0;
+        }
     </style>
 </head>
 <body class="bg-primary text-white">
@@ -113,7 +125,7 @@
             <h2>인기 설계사</h2>
         </div>
         <div class="all-planner">
-            <a href="#">
+            <a href="/promotion">
                 <button type="button" class="btn btn-transparent text-white">
                     전체보기
                 </button>
@@ -122,12 +134,15 @@
     </div>
     <div class="hot-planner-list">
         <ul class="list-group">
-            <li class="list-group-item">An active item</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
-            <li class="list-group-item">A fourth item</li>
-            <li class="list-group-item">And a fifth one</li>
+            <li class="list-group-item" th:each="plannerDto : ${recommendDtos}">
+                <a class="custom-link" th:href="@{'/promotion/' + ${plannerDto.id}}">
+                    <p style="margin-bottom: 0px" th:text="${plannerDto.plannerNickname} + ' 설계사'"></p>
+                </a>
+            </li>
         </ul>
+    </div>
+    <div class="hot-planner-title">
+        <p th:text="'최근 업데이트 시간 : '+${recommendTime}">
     </div>
 </div>
 <div class="review">
@@ -136,7 +151,7 @@
             <h2>최근 리뷰</h2>
         </div>
         <div class="all-review">
-            <a href="#">
+            <a href="/review">
                 <button type="button" class="btn btn-transparent text-white">
                     전체보기
                 </button>
@@ -145,11 +160,11 @@
     </div>
     <div class="recent-review-list">
         <ul class="list-group">
-            <li class="list-group-item">An active item</li>
-            <li class="list-group-item">A second item</li>
-            <li class="list-group-item">A third item</li>
-            <li class="list-group-item">A fourth item</li>
-            <li class="list-group-item">And a fifth one</li>
+            <li class="list-group-item" th:each="reviewDto : ${recentDtos}">
+                <a class="custom-link" th:href="@{'/review/detail/' + ${reviewDto.id}}">
+                    <p class="truncate-text" style="margin-bottom: 0px" th:text="'평점 '+ ${reviewDto.rate}+'   '+${reviewDto.plannerNickname} + ' 설계사 - ' + ${reviewDto.content}"></p>
+                </a>
+            </li>
         </ul>
     </div>
 </div>

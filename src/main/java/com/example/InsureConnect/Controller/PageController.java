@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -38,6 +40,15 @@ public class PageController {
             model.addAttribute("user", dto.getNickname()+"님 안녕하세요!");
             model.addAttribute("url", "/logout");
         }
+        RecommendDto recommendDto = plannerService.recommendPlanner();
+        List<PlannerDto> plannerDtos = recommendDto.getList();
+        Timestamp recommendTime = recommendDto.getTime();
+        List<PlannerDto> recommendDtos = plannerDtos.subList(0, Math.min(5, plannerDtos.size()));
+        model.addAttribute("recommendDtos", recommendDtos);
+        model.addAttribute("recommendTime", recommendTime);
+        List<ReviewDto> reviewDtos = reviewService.findAll();
+        List<ReviewDto> recentDtos = reviewDtos.subList(0, Math.min(5, reviewDtos.size()));
+        model.addAttribute("recentDtos", recentDtos);
         return "home";
     }
 
