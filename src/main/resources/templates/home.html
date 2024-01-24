@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Insure Connect</title>
@@ -68,11 +68,12 @@
                         <img src="/img/list_button.png" width="16" height="16" alt="리스트">
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="list">
-                        <li><a class="dropdown-item" href="/mypage">마이페이지</a></li>
-                        <li><a class="dropdown-item" href="/chat">AI 상담</a></li>
-                        <li><a class="dropdown-item" href="/promotion">설계사페이지</a></li>
-                        <li><a class="dropdown-item" href="/review">리뷰페이지</a></li>
-                        <li><a class="dropdown-item" href="/management">관리자페이지</a></li>
+                            <li sec:authorize="hasAnyAuthority('ADMIN')"><a class="dropdown-item" href="/management">관리자페이지</a></li>
+                            <li sec:authorize="hasAnyAuthority('USER') or hasAnyAuthority('PLANNER')"><a class="dropdown-item" href="/mypage">마이페이지</a></li>
+                            <li sec:authorize="hasAnyAuthority('PLANNER')"><a class="dropdown-item" href="/planner">설계사페이지</a></li>
+                            <li><a class="dropdown-item" href="/chat">AI상담</a></li>
+                            <li><a class="dropdown-item" href="/promotion">홍보 페이지</a></li>
+                            <li><a class="dropdown-item" href="/review">리뷰 페이지</a></li>
                     </ul>
                 </div>
             </div>

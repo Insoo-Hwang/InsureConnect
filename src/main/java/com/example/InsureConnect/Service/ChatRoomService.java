@@ -52,4 +52,5 @@ public class ChatRoomService {
         ChatRoom chatRoom = chatRoomRepository.findByCode(code).orElseThrow(() -> new IllegalArgumentException());
         return modelMapper.map(chatRoom, ChatRoomDto.class);
     }
+
 }

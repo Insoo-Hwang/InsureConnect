@@ -1,7 +1,9 @@
 package com.example.InsureConnect.Api;
 
+import com.example.InsureConnect.Dto.ConsultRequestDto;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.PromotionDto;
+import com.example.InsureConnect.Service.ConsultRequestService;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class PromotionApiController {
 
     private final PromotionService promotionService;
     private final PlannerService plannerService;
+    private final ConsultRequestService consultRequestService;
 
     //홍보글 존재 여부
     @GetMapping("/api/promotion/{userId}")
@@ -56,10 +59,26 @@ public class PromotionApiController {
                                                         @RequestParam("title") String title,
                                                         @RequestParam("content") String content,
                                                         @RequestPart(value = "images", required = false) List<MultipartFile> images,
-                                                        @RequestParam(value = "existingImages", required = false)List<String> existingImages) throws IOException {
+                                                        @RequestParam(value = "existingImages", required = false) List<String> existingImages) throws IOException {
         PromotionDto promotion = promotionService.findByPlannerId(plannerId);
 
         return promotionService.updatePromotion(promotion, title, content, images, existingImages);
     }
 
+    //promotion 삭제
+    @DeleteMapping("/api/promotion/delete/{promotionId}")
+    public ResponseEntity<PromotionDto> deletePromotion(@PathVariable("promotionId") Long promotionId) {
+        PromotionDto promotion = promotionService.delete(promotionId);
+        return ResponseEntity.status(HttpStatus.OK).body(promotion);
+    }
+
+    @PostMapping("/api/promotion/sendKakao")
+    public ResponseEntity<ConsultRequestDto> sendKakao(@RequestParam("chatRoom") UUID chatRoom,
+                                                       @RequestParam("plannerId") Long plannerId,
+                                                       @RequestParam("userNickname") String userNickname) {
+
+        ConsultRequestDto consultRequestDto = consultRequestService.saveConsultRequest(chatRoom, plannerId, userNickname);
+
+        return ResponseEntity.ok().body(consultRequestDto);
+    }
 }

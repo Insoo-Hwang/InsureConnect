@@ -4,9 +4,11 @@ import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.PromotionDto;
 import com.example.InsureConnect.Dto.PromotionImgDto;
+import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Service.PlannerService;
 import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
+import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -23,6 +25,7 @@ import java.util.List;
 public class PromotionController {
     private final PlannerService plannerService;
     private final PromotionService promotionService;
+    private final UserService userService;
 
     //Promotion 조회
     @GetMapping("/promotion")
@@ -50,11 +53,14 @@ public class PromotionController {
     //Promotion 세부조회
     @GetMapping("/promotion/{planner_id}")
     public String detailPromotion(@PathVariable("planner_id") Long plannerId,
+                                  @AuthenticationPrincipal CustomOAuth2User user,
                                   Model model) {
         PlannerDto planner = plannerService.findById(plannerId);
         PromotionDto promotion = promotionService.findByPlannerId(plannerId);
         promotion.getPromotionImg().sort(Comparator.comparingInt(PromotionImgDto::getSequence));
+        UserDto userDto = userService.findByKakaoId(user.getId());
 
+        model.addAttribute("userNickname", userDto.getNickname());
         model.addAttribute("planner", planner);
         model.addAttribute("promotion", promotion);
         return "detail_promotion";
