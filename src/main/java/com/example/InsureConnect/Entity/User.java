@@ -44,7 +44,7 @@ public class User implements UserDetails {
     @Column
     private String type;
 
-    @OneToOne(fetch = FetchType.LAZY,mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "user")
     @JsonBackReference
     private Planner planner;
 
@@ -69,19 +69,19 @@ public class User implements UserDetails {
         this.gender = userDto.getGender();
     }
 
-    public void delete(){
+    public void delete() {
         this.kakaoId = null;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        if(type.equals("user")){
+        if (type.equals("user")) {
             return AuthorityUtils.createAuthorityList("USER");
-        }
-        else if(type.equals("admin")){
+        } else if (type.equals("admin")) {
             return AuthorityUtils.createAuthorityList("ADMIN");
-        }
-        else {
+        } else if (type.equals("planner")) {
+            return AuthorityUtils.createAuthorityList("PLANNER");
+        } else {
             return AuthorityUtils.createAuthorityList("TEMPORARY");
         }
     }

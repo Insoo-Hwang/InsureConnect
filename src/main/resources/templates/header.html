@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://thymeleaf.org/thymeleaf-extras-springsecurity5">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <header class="--header" th:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
@@ -20,11 +21,12 @@
                             메뉴
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/mypage">마이페이지</a></li>
+                            <li sec:authorize="hasAnyAuthority('ADMIN')"><a class="dropdown-item" href="/management">관리자페이지</a></li>
+                            <li sec:authorize="hasAnyAuthority('USER') or hasAnyAuthority('PLANNER')"><a class="dropdown-item" href="/mypage">마이페이지</a></li>
+                            <li sec:authorize="hasAnyAuthority('PLANNER')"><a class="dropdown-item" href="/planner">설계사페이지</a></li>
                             <li><a class="dropdown-item" href="/chat">AI상담</a></li>
-                            <li><a class="dropdown-item" href="/promotion">설계사 페이지</a></li>
+                            <li><a class="dropdown-item" href="/promotion">홍보 페이지</a></li>
                             <li><a class="dropdown-item" href="/review">리뷰 페이지</a></li>
-                            <li><a class="dropdown-item" href="/management">관리자페이지</a></li>
                         </ul>
                     </li>
                 </ul>
