@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -160,6 +161,13 @@ public class PromotionService {
         }
     }
 
+    //Promotion 삭제 메서드
+    public PromotionDto delete(Long promotionId) {
+        Promotion promotion = getPromotionById(promotionId);
+        promotionRepository.delete(promotion);
+        return modelMapper.map(promotion, PromotionDto.class);
+    }
+
     // 다음 시퀀스 값을 가져오는 메서드
     private int getNextSequence(List<PromotionImg> promotionImgs) {
         if (promotionImgs.isEmpty()) {
@@ -170,5 +178,6 @@ public class PromotionService {
                 .max()
                 .orElse(0);
     }
+
 
 }

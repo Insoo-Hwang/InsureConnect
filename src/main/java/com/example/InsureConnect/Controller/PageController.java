@@ -77,6 +77,7 @@ public class PageController {
         return "myPage";
     }
 
+
     @GetMapping("/management/planner")
     public String managePlanner(Model model){
         List<PlannerDto> plannerDtos = plannerService.findEnrollPlanner();
@@ -111,5 +112,10 @@ public class PageController {
     @GetMapping("/management")
     public String manage(Model model){
         return "management";
+    }
+
+    @GetMapping("/openKakao")
+    public String openKakao() {
+        return "openKakao";
     }
 }
