@@ -162,6 +162,7 @@ public class PromotionService {
     }
 
     //Promotion 삭제 메서드
+    @Transactional
     public PromotionDto delete(Long promotionId) {
         Promotion promotion = getPromotionById(promotionId);
         promotionRepository.delete(promotion);
@@ -170,7 +171,7 @@ public class PromotionService {
 
     // 다음 시퀀스 값을 가져오는 메서드
     private int getNextSequence(List<PromotionImg> promotionImgs) {
-        if (promotionImgs.isEmpty()) {
+        if (promotionImgs == null) {
             return 0;
         }
         return promotionImgs.stream()

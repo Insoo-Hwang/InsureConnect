@@ -1,24 +1,24 @@
 package com.example.InsureConnect.Service;
 
+import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Config.Paging.PlannerSpecification;
 import com.example.InsureConnect.Dto.PlannerDto;
 import com.example.InsureConnect.Dto.RecommendDto;
 import com.example.InsureConnect.Dto.UserDto;
-import com.example.InsureConnect.Config.OAuth.CustomOAuth2User;
 import com.example.InsureConnect.Entity.Planner;
 import com.example.InsureConnect.Entity.RecommendPlanner;
 import com.example.InsureConnect.Entity.User;
+import com.example.InsureConnect.Handler.FileHandler;
 import com.example.InsureConnect.Repository.PlannerRepository;
 import com.example.InsureConnect.Repository.RecommendPlannerRepository;
 import com.example.InsureConnect.Repository.UserRepository;
-import com.example.InsureConnect.Handler.FileHandler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.domain.Specification;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class PlannerService {
 
     private final PlannerRepository plannerRepository;
@@ -42,56 +43,52 @@ public class PlannerService {
     private final ModelMapper modelMapper;
 
     @Transactional
-    public PlannerDto savePlanner(PlannerDto plannerDto, CustomOAuth2User user, MultipartFile profileImage, MultipartFile certificateImage) {
-        try {
-            String path = "classpath:/static/img/planner";
-            String profileFileName = fileHandler.uploadFile(profileImage, path);
-            String certificateFileName = fileHandler.uploadFile(certificateImage, path);
-            //파일명 인코딩 추가,메서드 분리
-            User byKakaoId = userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
+    public PlannerDto savePlanner(String company, String kakaoLink, CustomOAuth2User user, MultipartFile profileImage, MultipartFile certificateImage) throws IOException {
+        Map<String, String> images = saveImages(profileImage, certificateImage);
+        PlannerDto plannerDto = new PlannerDto();
+        plannerDto.setCompany(company);
+        plannerDto.setKakaoLink(kakaoLink);
+        plannerDto.setCertificate(images.get("certificatePath"));
+        plannerDto.setProfile(images.get("profilePath"));
 
-            Planner planner = Planner.builder()
-                    .id(plannerDto.getId())
-                    .user(byKakaoId)
-                    .company(plannerDto.getCompany())
-                    .profile(profileFileName)
-                    .certificate(certificateFileName)
-                    .status("enroll")
-                    .build();
+        User byKakaoId = getUserByKakaoId(user);
 
-            Planner savedPlanner = plannerRepository.save(planner);
-            return modelMapper.map(savedPlanner, PlannerDto.class);
-        } catch (IOException e) {
-            throw new RuntimeException("Unexpected error during file upload: " + e.getMessage());
-        }
+        return createPlanner(byKakaoId, plannerDto);
     }
 
     public PlannerDto findById(Long plannerId) {
-        Optional<Planner> planner = plannerRepository.findById(plannerId);
+        Planner planner = getPlannerById(plannerId);
         return modelMapper.map(planner, PlannerDto.class);
     }
 
-    public PlannerDto findByUser_KakaoId(Long userId) {
-        Planner byUserKakaoId = plannerRepository.findByUser_KakaoId(userId);
-        return modelMapper.map(byUserKakaoId, PlannerDto.class);
+    public PlannerDto findByUser_KakaoId(CustomOAuth2User user) {
+        Planner plannerByKakaoId = getPlannerByKakaoId(user);
+        return modelMapper.map(plannerByKakaoId, PlannerDto.class);
     }
 
     public UserDto findUserById(Long plannerId) {
-        User userById = plannerRepository.findUserByPlannerId(plannerId);
-        return modelMapper.map(userById, UserDto.class);
+        User userByPlannerId = getUserByPlannerId(plannerId);
+        return modelMapper.map(userByPlannerId, UserDto.class);
     }
 
     public PlannerDto findByUserId(UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
-        Planner planner = plannerRepository.findByUser(user);
+        User userById = getUserById(userId);
+        Planner planner = getPlannerByUser(userById);
         if (planner == null) return null;
         else return modelMapper.map(planner, PlannerDto.class);
     }
 
     @Transactional
+    public PlannerDto managePlanner(Long id, boolean permit) {
+        Planner target = getPlannerById(id);
+        target.changeStatus(permit);
+        Planner updated = plannerRepository.save(target);
+        return modelMapper.map(updated, PlannerDto.class);
+    }
+
+    @Transactional
     public PlannerDto delete(Long id) {
-        Planner target = plannerRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+        Planner target = getPlannerById(id);
         if (target.getStatus().equals("permit")) {
             return null;
         } else {
@@ -101,32 +98,21 @@ public class PlannerService {
     }
 
     @Transactional
-    public PlannerDto managePlanner(Long id, boolean permit) {
-        Planner target = plannerRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
-        target.changeStatus(permit);
-        Planner updated = plannerRepository.save(target);
-        return modelMapper.map(updated, PlannerDto.class);
-    }
-
-
-    @Transactional
-    public PlannerDto deletePlanner(Long id){
-        Planner target = plannerRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+    public PlannerDto deletePlanner(Long id) {
+        Planner target = getPlannerById(id);
         target.deleteStatus();
         Planner deleted = plannerRepository.save(target);
         return modelMapper.map(deleted, PlannerDto.class);
     }
 
-    public List<PlannerDto> findEnrollPlanner(){
+    public List<PlannerDto> findEnrollPlanner() {
         List<Planner> planners = plannerRepository.findByStatusEnroll();
         return planners.stream()
                 .map(planner -> modelMapper.map(planner, PlannerDto.class))
                 .collect(Collectors.toList());
     }
 
-    public List<PlannerDto> findAllAllPermitPlanner() {
+    public List<PlannerDto> findPermitPlanner() {
         List<Planner> planners = plannerRepository.findAllPermitPlanner();
 
         return planners.stream()
@@ -143,66 +129,159 @@ public class PlannerService {
     }
 
 
-    public RecommendDto recommendPlanner(){
+    @Transactional
+    public RecommendDto recommendPlanner() {
         List<PlannerDto> plannerDtos = new ArrayList<>();
-        RecommendPlanner recommendPlanner = recommendPlannerRepository.findFirstByOrderByTimeDesc();
-        Timestamp time = null;
-        if(recommendPlanner != null){
-            time = recommendPlanner.getTime();
-            Timestamp now = new Timestamp(System.currentTimeMillis());
-            Instant beforeIns = time.toInstant();
-            Instant nowIns = now.toInstant();
-            Duration duration = Duration.between(beforeIns, nowIns);
-            long hour = Math.abs(duration.toHours());
-            if(hour < 1){
-                String [] s = recommendPlanner.getList().split(",");
-                for(int i = 0; i < 5; i++){
-                    if(s[i].equals("A")) break;
-                    Planner planner = plannerRepository.findById(Long.parseLong(s[i])).orElseThrow(IllegalArgumentException::new);
-                    plannerDtos.add(modelMapper.map(planner, PlannerDto.class));
-                }
-            }
-            else recommendPlanner = null;
+        RecommendPlanner recommendPlanner = getLatestRecommendPlanner();
+
+        if (isValidRecommendPlanner(recommendPlanner)) {
+            plannerDtos.addAll(getPlannerDtosFromList(recommendPlanner.getList()));
+        } else {
+            plannerDtos.addAll(getPlannerDtosFromTopRecommendations());
+            recommendPlanner = createAndSaveRecommendPlanner(plannerDtos);
         }
-        if(recommendPlanner == null) {
-            List<Planner> planners = plannerRepository.findAllPermitPlanner();
-            List<Recommend> recommends = new ArrayList<>();
-            for (Planner planner : planners) {
-                recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
-            }
-            Collections.sort(recommends);
-            String s = "";
-            for (Recommend recommend : recommends) {
-                plannerDtos.add(recommend.getPlannerDto());
-                s+=recommend.getPlannerDto().getId();
-                s+=",";
-            }
-            s+="A,A,A,A,A";
-            time = new Timestamp(System.currentTimeMillis());
-            RecommendPlanner created = RecommendPlanner.builder()
-                    .time(time)
-                    .list(s)
-                    .build();
-            recommendPlannerRepository.save(created);
-        }
-        RecommendDto recommendDto = RecommendDto.builder()
+
+        return RecommendDto.builder()
                 .list(plannerDtos)
-                .time(time)
+                .time(recommendPlanner.getTime())
                 .build();
-        return recommendDto;
+    }
+
+    private User getUserById(UUID userId) {
+        return userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+    }
+
+    private Planner getPlannerByUser(User user) {
+        return plannerRepository.findByUser(user);
+    }
+
+    private User getUserByKakaoId(CustomOAuth2User user) {
+        return userRepository.findByKakaoId(user.getId()).orElseThrow(IllegalArgumentException::new);
+    }
+
+    private Planner getPlannerById(Long plannerId) {
+        return plannerRepository.findById(plannerId).orElseThrow(IllegalArgumentException::new);
+    }
+
+    private Planner getPlannerByKakaoId(CustomOAuth2User user) {
+        return plannerRepository.findByUser_KakaoId(user.getId());
+    }
+
+    private User getUserByPlannerId(Long plannerId) {
+        return plannerRepository.findUserByPlannerId(plannerId);
+    }
+
+    private RecommendPlanner getLatestRecommendPlanner() {
+        return recommendPlannerRepository.findFirstByOrderByTimeDesc();
+    }
+
+    private List<PlannerDto> getPlannerDtosFromList(String list) {
+        List<PlannerDto> plannerDtos = new ArrayList<>();
+        String[] s = list.split(",");
+        for (int i = 0; i < 5 && !s[i].equals("A"); i++) {
+            Planner planner = plannerRepository.findById(Long.parseLong(s[i]))
+                    .orElseThrow(() -> new IllegalArgumentException("Planner not found"));
+            plannerDtos.add(modelMapper.map(planner, PlannerDto.class));
+        }
+        return plannerDtos;
+    }
+
+    private List<PlannerDto> getPlannerDtosFromTopRecommendations() {
+        List<Planner> planners = plannerRepository.findAllPermitPlanner();
+        List<Recommend> recommends = planners.stream()
+                .map(planner -> new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)))
+                .sorted()
+                .collect(Collectors.toList());
+
+        List<PlannerDto> plannerDtos = recommends.stream()
+                .map(Recommend::getPlannerDto)
+                .collect(Collectors.toList());
+
+        String s = recommends.stream()
+                .limit(5)
+                .map(recommend -> String.valueOf(recommend.getPlannerDto().getId()))
+                .collect(Collectors.joining(","));
+
+        s += ",A,A,A,A,A";
+
+        RecommendPlanner created = RecommendPlanner.builder()
+                .time(Timestamp.from(Instant.now()))
+                .list(s)
+                .build();
+        recommendPlannerRepository.save(created);
+
+        return plannerDtos;
+    }
+
+    private PlannerDto createPlanner(User user, PlannerDto plannerDto) {
+        Planner planner = Planner.builder()
+                .user(user)
+                .certificate(plannerDto.getCertificate())
+                .company(plannerDto.getCompany())
+                .kakaoLink(plannerDto.getKakaoLink())
+                .profile(plannerDto.getProfile())
+                .status("enroll")
+                .plannerNickname(plannerDto.getPlannerNickname())
+                .build();
+
+        return modelMapper.map(plannerRepository.save(planner),PlannerDto.class);
+    }
+
+    private RecommendPlanner createAndSaveRecommendPlanner(List<PlannerDto> plannerDtos) {
+        String s = plannerDtos.stream()
+                .limit(5)
+                .map(dto -> String.valueOf(dto.getId()))
+                .collect(Collectors.joining(","));
+
+        s += ",A,A,A,A,A";
+
+        Timestamp time = Timestamp.from(Instant.now());
+        RecommendPlanner created = RecommendPlanner.builder()
+                .time(time)
+                .list(s)
+                .build();
+
+        return recommendPlannerRepository.save(created);
+    }
+
+    private Map<String, String> saveImages(MultipartFile profileImage, MultipartFile certificateImage) throws IOException {
+        String path = "classpath:/static/img/promotion";
+        String profilePath = "";
+        String certificatePath = "";
+        if (profileImage != null && !profileImage.isEmpty()) {
+            profilePath = fileHandler.uploadFile(profileImage, path);
+        }
+        if (certificateImage != null && !certificateImage.isEmpty()) {
+            certificatePath = fileHandler.uploadFile(certificateImage, path);
+        }
+        Map<String, String> imagePathMap = new HashMap<>();
+        imagePathMap.put("profilePath", profilePath);
+        imagePathMap.put("certificatePath", certificatePath);
+
+        return imagePathMap;
+    }
+
+    private boolean isValidRecommendPlanner(RecommendPlanner recommendPlanner) {
+        if (recommendPlanner == null) return false;
+
+        Instant beforeIns = recommendPlanner.getTime().toInstant();
+        Instant nowIns = Instant.now();
+        long hour = Math.abs(Duration.between(beforeIns, nowIns).toHours());
+        return hour < 1;
     }
 
     @Getter
     @AllArgsConstructor
-    static class Recommend implements Comparable<Recommend>{
+    static class Recommend implements Comparable<Recommend> {
         int cnt;
         int score;
         PlannerDto plannerDto;
 
         @Override
         public int compareTo(Recommend o) {
-            if(this.score == o.score) return o.cnt-this.cnt;
-            else return o.score-this.score;
+            if (this.score == o.score) return o.cnt - this.cnt;
+            else return o.score - this.score;
         }
     }
 }
+

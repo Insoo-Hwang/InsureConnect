@@ -51,6 +51,7 @@ public class SecurityConfig {
                     authorizeRequests
                             .requestMatchers("/management/**").hasAnyAuthority("ADMIN")
                             .requestMatchers("/mypage", "/chat").hasAnyAuthority("USER", "PLANNER")
+                            .requestMatchers("/planner").hasAnyAuthority("PLANNER")
                             .anyRequest().permitAll()
         );
 

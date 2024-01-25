@@ -13,4 +13,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> , JpaSpeci
     Optional<Review> findById(Long id);
     List<Review> findByUser(User user);
     List<Review> findByPlannerId(Long plannerId);
+
+    List<Review> findByOrderByEditDesc();
 }

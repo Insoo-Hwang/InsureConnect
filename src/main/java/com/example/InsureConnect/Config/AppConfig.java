@@ -8,6 +8,7 @@ import org.modelmapper.TypeMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,7 +82,7 @@ public class AppConfig {
 
     }
 
-    private Converter<List<ChatRoom>, List<Long>> convertChatRoomToLongList(){
+    private Converter<List<ChatRoom>, List<Long>> convertChatRoomToLongList() {
         return context -> context.getSource()
                 .stream()
                 .map(ChatRoom::getId)
@@ -96,17 +97,30 @@ public class AppConfig {
     }
 
     private Converter<List<ConnectCategory>, List<Long>> convertConnectCategoryToLong() {
-        return context -> context.getSource()
-                .stream()
-                .map(ConnectCategory::getId)
-                .collect(Collectors.toList());
+        return context -> {
+            if (context.getSource() == null) {
+                return Collections.emptyList();
+            }
+
+            return context.getSource()
+                    .stream()
+                    .map(ConnectCategory::getId)
+                    .collect(Collectors.toList());
+        };
     }
 
     private Converter<List<ConnectCategory>, List<String>> convertConnectCategoryToStringList() {
-        return context -> context.getSource()
-                .stream()
-                .map(connectCategory -> connectCategory.getCategory().getCategoryName())
-                .collect(Collectors.toList());
+        return context -> {
+            if (context.getSource() == null) {
+                return Collections.emptyList();
+            }
+
+            return context.getSource()
+                    .stream()
+                    .map(connectCategory -> connectCategory.getCategory().getCategoryName())
+                    .collect(Collectors.toList());
+
+        };
     }
 
 }

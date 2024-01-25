@@ -53,9 +53,11 @@
 <div id="planner-container">
     <div style="font-size: 30px; margin-bottom: 10px; font-weight: bold; text-align: center">설계사 신청 내역</div>
     <li th:each="planner : ${plannerDtos}" class="card">
-        <p th:text="${planner.profile}"></p>
-        <p th:text="${planner.company}"></p>
-        <p th:text="${planner.certificate}"></p>
+        <p>프로필 사진</p>
+        <img th:src="${planner.profile}" alt="프로필" width="100px" height="100px">
+        <p th:text="'회사 : ' + ${planner.company}"></p>
+        <p>재직 증명서</p>
+        <img th:src="${planner.certificate}" alt="프로필" width="300px" height="300px">
         <button id="permit-planner-button" style="background-color: #0056b3;" th:value="${planner.id}" onclick="managePlanner(this.value, true)">설계사 등록</button>
         <button id="temp-planner-button" style="background-color: #FF6666;" th:value="${planner.id}" onclick="managePlanner(this.value, false)">설계사 반려</button>
     </li>

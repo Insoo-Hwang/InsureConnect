@@ -166,10 +166,10 @@
                         '<div class="card-header">' +
                         '<small class="text-muted">' + planner.categoryName+ '</small>' +
                         '</div>' +
-                        '<img class="card-img-top" src="profile' + planner.profile + '.jpg" alt="프로필 사진">' +
+                        '<img class="card-img-top" src="' + planner.profile + '" width="250" height="280" alt="프로필 사진">' +
                         '<div class="card-body">' +
                         '<h4 class="card-title">' + planner.promotion.title + '</h4>' +
-                        '<p class="card-text">' + planner.promotion.content + '</p>' +
+                        // '<p class="card-text">' + planner.promotion.content + '</p>' +
                         '<p class="card-text">평균평점 = ' + planner.averageRating + '</p>' +
                         '<p class="card-text">' +
                         '<a href="/review/' + planner.id + '">리뷰갯수 = ' + planner.review.length + '</a>' +
@@ -178,7 +178,7 @@
                         '<div class="card-footer">' +
                         '<small class="text-muted">작성시간 : ' + formattedWriteDate + '</small>' +
                         '<div>' +
-                        '<small class="text-muted">수정시간 : ' + formattedEditDate + '</small>' +
+                        // '<small class="text-muted">수정시간 : ' + formattedEditDate + '</small>' +
 
                         '</div>' +
                         '</div>' +

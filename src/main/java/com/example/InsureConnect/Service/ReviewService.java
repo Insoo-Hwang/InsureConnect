@@ -51,11 +51,10 @@ public class ReviewService {
                 .rate(reviewDto.getRate())
                 .title(reviewDto.getTitle())
                 .content(reviewDto.getContent())
-                .edit(null)
                 .build();
 
         review.setWriteToCurrentTime();
-
+        review.setEditToCurrentTime();
         reviewRepository.save(review);
 
         List<String> imgLinks = fileHandler.uploadFiles(images, path);
@@ -88,13 +87,9 @@ public class ReviewService {
         return modelMapper.map(review, ReviewDto.class);
     }
 
-    public Page<ReviewDto> findAll(Pageable pageable){
-        Page<Review> reviews = reviewRepository.findAll(pageable);
-        return reviews.map(review -> modelMapper.map(review, ReviewDto.class));
-    }
 
     public List<ReviewDto> findAll(){
-        List<Review> reviewList = reviewRepository.findAll();
+        List<Review> reviewList = reviewRepository.findByOrderByEditDesc();
         return reviewList.stream()
                 .map(review -> modelMapper.map(review, ReviewDto.class))
                 .collect(Collectors.toList());
