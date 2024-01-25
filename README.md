@@ -32,7 +32,7 @@ SpingBoot를 활용한 보험 중개 서비스
 - **Web** : `HTML` + `JavaScript` + `CSS`
 
 ### 🌳 ERD
-<img width="1000" alt="스크린샷 2024-01-25 오후 2 25 48" src="https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/a4f3387e-d143-4b41-a31b-d3db1522013d">
+![earl - public](https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/87d754b6-0c60-416d-81fc-4d7285280440)
 
 ## 🧐 프로젝트 특징
 
@@ -48,7 +48,6 @@ SpingBoot를 활용한 보험 중개 서비스
 2. 가입자가 첨부한 AI 채팅 내역 확인 후 상담
 
 ### 1. 메인 페이지
-![earl - public](https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/87d754b6-0c60-416d-81fc-4d7285280440)
 
 ### 2. 
 <img width="1440" alt="스크린샷 2024-01-25 오후 3 54 16" src="https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/e181fc96-e11d-4410-bcbd-cf59be4b4429">
