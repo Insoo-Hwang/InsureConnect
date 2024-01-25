@@ -24,12 +24,13 @@ SpingBoot를 활용한 보험 중개 서비스
 
 ### ⚙️ 개발 환경
 - `Java 17`
-- `JDK 17.0.1`
 - **IDE** : IntelliJ
-- **Framework** : SpringBoot 3.2.0
-- **Database** : Postgre
-- **ORM** : Hibernate
-- **Web** : `HTML` + `JavaScript` + `CSS`
+- **Framework** : SpringBoot 3.2.1
+- **Featured Library** : OAuth 2.0 + JWT 0.9.1 + ModelMapper 3.1.1
+- **Sevlet Engine** : Apache Tomcat 10.1.17
+- **Database** : Postgresql 16
+- **ORM** : Hibernate 6.4.1 + JPA 3.2.1
+- **Web** : `HTML`(+thymeleaf) + `JavaScript`(+JQuery) + `CSS`(+bootstrap)
 
 ### 🌳 ERD
 ![earl - public](https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/87d754b6-0c60-416d-81fc-4d7285280440)
