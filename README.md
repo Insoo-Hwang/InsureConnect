@@ -48,6 +48,7 @@ SpingBoot를 활용한 보험 중개 서비스
 2. 가입자가 첨부한 AI 채팅 내역 확인 후 상담
 
 ### 1. 메인 페이지
+![screencapture-localhost-8080-2024-01-25-15_40_34](https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/096732b0-8e02-443e-b2da-e2a40ce3a830)
 
 ### 2. 
 <img width="1440" alt="스크린샷 2024-01-25 오후 3 54 16" src="https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/e181fc96-e11d-4410-bcbd-cf59be4b4429">
