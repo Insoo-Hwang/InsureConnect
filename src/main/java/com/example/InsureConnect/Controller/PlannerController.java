@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -29,7 +30,7 @@ public class PlannerController {
 
     @GetMapping("/planner")
     public String showPlanner(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
-        PlannerDto planner = plannerService.findByUser_KakaoId(user.getId());
+        PlannerDto planner = plannerService.findByUser_KakaoId(user);
         List<ConsultRequestDto> requests = consultRequestService.findAllRequest(planner.getId());
         model.addAttribute("planner", planner);
         model.addAttribute("requests", requests);
@@ -48,15 +49,11 @@ public class PlannerController {
                                 @RequestParam(value = "kakaoLink") String kakaoLink,
                                 @RequestPart(value = "profileImage") MultipartFile profileImage,
                                 @RequestPart(value = "certificateImage") MultipartFile certificateImage,
-                                @AuthenticationPrincipal CustomOAuth2User user) {
+                                @AuthenticationPrincipal CustomOAuth2User user) throws IOException {
 
-        PlannerDto plannerDto = new PlannerDto();
-        plannerDto.setCompany(company);
-        plannerDto.setKakaoLink(kakaoLink);
 
-        PlannerDto planner = plannerService.savePlanner(plannerDto, user, profileImage, certificateImage);
+        PlannerDto planner = plannerService.savePlanner(company, kakaoLink, user, profileImage, certificateImage);
         connectCategoryService.saveCategory(categoryIdList, planner.getId());
-
-        return "home";
+        return "redirect:/";
     }
 }

@@ -163,7 +163,7 @@
         <ul class="list-group">
             <li class="list-group-item" th:each="reviewDto : ${recentDtos}">
                 <a class="custom-link" th:href="@{'/review/detail/' + ${reviewDto.id}}">
-                    <p class="truncate-text" style="margin-bottom: 0px" th:text="'평점 '+ ${reviewDto.rate}+'   '+${reviewDto.plannerNickname} + ' 설계사 - ' + ${reviewDto.content}"></p>
+                    <p class="truncate-text" style="margin-bottom: 0px" th:text="'평점 '+ ${reviewDto.rate}+'   '+${reviewDto.plannerNickname} +  ${reviewDto.content}"></p>
                 </a>
             </li>
         </ul>

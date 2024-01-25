@@ -9,17 +9,20 @@ import com.example.InsureConnect.Repository.PlannerRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ConnectCategoryService {
     private final ConnectCategoryRepository connectCategoryRepository;
     private final PlannerRepository plannerRepository;
     private final CategoryRepository categoryRepository;
 
+    @Transactional
     public void saveCategory(List<Long> categoryIdList, Long plannerId) {
         // Planner 엔티티 가져오기
         Planner planner = plannerRepository.findById(plannerId)

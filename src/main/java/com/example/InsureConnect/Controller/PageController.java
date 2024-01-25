@@ -23,12 +23,6 @@ public class PageController {
     private final PlannerService plannerService;
     private final CategoryService categoryService;
 
-    @GetMapping("/test")
-    public String test(@AuthenticationPrincipal CustomOAuth2User user,Model model) {
-        model.addAttribute("user", user);
-        return "testqwer";
-    }
-
     @GetMapping("/")
     public String home(@AuthenticationPrincipal CustomOAuth2User user, Model model) {
         if(user == null){

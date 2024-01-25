@@ -22,9 +22,9 @@
             th:text="${#dates.format(promotion.edit, 'yyyy-MM-dd HH:mm:ss')}"></span></p>
 
     <div class="mt-3">
-        <p class="font-weight-bold">첨부 이미지:</p>
+<!--        <p class="font-weight-bold">첨부 이미지:</p>-->
         <div th:each=" image : ${promotion.promotionImg}">
-            <img th:src="${image.imgLink}" class="img-thumbnail mr-2" style="width:100px; height:100px;"
+            <img th:src="${image.imgLink}" class="img-thumbnail mr-2" style="width:300px; height:300px;"
                  alt="promotionImage">
         </div>
     </div>

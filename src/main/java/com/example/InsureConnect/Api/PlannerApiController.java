@@ -23,7 +23,7 @@ public class PlannerApiController {
     @GetMapping("/api/planners")
     public ResponseEntity<List<PlannerDto>> allPlanner() {
 
-        List<PlannerDto> permittedPlanners = plannerService.findAllAllPermitPlanner();
+        List<PlannerDto> permittedPlanners = plannerService.findPermitPlanner();
 
         if (permittedPlanners.isEmpty()) {
             // 만약 특정 조건을 만족하는 플래너가 없으면 HTTP 상태 코드 204 (NO_CONTENT)를 반환

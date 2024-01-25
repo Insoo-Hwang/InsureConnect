@@ -138,7 +138,7 @@
         </div>
     </th:block>
     <th:block th:if="${planner.promotion == null}">
-        <a th:href="@{/planner/new}" class="btn btn-success mt-3">프로모션 작성</a>
+        <a th:href="@{/promotion/new}" class="btn btn-success mt-3">프로모션 작성</a>
     </th:block>
 </div>
 <script>
@@ -149,7 +149,7 @@
                 method: "DELETE",
                 headers: {}
             }).then(response => {
-                const msg = (response.ok) ? "리뷰가 삭제되었습니다!" : "삭제 실패!";
+                const msg = (response.ok) ? " 삭제되었습니다!" : "삭제 실패!";
                 alert(msg);
                 window.location.reload();
             })

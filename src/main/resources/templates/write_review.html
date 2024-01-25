@@ -158,7 +158,7 @@
         planners.forEach(planner => {
             const option = document.createElement('option');
             option.value = planner.id;
-            option.text = planner.user.nickname;
+            option.text = planner.plannerNickname;
             dropdown.appendChild(option);
         });
     }

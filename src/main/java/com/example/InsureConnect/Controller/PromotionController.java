@@ -6,7 +6,6 @@ import com.example.InsureConnect.Dto.PromotionDto;
 import com.example.InsureConnect.Dto.PromotionImgDto;
 import com.example.InsureConnect.Dto.UserDto;
 import com.example.InsureConnect.Service.PlannerService;
-import com.example.InsureConnect.Service.PromotionImgService;
 import com.example.InsureConnect.Service.PromotionService;
 import com.example.InsureConnect.Service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,7 @@ public class PromotionController {
 
         promotionService.savePromotion(title, content, images, user);
 
-        return "home";
+        return "redirect:/";
     }
 
     //Promotion 세부조회

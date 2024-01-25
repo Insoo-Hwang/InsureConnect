@@ -18,12 +18,10 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class ConsultRequestService {
     private final ConsultRequestRepository consultRequestRepository;
-    private final ChatRoomService chatRoomService;
     private final ModelMapper modelMapper;
 
     @Transactional
     public ConsultRequestDto saveConsultRequest(UUID chatRoom, Long plannerId, String userNickname) {
-        ChatRoomDto byCode = chatRoomService.findByCode(chatRoom);
 
         ConsultRequest consultRequest = ConsultRequest.builder()
                 .chatRoomId(chatRoom)
@@ -43,10 +41,19 @@ public class ConsultRequestService {
 
     @Transactional
     public ConsultRequestDto findByPlannerId(Long plannerId, UUID chatRoomId, Long requestId) {
-        ConsultRequest consultRequest = consultRequestRepository.findByPlannerIdAndChatRoomIdAndId(plannerId, chatRoomId, requestId)
-                .orElseThrow(IllegalArgumentException::new);
+        ConsultRequest consultRequest = findConsultRequest(plannerId, chatRoomId, requestId);
+        updateConsultRequestStatus(consultRequest);
 
-        consultRequest = ConsultRequest.builder()
+        return modelMapper.map(consultRequest, ConsultRequestDto.class);
+    }
+
+    private ConsultRequest findConsultRequest(Long plannerId, UUID chatRoomId, Long requestId) {
+        return consultRequestRepository.findByPlannerIdAndChatRoomIdAndId(plannerId, chatRoomId, requestId)
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private void updateConsultRequestStatus(ConsultRequest consultRequest) {
+        ConsultRequest updatedRequest = ConsultRequest.builder()
                 .id(consultRequest.getId())
                 .plannerId(consultRequest.getPlannerId())
                 .userNickname(consultRequest.getUserNickname())
@@ -55,9 +62,8 @@ public class ConsultRequestService {
                 .requestTime(consultRequest.getRequestTime())
                 .build();
 
-        consultRequestRepository.save(consultRequest);
-
-        return modelMapper.map(consultRequest, ConsultRequestDto.class);
+        consultRequestRepository.save(updatedRequest);
     }
+
 }
 

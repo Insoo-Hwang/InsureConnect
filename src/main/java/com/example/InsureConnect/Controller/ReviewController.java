@@ -31,16 +31,6 @@ public class ReviewController {
         return "/write_review";
     }
 
-    @PostMapping("/review/new")
-    public String saveReview(@ModelAttribute ReviewDto reviewDto,
-                             @AuthenticationPrincipal CustomOAuth2User user,
-                             @RequestParam("planner_id") Long plannerId,
-                             @RequestPart("images") List<MultipartFile> images) throws IOException {
-        reviewService.saveReview(reviewDto,images,user,plannerId);
-
-        return "/home";
-    }
-
     @GetMapping("/review/detail/{review_id}")
     public String detailReview(@PathVariable("review_id") Long reviewId, Model model) {
         ReviewDto review = reviewService.findById(reviewId);
@@ -49,5 +39,14 @@ public class ReviewController {
         model.addAttribute("planner", planner);
         model.addAttribute("review", review);
         return "review_detail";
+    }
+    @PostMapping("/review/new")
+    public String saveReview(@ModelAttribute ReviewDto reviewDto,
+                             @AuthenticationPrincipal CustomOAuth2User user,
+                             @RequestParam("planner_id") Long plannerId,
+                             @RequestPart("images") List<MultipartFile> images) throws IOException {
+        reviewService.saveReview(reviewDto,images,user,plannerId);
+
+        return "redirect:/";
     }
 }
