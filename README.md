@@ -155,55 +155,55 @@ SpingBoot를 활용한 보험 중개 서비스
         ```
   - 인기 설계사 계산 함수 호출
     + **1시간 마다 계산한 내용을 DB에 저장 후 호출 -> 짧은 시간에 발생하는 동일한 계산을 방지하여 서버 과부하 방지**
-    + ```java
-      public RecommendDto recommendPlanner(){
-          List<PlannerDto> plannerDtos = new ArrayList<>();
-          RecommendPlanner recommendPlanner = recommendPlannerRepository.findFirstByOrderByTimeDesc(); //가장 최근에 저장된 인기 설계사 리스트 호출
-          Timestamp time = null;
-          if(recommendPlanner != null){ //저장된 내용이 있는 경우 1시간 이내의 데이터를 호출
-              time = recommendPlanner.getTime();
-              Timestamp now = new Timestamp(System.currentTimeMillis());
-              Instant beforeIns = time.toInstant();
-              Instant nowIns = now.toInstant();
-              Duration duration = Duration.between(beforeIns, nowIns);
-              long hour = Math.abs(duration.toHours());
-              if(hour < 1){
-                  String [] s = recommendPlanner.getList().split(",");
-                  for(int i = 0; i < 5; i++){ //최대 5개까지 호출
-                      if(s[i].equals("A")) break; //A는 설계사 정보가 없는 경우
-                      Planner planner = plannerRepository.findById(Long.parseLong(s[i])).orElseThrow(IllegalArgumentException::new);
-                      plannerDtos.add(modelMapper.map(planner, PlannerDto.class));
-                  }
-              }
-              else recommendPlanner = null;
-          }
-          if(recommendPlanner == null) { //저장된 내용이 없는 경우나 저장된지 1시간이 초과한 경우 새로운 계산 후 DB에 저장
-              List<Planner> planners = plannerRepository.findAllPermitPlanner();
-              List<Recommend> recommends = new ArrayList<>();
-              for (Planner planner : planners) {
-                  recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
-              }
-              Collections.sort(recommends);
-              String s = "";
-              for (Recommend recommend : recommends) {
-                  plannerDtos.add(recommend.getPlannerDto());
-                  s+=recommend.getPlannerDto().getId();
-                  s+=","; //설계사 ID간 ,를 활용하여 데이터 분리
-              }
-              s+="A,A,A,A,A"; //설계사가 0명인 경우를 대비하여 항상 빈 데이터를 5개 추가
-              time = new Timestamp(System.currentTimeMillis());
-              RecommendPlanner created = RecommendPlanner.builder()
-                      .time(time)
-                      .list(s)
-                      .build();
-              recommendPlannerRepository.save(created);
-          }
-          RecommendDto recommendDto = RecommendDto.builder()
-                  .list(plannerDtos)
-                  .time(time)
-                  .build();
-          return recommendDto;
-      }
-      ```
+      + ```java
+        public RecommendDto recommendPlanner(){
+            List<PlannerDto> plannerDtos = new ArrayList<>();
+            RecommendPlanner recommendPlanner = recommendPlannerRepository.findFirstByOrderByTimeDesc(); //가장 최근에 저장된 인기 설계사 리스트 호출
+            Timestamp time = null;
+            if(recommendPlanner != null){ //저장된 내용이 있는 경우 1시간 이내의 데이터를 호출
+                time = recommendPlanner.getTime();
+                Timestamp now = new Timestamp(System.currentTimeMillis());
+                Instant beforeIns = time.toInstant();
+                Instant nowIns = now.toInstant();
+                Duration duration = Duration.between(beforeIns, nowIns);
+                long hour = Math.abs(duration.toHours());
+                if(hour < 1){
+                    String [] s = recommendPlanner.getList().split(",");
+                    for(int i = 0; i < 5; i++){ //최대 5개까지 호출
+                        if(s[i].equals("A")) break; //A는 설계사 정보가 없는 경우
+                        Planner planner = plannerRepository.findById(Long.parseLong(s[i])).orElseThrow(IllegalArgumentException::new);
+                        plannerDtos.add(modelMapper.map(planner, PlannerDto.class));
+                    }
+                }
+                else recommendPlanner = null;
+            }
+            if(recommendPlanner == null) { //저장된 내용이 없는 경우나 저장된지 1시간이 초과한 경우 새로운 계산 후 DB에 저장
+                List<Planner> planners = plannerRepository.findAllPermitPlanner();
+                List<Recommend> recommends = new ArrayList<>();
+                for (Planner planner : planners) {
+                    recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
+                }
+                Collections.sort(recommends);
+                String s = "";
+                for (Recommend recommend : recommends) {
+                    plannerDtos.add(recommend.getPlannerDto());
+                    s+=recommend.getPlannerDto().getId();
+                    s+=","; //설계사 ID간 ,를 활용하여 데이터 분리
+                }
+                s+="A,A,A,A,A"; //설계사가 0명인 경우를 대비하여 항상 빈 데이터를 5개 추가
+                time = new Timestamp(System.currentTimeMillis());
+                RecommendPlanner created = RecommendPlanner.builder()
+                        .time(time)
+                        .list(s)
+                        .build();
+                recommendPlannerRepository.save(created);
+            }
+            RecommendDto recommendDto = RecommendDto.builder()
+                    .list(plannerDtos)
+                    .time(time)
+                    .build();
+            return recommendDto;
+        }
+        ```
 
 ### 📖 배운점
