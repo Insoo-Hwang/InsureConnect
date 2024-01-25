@@ -5,8 +5,10 @@ SpingBoot를 활용한 보험 중개 서비스
 보험 설계사와 보험 가입자를 연결해주는 웹 서비스
 
 ### 🧑 참여 인원
-* 황인수
-* 이한얼
+* [황인수](https://github.com/Insoo-Hwang)
+  - 사용자, 관리자 관련 페이지 및 OAuth2.0 및 JWT관련 파트 제작
+* [이한얼](https://github.com/Machrie)
+  - 설계사, 리뷰 관련 페이지 및 ModelMapper관련 파트 제작
 
 ### 🎬 프로젝트 기획 동기
 1. 보험에 대해 무지하여 자신에게 필요한 보험의 카테고리에 대해 잘 모르는 사람이 많음
@@ -95,5 +97,113 @@ SpingBoot를 활용한 보험 중개 서비스
 1. 전체 리뷰 확인
 
 ### ⚠️ 문제 발생 및 해결
+#### 1. 인기 설계사 선정 및 호출 문제
+* 문제 파악
+  - 인기 설계사 선정
+    + 단순 리뷰 점수의 합으로 나열하기에는 최근에 시작한 설계사가 불리한 면이 있음
+    + 리뷰 평균 점수로 나열하기에는 보험 가입자의 피드백을 수정받아 더 좋은 서비스를 제공해도 과거의 낮은 점수의 리뷰가 발목을 잡을 수 있음
+  - 인기 설계사 계산 함수 호출
+    + 메인 페이지에 접속할 때마다 인기 설계사 계산 함수 호출시 서버에 과부하가 걸릴 가능성이 있음 
+* 문제 해결
+  - 인기 설계사 선정
+    + ~~최근 1년 리뷰만 반영 후 평균 점수로 나열~~ -> 최근의 리뷰와 1년 전 리뷰가 같은 가치를 갖는 것은 2번 문제점을 해결하지 못함
+    + ~~기간별로 가중치를 두어 최근의 리뷰가 더 높은 점수를 받도록 조정~~ -> 리뷰 100개 평균 점수 4.8인 설계사보다 리뷰 1개 평균 점수 5.0인 설계사가 더 높은 점수를 받는 문제 발생
+    + **기간별로 가중치를 두고 평균 점수를 구한 후 전체 리뷰 수에 대한 점수 추가 부여 -> 최근 리뷰에 대한 가치 상승 및 평균의 함정 해결 가능**
+  - 인기 설계사 계산 함수 호출
+    + ~~리뷰가 추가될 때마다 점수 계산~~ -> 실시간으로 점수 반영이 가능하나 리뷰 작성 사용자 수가 많을 경우 서버 과부하 문제 해결 불가
+    + **1시간마다 한번씩 점수 계산 -> 실시간 점수 반영이 불가능하나 1시간에 많은 상담을 진행하지 못한다는 상황을 고려하여 점수 실시간 반영보다 과부하 방지가 더 큰 이점이 있다고 판단**
+* 해결 과정
+  - 인기 설계사 선정
+    + ~~기간에 따른 선형적 가중치 값 활용~~ -> 단순하여 합리적인 점수 부여가 불가능하다고 판단 
+    + **가중치 값으로 망각 곡선의 망각률 활용 -> 상담에 대한 기억(리뷰)은 인간의 기억과 유사할 것이라 판단**
+      + ![망각곡선](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/cabecc55-5de3-4b19-b42c-3dba088d526c)
+      + (1달(58점)+3달(44점)+6달(33점)+1년(20점))*리뷰 점수/전체 리뷰수+리뷰 1개당(30점)
+        ```java
+        public int getRecommendRating(){
+            int score = 0;
+            if(review != null && !review.isEmpty()){
+                int cnt = 0;
+                for(Review reviewScore : review){
+                    Timestamp before = reviewScore.getWrite();
+                    Timestamp now = new Timestamp(System.currentTimeMillis());
+                    Instant beforeIns = before.toInstant();
+                    Instant nowIns = now.toInstant();
+                    Duration duration = Duration.between(beforeIns, nowIns);
+                    long day = Math.abs(duration.toDays());
+                    if(day > 365) continue; //1년 이상 0점
+                    else if(day > 180){
+                        score+=reviewScore.getRate()*20; //6개월~1년 20점
+                        cnt++;
+                    }
+                    else if(day > 90){
+                        score+=reviewScore.getRate()*33; //3개월~6개월 33점
+                        cnt++;
+                    }
+                    else if(day > 30){
+                        score+=reviewScore.getRate()*44; //1개월~3개월 30점
+                        cnt++;
+                    }
+                    else{
+                        score+=reviewScore.getRate()*58; //1개월 이하 58점
+                        cnt++;
+                    }
+                }
+                score = (score/cnt)+(cnt*30); //가중치 점수 평균 + 리뷰 1개당 30점점
+            }
+            return score;
+        }
+        ```
+  - 인기 설계사 계산 함수 호출
+    + **1시간 마다 계산한 내용을 DB에 저장 후 호출 -> 짧은 시간에 발생하는 동일한 계산을 방지하여 서버 과부하 방지**
+    + ```java
+      public RecommendDto recommendPlanner(){
+          List<PlannerDto> plannerDtos = new ArrayList<>();
+          RecommendPlanner recommendPlanner = recommendPlannerRepository.findFirstByOrderByTimeDesc(); //가장 최근에 저장된 인기 설계사 리스트 호출
+          Timestamp time = null;
+          if(recommendPlanner != null){ //저장된 내용이 있는 경우 1시간 이내의 데이터를 호출
+              time = recommendPlanner.getTime();
+              Timestamp now = new Timestamp(System.currentTimeMillis());
+              Instant beforeIns = time.toInstant();
+              Instant nowIns = now.toInstant();
+              Duration duration = Duration.between(beforeIns, nowIns);
+              long hour = Math.abs(duration.toHours());
+              if(hour < 1){
+                  String [] s = recommendPlanner.getList().split(",");
+                  for(int i = 0; i < 5; i++){ //최대 5개까지 호출
+                      if(s[i].equals("A")) break; //A는 설계사 정보가 없는 경우
+                      Planner planner = plannerRepository.findById(Long.parseLong(s[i])).orElseThrow(IllegalArgumentException::new);
+                      plannerDtos.add(modelMapper.map(planner, PlannerDto.class));
+                  }
+              }
+              else recommendPlanner = null;
+          }
+          if(recommendPlanner == null) { //저장된 내용이 없는 경우나 저장된지 1시간이 초과한 경우 새로운 계산 후 DB에 저장
+              List<Planner> planners = plannerRepository.findAllPermitPlanner();
+              List<Recommend> recommends = new ArrayList<>();
+              for (Planner planner : planners) {
+                  recommends.add(new Recommend(planner.getReview().size(), planner.getRecommendRating(), modelMapper.map(planner, PlannerDto.class)));
+              }
+              Collections.sort(recommends);
+              String s = "";
+              for (Recommend recommend : recommends) {
+                  plannerDtos.add(recommend.getPlannerDto());
+                  s+=recommend.getPlannerDto().getId();
+                  s+=","; //설계사 ID간 ,를 활용하여 데이터 분리
+              }
+              s+="A,A,A,A,A"; //설계사가 0명인 경우를 대비하여 항상 빈 데이터를 5개 추가
+              time = new Timestamp(System.currentTimeMillis());
+              RecommendPlanner created = RecommendPlanner.builder()
+                      .time(time)
+                      .list(s)
+                      .build();
+              recommendPlannerRepository.save(created);
+          }
+          RecommendDto recommendDto = RecommendDto.builder()
+                  .list(plannerDtos)
+                  .time(time)
+                  .build();
+          return recommendDto;
+      }
+      ```
 
 ### 📖 배운점
