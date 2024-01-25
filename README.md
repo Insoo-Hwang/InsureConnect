@@ -49,7 +49,7 @@ SpingBoot를 활용한 보험 중개 서비스
 2. 가입자가 첨부한 AI 채팅 내역 확인 후 상담
 
 ### 1. 메인 페이지
-![screencapture-localhost-8080-2024-01-25-15_40_34](https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/096732b0-8e02-443e-b2da-e2a40ce3a830)
+![screencapture-localhost-8080-2024-01-25-16_39_00](https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/47674a52-e6a5-4060-bd61-6220b3e89559)
 
 1. 인기 상담사 확인
 2. 최근 리뷰 확인
