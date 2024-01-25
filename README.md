@@ -65,7 +65,7 @@ SpingBoot를 활용한 보험 중개 서비스
 4. 카테고리 관리
 
 ### 3. 설계사 관리 페이지
-<img width="1440" alt="스크린샷 2024-01-25 오후 3 53 11" src="https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/2fefeef8-f489-4aa0-810a-40be06f3ed2a">
+<img width="1440" alt="스크린샷 2024-01-25 오후 7 16 32" src="https://github.com/Insoo-Hwang/InsureConnect/assets/125466323/51bd9646-a9f7-4b34-a50f-b19b2a922f30">
 
 1. 요청 상담자 AI채팅 내역 확인
 2. 홍보글 관리
