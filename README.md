@@ -1,4 +1,4 @@
-# InsureConnect
+# Insure Connect
 SpingBoot를 활용한 보험 중개 서비스
 
 ## 🖥️ 프로젝트 소개
@@ -29,7 +29,7 @@ SpingBoot를 활용한 보험 중개 서비스
 - **IDE** : `IntelliJ`
 - **Framework** : `SpringBoot 3.2.1`
 - **Featured Library** : `OAuth 2.0` + `JWT 0.9.1` + `ModelMapper 3.1.1`
-- **Sevlet Engine** : `Apache Tomcat 10.1.17`
+- **Servlet Engine** : `Apache Tomcat 10.1.17`
 - **Database** : `Postgresql 16`
 - **ORM** : `Hibernate 6.4.1` + `JPA 3.2.1`
 - **Web** : `HTML`(+`thymeleaf`) + `JavaScript`(+`JQuery`) + `CSS`(+`bootstrap`)
