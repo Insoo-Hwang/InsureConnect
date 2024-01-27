@@ -205,7 +205,77 @@ SpingBoot를 활용한 보험 중개 서비스
             return recommendDto;
         }
         ```
+#### 2. JWT 및 지연로딩 관련 문제 
+* 문제 파악
+  - JWT 사용 시 LazyInitializationException 발생.
+* 문제 해결
+  - ModelMapper 수정
+    + Converter com.example.InsureConnect.Config.AppConfig$$Lambda$1365/0x000000b8017ef260@389a7e23 failed to convert org.hibernate.collection.spi.PersistentBag to java.util.List.
+      + ```java
 
+        modelMapper.createTypeMap(User.class, UserDto.class)
+                .addMappings(mapping -> {
+                    mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
+                    mapping.using(convertReviewToLongList()).map(User::getReview, UserDto::setReviewId);
+                    mapping.using(convertChatRoomToLongList()).map(User::getChatRoom, UserDto::setChatRoomId);
+                });
+                
+        private Converter<List<ChatRoom>, List<Long>> convertChatRoomToLongList() {
+        return context -> context.getSource()
+                    .stream()
+                    .map(ChatRoom::getId)
+                    .collect(Collectors.toList());
+       
+        }
+        private Converter<List<Review>, List<Long>> convertReviewToLongList() {
+        return context -> context.getSource()
+                    .stream()
+                    .map(Review::getId)
+                    .collect(Collectors.toList());
+        }
+        ```
+    + ModelMapper Config에서 convertChatRoomToLongList,convertReviewToLongList에서 오류 발생을 확인, User,UserDto에서 Review,ChatRoom을 사용하는 코드가 없기때문에 매핑에서 제외하니 정상적으로 작동.
+      + ```java
+
+        modelMapper.createTypeMap(User.class, UserDto.class)
+                .addMappings(mapping -> {
+                    mapping.map(src -> src.getPlanner().getId(), UserDto::setPlannerId);
+                    mapping.skip(User::getReview, UserDto::setReviewId);
+                    mapping.skip(User::getChatRoom, UserDto::setChatRoomId);
+                });
+        ```
+  - 즉시로딩으로 변경
+    + 현재는 User,UserDto에서 Review,ChatRoom을 사용하지 않지만 추후 기능 추가시 필요할수도 있기때문에 ModelMapper 수정을 Rollback, 즉시로딩 사용
+    + 정상적으로 작동됨을 확인했으나 즉시로딩 사용 시 필요하지 않은 엔티티도 함께 조회, 예상치 못한 SQL 발생등 성능상의 문제가 존재하기때문에 즉시로딩 사용방안은 폐기.
+  - UserService 수정
+    + 지연로딩이 아니라 즉시로딩 + 변경 전 modelmaaper사용시 정상적으로 작동하는것으로 보아 modelmapper 설정 변경은 정상적인 해결방법이 아님을 인지
+    + JWT 도입이후부터 오류가 발생하였기 때문에 TokenService를 확인 -> userService.findById를 호출
+      + ```java
+        public UserDto findById(UUID id){
+        Optional<User> byId = userRepository.findById(id);
+        return byId.map(user -> modelMapper.map(user, UserDto.class))
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+        }
+        ```
+    + findById메서드에서 planner 혹은 review,chatroom 설정이 없으니 프록시가 전부 생성되어야하지만 chatRoom과 review에서 LazyInitializationException: failed to lazily initialize a collection of role: could not initialize proxy - no Session라는 예외가 발생하고 planner만 정상적으로 프록시 생성이 진행.
+    + findById메서드가 트랜잭션을 열어주면, Planner,Review,ChatRoom 조회가 같은 트랜잭션 범위에서 이루어져야하지만 planner는 프록시 초기화에 성공, review,chatroom은 실패하였기때문에 별개의 트랜잭션에서 진행된다는 것을 확인 후 userService를 다시 한번 검토하니 @Transactional 어노테이션을 사용하지않아 범위가 지정되지않았다는 것을 인지. @Transactional 어노테이션을 추가하여 트랜잭션 범위를 설정하니 정상적으로 작동하였다.
+      + ```java
+        @RequiredArgsConstructor
+        @Service
+        @Transactional(readOnly = true)
+        public class UserService {
+
+        private final UserRepository userRepository;
+        private final ModelMapper modelMapper;
+    
+        public UserDto findById(UUID id){
+            Optional<User> byId = userRepository.findById(id);
+            return byId.map(user -> modelMapper.map(user, UserDto.class))
+                    .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+        }
+        .....
+        ```      
+    
 ## 📖 배운점
 * **황인수**
   - 늘 사용하기만 했던 웹 서비스와 서버를 직접 구현해보며 보이지 않는 부분에서 조회나 검증 등 처리해야할 내용이 많다는 것을 알게 됨
@@ -214,3 +284,7 @@ SpingBoot를 활용한 보험 중개 서비스
   - OAuth2.0 + JWT를 직접 구현해보며 사용자 정보를 가져오는 방법, 세션 방식과 토큰 방식의 차이점에 대해 배움
   - 학부 시절 Spring을 접한 경험이 없었으나 취업 준비를 하며 다양한 기업에서 Spring에 대한 지식을 요구한다는 것을 알게 되었고 이에 충족하고자 학습 및 실습하는 과정을 통해 늘 새로운 것을 접하고 활용하는 개발자의 태도에 대해 배움
 * **이한얼**
+  - 문제가 발생했을 때 그 원인을 정확하게 파악하는 것이 제일 중요하다. 이번 경우에도 원인을 정확하게 알았다면 시간을 아끼고 정확한 조치를 취할 수 있었을 것이다.
+  - 기반이 얼마나 중요한지 깨달음. 복잡한 문제에 대한 해결은 항상 기초 지식에서 출발한다. 프로그래밍, 데이터베이스, 백엔드 시스템 등의 기본 개념을 잘 이해하는 것은 문제 해결에 필수적이라는 것을 다시 한번 상기하게 됨.
+  - 복잡한 문제의 시작은 종종 사소한 곳에서 비롯된다. 작은 설정 오류, 미처 고려하지 못한 부분이 큰 문제의 근본이 될 수 있다.
+
