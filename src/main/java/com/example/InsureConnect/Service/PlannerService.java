@@ -82,6 +82,7 @@ public class PlannerService {
     public PlannerDto managePlanner(Long id, boolean permit) {
         Planner target = getPlannerById(id);
         target.changeStatus(permit);
+        target.changePlannerType();
         Planner updated = plannerRepository.save(target);
         return modelMapper.map(updated, PlannerDto.class);
     }

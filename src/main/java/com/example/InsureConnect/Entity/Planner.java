@@ -68,6 +68,10 @@ public class Planner {
         this.status = "deleted";
     }
 
+    public void changePlannerType(){
+        this.user.changePlannerType();
+    }
+
     public int getRecommendRating(){
         int score = 0;
         if(review != null && !review.isEmpty()){

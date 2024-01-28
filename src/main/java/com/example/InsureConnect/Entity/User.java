@@ -73,6 +73,10 @@ public class User implements UserDetails {
         this.kakaoId = null;
     }
 
+    public void changePlannerType(){
+        this.type = "planner";
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (type.equals("user")) {
