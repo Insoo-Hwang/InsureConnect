@@ -251,6 +251,17 @@ SpingBoot를 활용한 보험 중개 서비스
     + 지연로딩이 아니라 즉시로딩 + 변경 전 modelmaaper사용시 정상적으로 작동하는것으로 보아 modelmapper 설정 변경은 정상적인 해결방법이 아님을 인지
     + JWT 도입이후부터 오류가 발생하였기 때문에 TokenService를 확인 -> userService.findById를 호출
       + ```java
+        public String createNewAccessToken(String refreshToken) {
+        if(!tokenProvider.validToken(refreshToken)) {
+            throw new IllegalArgumentException("Unexpected token");
+        }
+
+        UUID userId = refreshTokenService.findByRefreshToken(refreshToken).getUserId();
+        User user = modelMapper.map(userService.findById(userId), User.class);
+
+        return tokenProvider.generateToken(user, Duration.ofHours(2));
+        }
+    
         public UserDto findById(UUID id){
         Optional<User> byId = userRepository.findById(id);
         return byId.map(user -> modelMapper.map(user, UserDto.class))
