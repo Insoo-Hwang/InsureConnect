@@ -5,17 +5,17 @@ server:
 
 spring:
     jpa:
+        defer-datasource-initialization: true
         hibernate:
-            ddl-auto: none
+            ddl-auto: update
         properties:
             hibernate:
                 show_sql: true
                 format_sql: true
     datasource:
-        url: jdbc:postgresql://localhost:5432/earl
-        username: earl
-        password: han
-        driver-class-name: org.postgresql.Driver
+        url: {YOUR_URL}
+        username: {YOUR_NAME}
+        password: {YOUR_PASSWORD}
     sql:
         init:
             encoding: utf-8
@@ -25,19 +25,23 @@ spring:
             client:
                 registration:
                     kakao:
-                        client-id: 39acd4a4fff84f2535aa93ddb042f0c4
-                        client-secret: oYWofo7GgvQfMgfAvDHXehTakpc5kf2u
+                        client-id: {YOUR_ID}
+                        client-secret: {YOUR_SECRET}
                         client-authentication-method: client_secret_post
-                        redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+                        redirect-uri: {YOUR_URI}
                         authorization-grant-type: authorization_code
                         client-name: Kakao
                         scope: profile_nickname, account_email
                 provider:
                     kakao:
-                        authorization-uri: https://kauth.kakao.com/oauth/authorize
-                        token-uri: https://kauth.kakao.com/oauth/token
-                        user-info-uri: https://kapi.kakao.com/v2/user/me
+                        authorization-uri: {YOUR_URI}
+                        token-uri: {YOUR_URI}
+                        user-info-uri: {YOUR_URI}
                         user-name-attribute: id
     servlet:
         multipart:
             max-file-size: 5MB
+
+jwt:
+    issuer: {YOUR_EMAIL}
+    secret_key: {YOUR_SECRET_KEY}
