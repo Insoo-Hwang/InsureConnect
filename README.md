@@ -205,6 +205,17 @@ SpingBoot를 활용한 보험 중개 서비스
             return recommendDto;
         }
         ```
+      + 적용 전 걸린 시간(리뷰 100개, 설계사 10명)
+        + ![image](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/50ea525f-e254-4064-bde5-779439442ad0)
+        + ![image](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/9ec80aaf-4bb9-4612-ba27-f55a219f13e2)
+        + ![image](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/444a277e-444a-4543-871e-6ca854e4b1cc)
+      + 적용 후 걸린 시간(리뷰 100개, 설계사 10명)
+        + ![image](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/d8a05b3a-dd83-4278-8a5d-15b8df92aab1)
+        + ![image](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/c66c432d-0a67-4f56-997e-d3a0f8d1ad54)
+        + ![image](https://github.com/Insoo-Hwang/InsureConnect/assets/70841847/d2d4cc63-8429-4105-9e75-1d00b4fcb710)
+      + 데이터의 양이 많지 않아 큰 차이가 나지는 않지만 대용량 데이터를 처리할 때는 유의미한 결과가 나올 것으로 예상됨
+
+
 #### 2. JWT 및 지연로딩 관련 문제 
 * 문제 파악
   - JWT 사용 시 LazyInitializationException 발생.
